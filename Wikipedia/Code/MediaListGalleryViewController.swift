@@ -1,9 +1,8 @@
 class MediaListGalleryViewController: WMFImageGalleryViewController {
-    let imageController: ImageController = ImageController.shared
-    let imageInfoFetcher = MWKImageInfoFetcher()
-    let imageFetcher = ImageFetcher()
+    let imageController: ImageCacheController
+    let imageInfoFetcher: MWKImageInfoFetcher
     let articleURL: URL
-    required init(articleURL: URL, mediaList: MediaList, initialItem: MediaListItem?, theme: Theme, overlayViewTopBarHidden: Bool = false) {
+    required init(articleURL: URL, mediaList: MediaList, dataStore: MWKDataStore, initialItem: MediaListItem?, theme: Theme, overlayViewTopBarHidden: Bool = false) {
         self.articleURL = articleURL
         let photos = mediaList.items.compactMap { MediaListItemNYTPhotoWrapper($0) }
         let initialPhoto: WMFPhoto?
@@ -12,6 +11,8 @@ class MediaListGalleryViewController: WMFImageGalleryViewController {
         } else {
             initialPhoto = photos.first
         }
+        imageInfoFetcher = MWKImageInfoFetcher(dataStore: dataStore)
+        imageController = dataStore.cacheController.imageCache
         super.init(photos: photos, initialPhoto: initialPhoto, delegate: nil, theme: theme, overlayViewTopBarHidden:overlayViewTopBarHidden)
         fetchImageForPhoto(initialPhoto)
     }
@@ -77,20 +78,18 @@ class MediaListGalleryViewController: WMFImageGalleryViewController {
             return
         }
         
-        let urlRequest = imageFetcher.request(for: imageURL, forceCache: false)
-        
-        imageFetcher.data(for: urlRequest) { [weak self] (result) in
-            switch result {
-            case .success(let data):
-                DispatchQueue.main.async {
-                    let image = UIImage(data: data)
-                    photo.image = image
-                    self?.updateImageForPhoto(afterUserInteractionIsFinished: photo)
+        imageController.fetchImage(withURL: imageURL, failure: { (error) in
+            DispatchQueue.main.async {
+                self.wmf_showAlertWithError(error as NSError)
+            }
+        }) { [weak self] (download) in
+            DispatchQueue.main.async {
+                if let animatedImage = download.image.animatedImage {
+                    photo.imageData = animatedImage.data
+                } else {
+                    photo.image = download.image.staticImage
                 }
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    self?.wmf_showAlertWithError(error as NSError)
-                }
+                self?.updateImageForPhoto(afterUserInteractionIsFinished: photo)
             }
         }
     }

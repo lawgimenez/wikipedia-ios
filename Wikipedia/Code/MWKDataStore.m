@@ -1,5 +1,5 @@
 #import <WMF/WMF-Swift.h>
-#include <notify.h>
+#import <WMF/WMFCrossProcessCoreDataSynchronizer.h>
 #import "WMFAnnouncement.h"
 
 @import CoreData;
@@ -13,7 +13,7 @@ NSString *const WMFFeedImportContextDidSave = @"WMFFeedImportContextDidSave";
 NSString *const WMFViewContextDidSave = @"WMFViewContextDidSave";
 
 NSString *const WMFLibraryVersionKey = @"WMFLibraryVersion";
-static const NSInteger WMFCurrentLibraryVersion = 10;
+static const NSInteger WMFCurrentLibraryVersion = 11;
 
 NSString *const MWKDataStoreValidImageSitePrefix = @"//upload.wikimedia.org/";
 
@@ -21,9 +21,11 @@ NSString *MWKCreateImageURLWithPath(NSString *path) {
     return [MWKDataStoreValidImageSitePrefix stringByAppendingString:path];
 }
 
-@interface MWKDataStore () {
-    dispatch_semaphore_t _handleCrossProcessChangesSemaphore;
-}
+@interface MWKDataStore () <WMFAuthenticationManagerDelegate, WMFSessionAuthenticationDelegate>
+
+@property (nonatomic, strong) WMFSession *session;
+@property (nonatomic, strong) WMFConfiguration *configuration;
+@property (nonatomic, strong) WMFAuthenticationManager *authenticationManager;
 
 @property (readwrite, strong, nonatomic) MWKSavedPageList *savedPageList;
 @property (readwrite, strong, nonatomic) MWKRecentSearchList *recentSearchList;
@@ -33,9 +35,8 @@ NSString *MWKCreateImageURLWithPath(NSString *path) {
 @property (nonatomic, strong) WikidataDescriptionEditingController *wikidataDescriptionEditingController;
 @property (nonatomic, strong) RemoteNotificationsController *remoteNotificationsController;
 @property (nonatomic, strong) WMFArticleSummaryController *articleSummaryController;
-
-@property (nonatomic, strong) WMFCacheControllerWrapper *imageCacheControllerWrapper;
-@property (nonatomic, strong) WMFCacheControllerWrapper *articleCacheControllerWrapper;
+@property (nonatomic, strong) MWKLanguageLinkController *languageLinkController;
+@property (nonatomic, strong) WMFNotificationsController *notificationsController;
 
 @property (nonatomic, strong) MobileviewToMobileHTMLConverter *mobileviewConverter;
 
@@ -46,8 +47,10 @@ NSString *MWKCreateImageURLWithPath(NSString *path) {
 @property (nonatomic, strong) NSManagedObjectContext *viewContext;
 @property (nonatomic, strong) NSManagedObjectContext *feedImportContext;
 
-@property (nonatomic, strong) NSString *crossProcessNotificationChannelName;
-@property (nonatomic) int crossProcessNotificationToken;
+@property (nonatomic, strong) WMFPermanentCacheController *cacheController;
+
+@property (nonatomic, strong) WMFCrossProcessCoreDataSynchronizer *librarySynchronizer;
+@property (nonatomic, strong) WMFCrossProcessCoreDataSynchronizer *cacheSynchronizer;
 
 @property (nonatomic, strong) NSURL *containerURL;
 
@@ -70,6 +73,7 @@ NSString *MWKCreateImageURLWithPath(NSString *path) {
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self stopCoreDataSynchronizers];
 }
 
 - (instancetype)init {
@@ -77,80 +81,93 @@ NSString *MWKCreateImageURLWithPath(NSString *path) {
     return self;
 }
 
-static uint64_t bundleHash() {
-    static dispatch_once_t onceToken;
-    static uint64_t bundleHash;
-    dispatch_once(&onceToken, ^{
-        bundleHash = (uint64_t)[[[NSBundle mainBundle] bundleIdentifier] hash];
-    });
-    return bundleHash;
-}
-
 - (instancetype)initWithContainerURL:(NSURL *)containerURL {
     self = [super init];
     if (self) {
-        _handleCrossProcessChangesSemaphore = dispatch_semaphore_create(1);
+        WMFConfiguration *configuration = [WMFConfiguration current];
+        WMFSession *session = [[WMFSession alloc] initWithConfiguration:configuration];
+        session.authenticationDelegate = self;
+        WMFAuthenticationManager *authenticationManager = [[WMFAuthenticationManager alloc] initWithSession:session configuration:configuration];
+        authenticationManager.delegate = self;
+        self.session = session;
+        self.configuration = configuration;
+        self.authenticationManager = authenticationManager;
         self.containerURL = containerURL;
         self.basePath = [self.containerURL URLByAppendingPathComponent:@"Data" isDirectory:YES].path;
         [self setupLegacyDataStore];
-        NSDictionary *infoDictionary = [self loadSharedInfoDictionaryWithContainerURL:containerURL];
-        self.crossProcessNotificationChannelName = infoDictionary[@"CrossProcessNotificiationChannelName"];
-        [self setupCrossProcessCoreDataNotifier];
         [self setupCoreDataStackWithContainerURL:containerURL];
+        [self setupCoreDataSynchronizersWithContainerURL:containerURL];
+        [self startSynchronizingLibraryContexts];
         [self setupHistoryAndSavedPageLists];
+        self.languageLinkController = [[MWKLanguageLinkController alloc] initWithManagedObjectContext:self.viewContext];
         self.feedContentController = [[WMFExploreFeedContentController alloc] init];
         self.feedContentController.dataStore = self;
-        self.feedContentController.siteURLs = [[MWKLanguageLinkController sharedInstance] preferredSiteURLs];
+        self.feedContentController.siteURLs = self.languageLinkController.preferredSiteURLs;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didReceiveMemoryWarningWithNotification:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-        self.wikidataDescriptionEditingController = [[WikidataDescriptionEditingController alloc] initWithSession:[WMFSession shared] configuration:[WMFConfiguration current]];
-        self.remoteNotificationsController = [[RemoteNotificationsController alloc] initWithSession:[WMFSession shared] configuration:[WMFConfiguration current]];
-        WMFArticleSummaryFetcher *fetcher = [[WMFArticleSummaryFetcher alloc] initWithSession:[WMFSession shared] configuration:[WMFConfiguration current]];
-        self.articleSummaryController = [[WMFArticleSummaryController alloc] initWithFetcher:fetcher dataStore:self];
-        self.imageCacheControllerWrapper = [[WMFCacheControllerWrapper alloc] initWithType:WMFCacheControllerTypeImage];
-        self.articleCacheControllerWrapper = [[WMFCacheControllerWrapper alloc] initWithArticleCacheWithImageCacheControllerWrapper:self.imageCacheControllerWrapper];
+        self.wikidataDescriptionEditingController = [[WikidataDescriptionEditingController alloc] initWithSession:session configuration:configuration];
+        self.remoteNotificationsController = [[RemoteNotificationsController alloc] initWithSession:session configuration:configuration preferredLanguageCodesProvider:self.languageLinkController];
+        self.notificationsController = [[WMFNotificationsController alloc] initWithDataStore:self];
+        self.articleSummaryController = [[WMFArticleSummaryController alloc] initWithSession:session configuration:configuration dataStore:self];
         self.mobileviewConverter = [[MobileviewToMobileHTMLConverter alloc] init];
     }
     return self;
 }
 
-- (NSDictionary *)loadSharedInfoDictionaryWithContainerURL:(NSURL *)containerURL {
+- (void)setupCoreDataSynchronizersWithContainerURL:(NSURL *)containerURL {
     NSURL *infoDictionaryURL = [containerURL URLByAppendingPathComponent:@"Wikipedia.info" isDirectory:NO];
-    NSData *infoDictionaryData = [NSData dataWithContentsOfURL:infoDictionaryURL];
-    NSDictionary *infoDictionary = [NSKeyedUnarchiver unarchiveObjectWithData:infoDictionaryData];
-    if (!infoDictionary[@"CrossProcessNotificiationChannelName"]) {
+    NSError *unarchiveError = nil;
+    NSDictionary *infoDictionary = [self unarchivedDictionaryFromFileURL:infoDictionaryURL error:&unarchiveError];
+    if (unarchiveError) {
+        DDLogError(@"Error unarchiving shared info dictionary: %@", unarchiveError);
+    }
+    
+    BOOL needsWrite = false;
+    
+    // The main cross process notification channel is for the main core data stack (articles, feed, library values, etc)
+    NSString *key = @"CrossProcessNotificiationChannelName";
+    if (!infoDictionary[key]) {
         NSString *channelName = [NSString stringWithFormat:@"org.wikimedia.wikipedia.cd-cpn-%@", [NSUUID new].UUIDString].lowercaseString;
-        infoDictionary = @{@"CrossProcessNotificiationChannelName": channelName};
-        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:infoDictionary];
+        infoDictionary = @{key: channelName};
+        needsWrite = YES;
+    }
+    self.librarySynchronizer = [[WMFCrossProcessCoreDataSynchronizer alloc] initWithIdentifier:infoDictionary[key] storageDirectory:containerURL];
+    
+    // The cache context cross process notification channel is for the cache's core data stack (cached images, offline article content)
+    key = @"CacheContextCrossProcessNotificiationChannelName";
+    if (!infoDictionary[key]) {
+        NSString *channelName = [NSString stringWithFormat:@"org.wikimedia.wikipedia.cache-cd-cpn-%@", [NSUUID new].UUIDString].lowercaseString;
+        infoDictionary = @{key: channelName};
+        needsWrite = YES;
+    }
+    self.cacheSynchronizer = [[WMFCrossProcessCoreDataSynchronizer alloc] initWithIdentifier:infoDictionary[key] storageDirectory:containerURL];
+    
+    if (needsWrite) {
+        NSError *archiveError = nil;
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:infoDictionary requiringSecureCoding:false error:&archiveError];
+        if (archiveError) {
+            DDLogError(@"Error archiving shared info dictionary: %@", archiveError);
+        }
         [data writeToURL:infoDictionaryURL atomically:YES];
     }
-    return infoDictionary;
 }
 
-- (void)setupCrossProcessCoreDataNotifier {
-    NSString *channelName = self.crossProcessNotificationChannelName;
-    assert(channelName);
-    if (!channelName) {
-        DDLogError(@"missing channel name");
-        return;
-    }
-    const char *name = [channelName UTF8String];
-    notify_register_dispatch(name, &_crossProcessNotificationToken, dispatch_get_main_queue(), ^(int token) {
-        uint64_t state;
-        notify_get_state(token, &state);
-        BOOL isExternal = state != bundleHash();
-        if (isExternal) {
-            [self handleCrossProcessCoreDataNotificationWithState:state];
-        }
-    });
+- (void)startSynchronizingLibraryContexts {
+    [self.librarySynchronizer startSynchronizingContexts:@[self.viewContext]];
 }
 
-- (void)handleCrossProcessCoreDataNotificationWithState:(uint64_t)state {
-    NSURL *baseURL = self.containerURL;
-    NSString *fileName = [NSString stringWithFormat:@"%llu.changes", state];
-    NSURL *fileURL = [baseURL URLByAppendingPathComponent:fileName isDirectory:NO];
+- (void)startSynchronizingCacheContext:(NSManagedObjectContext *)moc {
+    [self.cacheSynchronizer startSynchronizingContexts:@[moc]];
+}
+
+- (void)stopCoreDataSynchronizers {
+    [self.librarySynchronizer stop];
+    [self.cacheSynchronizer stop];
+}
+
+- (NSDictionary *)unarchivedDictionaryFromFileURL:(NSURL *)fileURL error:(NSError **)error {
     NSData *data = [NSData dataWithContentsOfURL:fileURL];
-    NSDictionary *userInfo = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    [NSManagedObjectContext mergeChangesFromRemoteContextSave:userInfo intoContexts:@[self.viewContext]];
+    NSSet *allowedClasses = [NSSet setWithArray:[NSSecureUnarchiveFromDataTransformer allowedTopLevelClasses]];
+    return [NSKeyedUnarchiver unarchivedObjectOfClasses:allowedClasses fromData:data error:error];
 }
 
 - (void)setupCoreDataStackWithContainerURL:(NSURL *)containerURL {
@@ -191,61 +208,6 @@ static uint64_t bundleHash() {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(viewContextDidChange:) name:NSManagedObjectContextObjectsDidChangeNotification object:self.viewContext];
 }
 
-- (nullable id)archiveableNotificationValueForValue:(id)value {
-    if ([value isKindOfClass:[NSManagedObject class]]) {
-        return [[value objectID] URIRepresentation];
-    } else if ([value isKindOfClass:[NSManagedObjectID class]]) {
-        return [value URIRepresentation];
-    } else if ([value isKindOfClass:[NSSet class]] || [value isKindOfClass:[NSArray class]]) {
-        return [value wmf_map:^id(id obj) {
-            return [self archiveableNotificationValueForValue:obj];
-        }];
-    } else if ([value conformsToProtocol:@protocol(NSCoding)]) {
-        return value;
-    } else {
-        return nil;
-    }
-}
-
-- (NSDictionary *)archivableNotificationUserInfoForUserInfo:(NSDictionary *)userInfo {
-    NSMutableDictionary *archiveableUserInfo = [NSMutableDictionary dictionaryWithCapacity:userInfo.count];
-    NSArray *allKeys = userInfo.allKeys;
-    for (NSString *key in allKeys) {
-        id value = userInfo[key];
-        if ([value isKindOfClass:[NSDictionary class]]) {
-            value = [self archivableNotificationUserInfoForUserInfo:value];
-        } else {
-            value = [self archiveableNotificationValueForValue:value];
-        }
-        if (value) {
-            archiveableUserInfo[key] = value;
-        }
-    }
-    return archiveableUserInfo;
-}
-
-- (void)handleCrossProcessChangesFromContextDidSaveNotification:(NSNotification *)note {
-    dispatch_semaphore_wait(_handleCrossProcessChangesSemaphore, DISPATCH_TIME_FOREVER);
-    NSDictionary *userInfo = note.userInfo;
-    if (!userInfo) {
-        return;
-    }
-
-    uint64_t state = bundleHash();
-
-    NSDictionary *archiveableUserInfo = [self archivableNotificationUserInfoForUserInfo:userInfo];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:archiveableUserInfo];
-    NSURL *baseURL = [[NSFileManager defaultManager] wmf_containerURL];
-    NSString *fileName = [NSString stringWithFormat:@"%llu.changes", state];
-    NSURL *fileURL = [baseURL URLByAppendingPathComponent:fileName isDirectory:NO];
-    [data writeToURL:fileURL atomically:YES];
-
-    const char *name = [self.crossProcessNotificationChannelName UTF8String];
-    notify_set_state(_crossProcessNotificationToken, state);
-    notify_post(name);
-    dispatch_semaphore_signal(_handleCrossProcessChangesSemaphore);
-}
-
 - (void)viewContextDidChange:(NSNotification *)note {
     NSDictionary *userInfo = note.userInfo;
     NSArray<NSString *> *keys = @[NSInsertedObjectsKey, NSUpdatedObjectsKey, NSDeletedObjectsKey, NSRefreshedObjectsKey, NSInvalidatedObjectsKey];
@@ -284,7 +246,6 @@ static uint64_t bundleHash() {
         notificationName = WMFBackgroundContextDidSave;
     }
     [[NSNotificationCenter defaultCenter] postNotificationName:notificationName object:note.object userInfo:note.userInfo];
-    [self handleCrossProcessChangesFromContextDidSaveNotification:note];
 }
 
 - (void)performBackgroundCoreDataOperationOnATemporaryContext:(nonnull void (^)(NSManagedObjectContext *moc))mocBlock {
@@ -390,17 +351,6 @@ static uint64_t bundleHash() {
 
 - (void)performUpdatesFromLibraryVersion:(NSUInteger)currentLibraryVersion inManagedObjectContext:(NSManagedObjectContext *)moc {
     NSError *migrationError = nil;
-    if (currentLibraryVersion < 1) {
-        if ([self migrateContentGroupsToPreviewContentInManagedObjectContext:moc error:nil]) {
-            [moc wmf_setValue:@(1) forKey:WMFLibraryVersionKey];
-            if ([moc hasChanges] && ![moc save:&migrationError]) {
-                DDLogError(@"Error saving during migration: %@", migrationError);
-                return;
-            }
-        } else {
-            return;
-        }
-    }
 
     if (currentLibraryVersion < 5) {
         if (![self migrateToReadingListsInManagedObjectContext:moc error:&migrationError]) {
@@ -412,21 +362,6 @@ static uint64_t bundleHash() {
     if (currentLibraryVersion < 6) {
         if (![self migrateMainPageContentGroupInManagedObjectContext:moc error:&migrationError]) {
             DDLogError(@"Error during migration: %@", migrationError);
-            return;
-        }
-    }
-
-    if (currentLibraryVersion < 7) {
-        NSError *fileProtectionError = nil;
-        if ([self.containerURL setResourceValue:NSURLFileProtectionCompleteUntilFirstUserAuthentication forKey:NSURLFileProtectionKey error:&fileProtectionError]) {
-            [moc wmf_setValue:@(7) forKey:WMFLibraryVersionKey];
-            NSError *migrationSaveError = nil;
-            if ([moc hasChanges] && ![moc save:&migrationSaveError]) {
-                DDLogError(@"Error saving during migration: %@", migrationSaveError);
-                return;
-            }
-        } else {
-            DDLogError(@"Error enabling file protection: %@", fileProtectionError);
             return;
         }
     }
@@ -459,37 +394,59 @@ static uint64_t bundleHash() {
             DDLogError(@"Error saving during migration: %@", migrationError);
             return;
         }
+        
+        if (![self moveImageControllerCacheFolderWithError:&migrationError]) {
+            DDLogError(@"Error saving during migration: %@", migrationError);
+            return;
+        }
     }
 
+    if (currentLibraryVersion < 11) {
+        [MWKLanguageLinkController migratePreferredLanguagesToManagedObjectContext:moc];
+        [moc wmf_setValue:@(11) forKey:WMFLibraryVersionKey];
+        if ([moc hasChanges] && ![moc save:&migrationError]) {
+            DDLogError(@"Error saving during migration: %@", migrationError);
+            return;
+        }
+    }
+    
     // IMPORTANT: When adding a new library version and migration, update WMFCurrentLibraryVersion to the latest version number
 }
 
 /// Library updates are separate from Core Data migration and can be used to orchestrate migrations that are more complex than automatic Core Data migration allows.
 /// They can also be used to perform migrations when the underlying Core Data model has not changed version but the apps' logic has changed in a way that requires data migration.
-- (void)performLibraryUpdates:(dispatch_block_t)completion {
+- (void)performLibraryUpdates:(dispatch_block_t)completion needsMigrateBlock:(dispatch_block_t)needsMigrateBlock {
+    dispatch_block_t combinedCompletion = ^{
+        [WMFPermanentCacheController setupCoreDataStack:^(NSManagedObjectContext * _Nullable moc, NSError * _Nullable error) {
+            if (error) {
+                DDLogError(@"Error during cache controller migration: %@", error);
+            }
+            WMFPermanentCacheController *permanentCacheController = [[WMFPermanentCacheController alloc] initWithMoc:moc session:self.session configuration:self.configuration preferredLanguageDelegate:self.languageLinkController];
+            self.cacheController = permanentCacheController;
+            [self startSynchronizingCacheContext:moc];
+            if (completion) {
+                completion();
+            }
+        }];
+    };
     NSNumber *libraryVersionNumber = [self.viewContext wmf_numberValueForKey:WMFLibraryVersionKey];
     // If the library value doesn't exist, it's a new library and can be set to the latest version
     if (!libraryVersionNumber) {
         [self performInitialLibrarySetup];
-        if (completion) {
-            completion();
-        }
+        combinedCompletion();
         return;
     }
     NSInteger currentUserLibraryVersion = [libraryVersionNumber integerValue];
     // If the library version is >= the current version, we can skip the migration
     if (currentUserLibraryVersion >= WMFCurrentLibraryVersion) {
-        if (completion) {
-            completion();
-        }
+        combinedCompletion();
         return;
     }
+    
+    needsMigrateBlock();
     [self performBackgroundCoreDataOperationOnATemporaryContext:^(NSManagedObjectContext *moc) {
-        dispatch_block_t done = ^{
-            dispatch_async(dispatch_get_main_queue(), completion);
-        };
         [self performUpdatesFromLibraryVersion:currentUserLibraryVersion inManagedObjectContext:moc];
-        done();
+        combinedCompletion();
     }];
 }
 
@@ -501,6 +458,13 @@ static uint64_t bundleHash() {
         DDLogError(@"Error performing initial library setup: %@", setupError);
     }
 }
+
+#if TEST
+- (void)performTestLibrarySetup {
+    WMFPermanentCacheController *permanentCacheController = [WMFPermanentCacheController testControllerWith:self.containerURL dataStore:self];
+    self.cacheController = permanentCacheController;
+}
+#endif
 
 - (void)markAllDownloadedArticlesInManagedObjectContextAsNeedingConversionFromMobileview:(NSManagedObjectContext *)moc {
     NSFetchRequest *request = [WMFArticle fetchRequest];
@@ -551,67 +515,13 @@ static uint64_t bundleHash() {
     }
 }
 
-- (BOOL)migrateContentGroupsToPreviewContentInManagedObjectContext:(NSManagedObjectContext *)moc error:(NSError **)error {
-    NSFetchRequest *request = [WMFContentGroup fetchRequest];
-    request.predicate = [NSPredicate predicateWithFormat:@"content != NULL"];
-    request.fetchLimit = 500;
-    NSError *fetchError = nil;
-    NSArray *contentGroups = [moc executeFetchRequest:request error:&fetchError];
-    if (fetchError) {
-        DDLogError(@"Error fetching content groups: %@", fetchError);
-        if (error) {
-            *error = fetchError;
-        }
-        return false;
-    }
-
-    while (contentGroups.count > 0) {
-        @autoreleasepool {
-            NSMutableArray *toDelete = [NSMutableArray arrayWithCapacity:1];
-            for (WMFContentGroup *contentGroup in contentGroups) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-                NSArray *content = contentGroup.content;
-                if (!content) {
-                    continue;
-                }
-                contentGroup.fullContentObject = content;
-                contentGroup.featuredContentIdentifier = contentGroup.articleURLString;
-                [contentGroup updateContentPreviewWithContent:content];
-                contentGroup.content = nil;
-#pragma clang diagnostic pop
-                if (contentGroup.contentPreview == nil) {
-                    [toDelete addObject:contentGroup];
-                }
-            }
-            for (WMFContentGroup *group in toDelete) {
-                [moc deleteObject:group];
-            }
-
-            if ([moc hasChanges]) {
-                NSError *saveError = nil;
-                [moc save:&saveError];
-                if (saveError) {
-                    DDLogError(@"Error saving downloaded articles: %@", fetchError);
-                    if (error) {
-                        *error = saveError;
-                    }
-                    return false;
-                }
-                [moc reset];
-            }
-        }
-
-        contentGroups = [moc executeFetchRequest:request error:&fetchError];
-        if (fetchError) {
-            DDLogError(@"Error fetching content groups: %@", fetchError);
-            if (error) {
-                *error = fetchError;
-            }
-            return false;
-        }
-    }
-    return true;
+- (BOOL)moveImageControllerCacheFolderWithError:(NSError **)error {
+    
+    NSURL *legacyDirectory = [[[NSFileManager defaultManager] wmf_containerURL] URLByAppendingPathComponent:@"Permanent Image Cache" isDirectory:YES];
+    NSURL *newDirectory = [[[NSFileManager defaultManager] wmf_containerURL] URLByAppendingPathComponent:@"Permanent Cache" isDirectory:YES];
+    
+    //move legacy image cache to new non-image path name
+    return [[NSFileManager defaultManager] moveItemAtURL:legacyDirectory toURL:newDirectory error:error];
 }
 
 - (void)markAllDownloadedArticlesInManagedObjectContextAsUndownloaded:(NSManagedObjectContext *)moc {
@@ -836,7 +746,7 @@ static uint64_t bundleHash() {
 
 - (void)clearTemporaryCache {
     [self clearMemoryCache];
-    [WMFSession clearTemporaryCache];
+    [self.session clearTemporaryCache];
     NSSet<NSString *> *typesToClear = [NSSet setWithObjects:WKWebsiteDataTypeDiskCache, WKWebsiteDataTypeMemoryCache, nil];
     [[WKWebsiteDataStore defaultDataStore] removeDataOfTypes:typesToClear modifiedSince:[NSDate distantPast] completionHandler:^{}];
 }
@@ -854,9 +764,9 @@ static uint64_t bundleHash() {
     WMFTaskGroup *taskGroup = [[WMFTaskGroup alloc] init];
 
     // Site info
-    NSURLComponents *components = [[WMFConfiguration current] mediaWikiAPIURLComponentsForHost:@"meta.wikimedia.org" withQueryParameters:@{@"action": @"query", @"format": @"json", @"meta": @"siteinfo"}];
+    NSURLComponents *components = [self.configuration mediaWikiAPIURLComponentsForHost:@"meta.wikimedia.org" withQueryParameters:WikipediaSiteInfo.defaultRequestParameters];
     [taskGroup enter];
-    [[WMFSession shared] getJSONDictionaryFromURL:components.URL
+    [self.session getJSONDictionaryFromURL:components.URL
                                       ignoreCache:YES
                                 completionHandler:^(NSDictionary<NSString *, id> *_Nullable siteInfo, NSURLResponse *_Nullable response, NSError *_Nullable error) {
                                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -879,7 +789,7 @@ static uint64_t bundleHash() {
     // Remote config
     NSURL *remoteConfigURL = [NSURL URLWithString:@"https://meta.wikimedia.org/static/current/extensions/MobileApp/config/ios.json"];
     [taskGroup enter];
-    [[WMFSession shared] getJSONDictionaryFromURL:remoteConfigURL
+    [self.session getJSONDictionaryFromURL:remoteConfigURL
                                       ignoreCache:YES
                                 completionHandler:^(NSDictionary<NSString *, id> *_Nullable remoteConfigurationDictionary, NSURLResponse *_Nullable response, NSError *_Nullable error) {
                                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1015,6 +925,31 @@ static uint64_t bundleHash() {
 
 - (BOOL)isArticleWithURLExcludedFromFeed:(NSURL *)articleURL {
     return [self isArticleWithURLExcludedFromFeed:articleURL inManagedObjectContext:self.viewContext];
+}
+
+#pragma mark - WMFAuthenticationManagerDelegate
+
+- (nullable NSURL*)loginSiteURL {
+    return self.languageLinkController.appLanguage.siteURL;
+}
+
+- (void)authenticationManagerDidLogin {
+    [self clearMemoryCache];
+}
+
+- (void)authenticationManagerDidReset {
+    [self clearMemoryCache];
+    [self.readingListsController setSyncEnabled:NO shouldDeleteLocalLists:NO shouldDeleteRemoteLists:NO];
+}
+
+#pragma mark - WMFSessionAuthenticationDelegate
+
+- (void)attemptReauthentication {
+    [self.authenticationManager attemptLoginWithLogoutOnFailureInitiatedBy:LogoutInitiatorServer completion:^{}];
+}
+
+- (void)deauthenticate {
+    [self.authenticationManager logoutInitiatedBy:LogoutInitiatorServer completion:^{}];
 }
 
 @end

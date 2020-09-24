@@ -2,16 +2,16 @@ import Foundation
 
 @objc(WMFArticleSummaryController)
 public class ArticleSummaryController: NSObject {
-    @objc public let fetcher: ArticleSummaryFetcher
+    private let fetcher: ArticleFetcher
     weak var dataStore: MWKDataStore?
     
-    @objc required init(fetcher: ArticleSummaryFetcher, dataStore: MWKDataStore) {
+    @objc required init(session: Session, configuration: Configuration, dataStore: MWKDataStore) {
         self.dataStore = dataStore
-        self.fetcher = fetcher
+        self.fetcher = ArticleFetcher(session: session, configuration: configuration)
     }
     
-    @discardableResult public func updateOrCreateArticleSummaryForArticle(withKey articleKey: String, completion: ((WMFArticle?, Error?) -> Void)? = nil) -> URLSessionTask? {
-        return fetcher.fetchSummaryForArticle(with: articleKey) { [weak self] (articleSummary, urlResponse, error) in
+    @discardableResult public func updateOrCreateArticleSummaryForArticle(withKey articleKey: String, cachePolicy: URLRequest.CachePolicy? = nil, completion: ((WMFArticle?, Error?) -> Void)? = nil) -> URLSessionTask? {
+        return fetcher.fetchSummaryForArticle(with: articleKey, cachePolicy: cachePolicy) { [weak self] (articleSummary, urlResponse, error) in
             DispatchQueue.main.async {
                 guard let articleSummary = articleSummary,
                     error == nil else {
@@ -25,9 +25,9 @@ public class ArticleSummaryController: NSObject {
         }
     }
     
-    @discardableResult public func updateOrCreateArticleSummariesForArticles(withKeys articleKeys: [String], completion: (([String: WMFArticle], Error?) -> Void)? = nil) -> [URLSessionTask] {
+    @discardableResult public func updateOrCreateArticleSummariesForArticles(withKeys articleKeys: [String], cachePolicy: URLRequest.CachePolicy? = nil, completion: (([String: WMFArticle], Error?) -> Void)? = nil) -> [URLSessionTask] {
 
-        return fetcher.fetchArticleSummaryResponsesForArticles(withKeys: articleKeys) { [weak self] (summaryResponses) in
+        return fetcher.fetchArticleSummaryResponsesForArticles(withKeys: articleKeys, cachePolicy: cachePolicy) { [weak self] (summaryResponses) in
             DispatchQueue.main.async {
                 self?.processSummaryResponses(with: summaryResponses, completion: completion)
             }

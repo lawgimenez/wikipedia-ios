@@ -32,14 +32,16 @@ import WMF
     // These would be better as let's and a required initializer but it's not an opportune time to ditch the storyboard
     // Convert these to non-force unwrapped if there's some way to ditch the storyboard or provide an initializer with the storyboard
     var article: WMFArticle!
+    var wikidataID: String!
     var articleURL: URL!
     var descriptionSource: ArticleDescriptionSource!
     var isAddingNewTitleDescription: Bool!
     var dataStore: MWKDataStore!
-    static func with(articleURL: URL, article: WMFArticle, descriptionSource: ArticleDescriptionSource, dataStore: MWKDataStore, theme: Theme) -> DescriptionEditViewController {
+    static func with(articleURL: URL, wikidataID: String, article: WMFArticle, descriptionSource: ArticleDescriptionSource, dataStore: MWKDataStore, theme: Theme) -> DescriptionEditViewController {
         let vc = wmf_initialViewControllerFromClassStoryboard()!
         vc.articleURL = articleURL
         vc.article = article
+        vc.wikidataID = wikidataID
         vc.descriptionSource = descriptionSource
         vc.isAddingNewTitleDescription = descriptionSource == .none
         vc.dataStore = dataStore
@@ -80,7 +82,7 @@ import WMF
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         enableProgressiveButton(false)
-        loginLabel.isHidden = WMFAuthenticationManager.sharedInstance.isLoggedIn
+        loginLabel.isHidden = dataStore.authenticationManager.isLoggedIn
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -209,10 +211,7 @@ import WMF
         enableProgressiveButton(false)
         wmf_hideKeyboard()
         
-        guard
-            let wikidataID = article.wikidataID,
-            let language = articleURL.wmf_language
-        else {
+        guard let language = articleURL.wmf_language else {
             enableProgressiveButton(true)
             assertionFailure("Expected article, datastore or article url not found")
             return

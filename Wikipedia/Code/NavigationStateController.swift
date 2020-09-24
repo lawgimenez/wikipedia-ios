@@ -36,7 +36,7 @@ final class NavigationStateController: NSObject {
             }
         }
         if navigationState.shouldAttemptLogin {
-            WMFAuthenticationManager.sharedInstance.attemptLogin {
+            dataStore.authenticationManager.attemptLogin {
                 restore()
             }
         } else {
@@ -105,7 +105,7 @@ final class NavigationStateController: NSObject {
                 guard let articleURL = articleURL(from: info) else {
                     return
                 }
-                guard let articleVC = ArticleViewController(articleURL: articleURL, dataStore: dataStore, theme: theme, forceCache: true) else {
+                guard let articleVC = ArticleViewController(articleURL: articleURL, dataStore: dataStore, theme: theme) else {
                     return
                 }
                 articleVC.isRestoringState = true
@@ -156,6 +156,9 @@ final class NavigationStateController: NSObject {
                     let detailVC = contentGroup.detailViewControllerWithDataStore(dataStore, theme: theme) as? UIViewController & Themeable
                 else {
                     return
+                }
+                if let onThisDayVC = detailVC as? OnThisDayViewController, let shouldShowNavigationBar = viewController.info?.shouldShowNavigationBar {
+                    onThisDayVC.shouldShowNavigationBar = shouldShowNavigationBar
                 }
                 pushOrPresent(detailVC, navigationController: navigationController, presentation: viewController.presentation)
             case (.singleWebPage, let info):
@@ -235,7 +238,8 @@ final class NavigationStateController: NSObject {
             info = Info(readingListURIString: readingListDetailVC.readingList.objectID.uriRepresentation().absoluteString)
         case let detailPresenting as DetailPresentingFromContentGroup:
             kind = .detail
-            info = Info(contentGroupIDURIString: detailPresenting.contentGroupIDURIString)
+            let shouldShowNavigationBar = (viewController as? OnThisDayViewController)?.shouldShowNavigationBar
+            info = Info(shouldShowNavigationBar: shouldShowNavigationBar, contentGroupIDURIString: detailPresenting.contentGroupIDURIString)
         case let singlePageWebViewController as SinglePageWebViewController:
             kind = .singleWebPage
             info = Info(url: singlePageWebViewController.url)

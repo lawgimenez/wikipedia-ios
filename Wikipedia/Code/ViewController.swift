@@ -29,6 +29,15 @@ class ViewController: PreviewingViewController, NavigationBarHiderDelegate {
         return NavigationBarHider()
     }()
 
+    var isProgramaticallyScrolling: Bool = false {
+        didSet {
+            guard let yOffset = scrollView?.contentOffset.y, let topInset = scrollView?.contentInset.top else {
+                return
+            }
+            navigationBarHider.setIsProgramaticallyScrolling(isProgramaticallyScrolling, yOffset: yOffset, topContentInset: topInset)
+        }
+    }
+
     private var keyboardFrame: CGRect? {
         didSet {
             keyboardDidChangeFrame(from: oldValue, newKeyboardFrame: keyboardFrame)
@@ -179,7 +188,10 @@ class ViewController: PreviewingViewController, NavigationBarHiderDelegate {
             }
             return
         }
-        
+
+        /// Need to prune on every VC appearance, and must be done prior to updateNavigationItems being called.
+        (navigationController as? RootNavigationController)?.pruneSearchControllers()
+
         if navigationMode == .forceBar {
             ownsNavigationBar = true
             showsNavigationBar = true
@@ -329,6 +341,12 @@ class ViewController: PreviewingViewController, NavigationBarHiderDelegate {
         }
         navigationBarHider.scrollViewWillScrollToTop(scrollView)
         scrollView.setContentOffset(CGPoint(x: scrollView.contentOffset.x, y: 0 - scrollView.contentInset.top), animated: true)
+    }
+    
+    // MARK: - NavigationBar
+    
+    func showNavigationBar() {
+        navigationBar.setNavigationBarPercentHidden(0, underBarViewPercentHidden: 0, extendedViewPercentHidden: 0, topSpacingPercentHidden: 0, animated: false)
     }
     
     // MARK: - WMFNavigationBarHiderDelegate
@@ -514,8 +532,8 @@ class ViewController: PreviewingViewController, NavigationBarHiderDelegate {
     
     internal let alertManager: WMFAlertManager = WMFAlertManager.sharedInstance
     
-    func showError(_ error: Error) {
-        alertManager.showErrorAlert(error, sticky: false, dismissPreviousAlerts: false)
+    func showError(_ error: Error, sticky: Bool = false) {
+        alertManager.showErrorAlert(error, sticky: sticky, dismissPreviousAlerts: false, viewController: self)
     }
     
     func showGenericError() {
@@ -602,6 +620,11 @@ extension ViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         navigationBarHider.scrollViewDidEndScrollingAnimation(scrollView)
+
+        if let scrollableArticle = self as? ArticleScrolling {
+            // call the first completion
+            scrollableArticle.scrollViewAnimationCompletions.popLast()?()
+        }
     }
 
     func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {

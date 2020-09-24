@@ -92,26 +92,9 @@ public class NavigationBar: SetupView, FakeProgressReceiving, FakeProgressDelega
     
     @objc public func updateNavigationItems() {
         var items: [UINavigationItem] = []
-        if displayType == .backVisible {
-            
-            if let vc = delegate, let nc = vc.navigationController {
-                
-                var indexToAppend: Int = 0
-                if let index = nc.viewControllers.firstIndex(of: vc), index > 0 {
-                    indexToAppend = index
-                } else if let parentVC = vc.parent,
-                    let index = nc.viewControllers.firstIndex(of: parentVC),
-                    index > 0 {
-                    indexToAppend = index
-                }
-                
-                if indexToAppend > 0 {
-                    items.append(nc.viewControllers[indexToAppend].navigationItem)
-                }
-            }
-        }
-        
-        if let item = delegate?.navigationItem {
+        if displayType == .backVisible, let vc = delegate, let nc = vc.navigationController {
+            nc.viewControllers.forEach({ items.append($0.navigationItem) })
+        } else if let item = delegate?.navigationItem {
             items.append(item)
         }
         
@@ -170,8 +153,8 @@ public class NavigationBar: SetupView, FakeProgressReceiving, FakeProgressDelega
         } else if let systemBarButton = item as? SystemBarButton, let systemItem = systemBarButton.systemItem {
             barButtonItem = SystemBarButton(with: systemItem, target: systemBarButton.target, action: systemBarButton.action)
         } else if let customView = item.customView {
-            let customViewData = NSKeyedArchiver.archivedData(withRootObject: customView)
-            if let copiedView = NSKeyedUnarchiver.unarchiveObject(with: customViewData) as? UIView {
+            if let customViewData = try? NSKeyedArchiver.archivedData(withRootObject: customView, requiringSecureCoding: false),
+                let copiedView = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIView.self, from: customViewData) {
                 if let button = customView as? UIButton, let copiedButton = copiedView as? UIButton {
                     for target in button.allTargets {
                         guard let actions = button.actions(forTarget: target, forControlEvent: .touchUpInside) else {
@@ -208,6 +191,16 @@ public class NavigationBar: SetupView, FakeProgressReceiving, FakeProgressDelega
 
     private var shadowHeightConstraint: NSLayoutConstraint!
     private var extendedViewHeightConstraint: NSLayoutConstraint!
+
+    private lazy var safeAreaUnderBarConstraints = [
+        safeAreaLayoutGuide.leadingAnchor.constraint(equalTo: underBarView.leadingAnchor),
+        safeAreaLayoutGuide.trailingAnchor.constraint(equalTo: underBarView.trailingAnchor)
+    ]
+
+    private lazy var fullWidthUnderBarConstraints = [
+        leadingAnchor.constraint(equalTo: underBarView.leadingAnchor),
+        trailingAnchor.constraint(equalTo: underBarView.trailingAnchor)
+    ]
     
     private var titleBarTopConstraint: NSLayoutConstraint!
     private var barTopConstraint: NSLayoutConstraint!
@@ -284,10 +277,7 @@ public class NavigationBar: SetupView, FakeProgressReceiving, FakeProgressDelega
         underBarViewTopBarBottomConstraint = bar.bottomAnchor.constraint(equalTo: underBarView.topAnchor)
         underBarViewTopTitleBarBottomConstraint = titleBar.bottomAnchor.constraint(equalTo: underBarView.topAnchor)
         underBarViewTopBottomConstraint = topAnchor.constraint(equalTo: underBarView.topAnchor)
-        
-        let underBarViewLeadingConstraint = leadingAnchor.constraint(equalTo: underBarView.leadingAnchor)
-        let underBarViewTrailingConstraint = trailingAnchor.constraint(equalTo: underBarView.trailingAnchor)
-        
+
         extendedViewHeightConstraint = extendedView.heightAnchor.constraint(equalToConstant: 0)
         extendedView.addConstraint(extendedViewHeightConstraint)
         
@@ -311,7 +301,8 @@ public class NavigationBar: SetupView, FakeProgressReceiving, FakeProgressDelega
         shadowTopExtendedViewBottomConstraint = extendedView.bottomAnchor.constraint(equalTo: shadow.topAnchor)
         shadowTopUnderBarViewBottomConstraint = underBarView.bottomAnchor.constraint(equalTo: shadow.topAnchor)
 
-        updatedConstraints.append(contentsOf: [titleBarTopConstraint, titleBarLeadingConstraint, titleBarTrailingConstraint, underBarViewTopTitleBarBottomConstraint, barTopConstraint, barLeadingConstraint, barTrailingConstraint, underBarViewTopBarBottomConstraint, underBarViewTopBottomConstraint, underBarViewLeadingConstraint, underBarViewTrailingConstraint, extendedViewTopConstraint, extendedViewLeadingConstraint, extendedViewTrailingConstraint, extendedViewBottomConstraint, backgroundViewTopConstraint, backgroundViewLeadingConstraint, backgroundViewTrailingConstraint, backgroundViewBottomConstraint, progressViewBottomConstraint, progressViewLeadingConstraint, progressViewTrailingConstraint, shadowTopUnderBarViewBottomConstraint, shadowTopExtendedViewBottomConstraint, shadowLeadingConstraint, shadowTrailingConstraint])
+        updatedConstraints.append(contentsOf: [titleBarTopConstraint, titleBarLeadingConstraint, titleBarTrailingConstraint, underBarViewTopTitleBarBottomConstraint, barTopConstraint, barLeadingConstraint, barTrailingConstraint, underBarViewTopBarBottomConstraint, underBarViewTopBottomConstraint, extendedViewTopConstraint, extendedViewLeadingConstraint, extendedViewTrailingConstraint, extendedViewBottomConstraint, backgroundViewTopConstraint, backgroundViewLeadingConstraint, backgroundViewTrailingConstraint, backgroundViewBottomConstraint, progressViewBottomConstraint, progressViewLeadingConstraint, progressViewTrailingConstraint, shadowTopUnderBarViewBottomConstraint, shadowTopExtendedViewBottomConstraint, shadowLeadingConstraint, shadowTrailingConstraint])
+        updatedConstraints.append(contentsOf: safeAreaUnderBarConstraints)
         addConstraints(updatedConstraints)
         
         updateTitleBarConstraints()
@@ -376,6 +367,17 @@ public class NavigationBar: SetupView, FakeProgressReceiving, FakeProgressDelega
         }
         set {
             setNavigationBarPercentHidden(_navigationBarPercentHidden, underBarViewPercentHidden: _underBarViewPercentHidden, extendedViewPercentHidden: newValue, topSpacingPercentHidden: _topSpacingPercentHidden, animated: false)
+        }
+    }
+
+    private var shouldUnderBarIgnoreSafeArea: Bool = false {
+        didSet {
+            guard shouldUnderBarIgnoreSafeArea != oldValue else {
+                return
+            }
+
+            NSLayoutConstraint.deactivate(shouldUnderBarIgnoreSafeArea ? safeAreaUnderBarConstraints : fullWidthUnderBarConstraints)
+            NSLayoutConstraint.activate(shouldUnderBarIgnoreSafeArea ? fullWidthUnderBarConstraints : safeAreaUnderBarConstraints)
         }
     }
     
@@ -613,11 +615,12 @@ public class NavigationBar: SetupView, FakeProgressReceiving, FakeProgressDelega
         extendedViewHeightConstraint.isActive = true
     }
     
-    @objc public func addUnderNavigationBarView(_ view: UIView) {
+    @objc public func addUnderNavigationBarView(_ view: UIView, shouldIgnoreSafeArea: Bool = false) {
         guard underBarView.subviews.first == nil else {
             return
         }
         underBarViewHeightConstraint.isActive = false
+        shouldUnderBarIgnoreSafeArea = shouldIgnoreSafeArea
         underBarView.wmf_addSubviewWithConstraintsToEdges(view)
     }
     
@@ -722,5 +725,17 @@ extension NavigationBar: UINavigationBarDelegate {
     public func navigationBar(_ navigationBar: UINavigationBar, shouldPop item: UINavigationItem) -> Bool {
         delegate?.navigationController?.popViewController(animated: true)
         return false
+    }
+
+    public func navigationBar(_ navigationBar: UINavigationBar, didPop item: UINavigationItem) {
+        // During iOS 14's long press to access back history, this function is called *after* the unneeded navigationItems have been popped off.
+        // However, with our custom navBar the actual articleVC isn't changed. So we need to find the articleVC for the top navItem, and pop to it.
+        // This should be in shouldPop, but as of iOS 14.0 beta 5, shouldPop isn't called when long pressing a back button. Once this is fixed by Apple,
+        // we should move this to shouldPop to improve animations.
+        if let topNavigationItem = navigationBar.items?.last,
+           let navController = delegate?.navigationController,
+           let tappedViewController = navController.viewControllers.first(where: {$0.navigationItem == topNavigationItem}) {
+            delegate?.navigationController?.popToViewController(tappedViewController, animated: true)
+        }
     }
 }

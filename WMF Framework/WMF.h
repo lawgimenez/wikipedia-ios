@@ -49,18 +49,10 @@ FOUNDATION_EXPORT const unsigned char WMFVersionString[];
 #import <WMF/MWKDataObject.h>
 #import <WMF/MWKSiteDataObject.h>
 
-#import <WMF/MWKUser.h>
-
 #import <WMF/MWKSavedPageList.h>
 
 #import <WMF/MWKRecentSearchEntry.h>
 #import <WMF/MWKRecentSearchList.h>
-
-#import <WMF/WMFImageTagParser.h>
-#import <WMF/WMFImageTag.h>
-#import <WMF/WMFImageTag+TargetImageWidthURL.h>
-#import <WMF/WMFImageTagList.h>
-#import <WMF/WMFImageTagList+ImageURLs.h>
 
 #import <WMF/MWLanguageInfo.h>
 
@@ -77,15 +69,10 @@ FOUNDATION_EXPORT const unsigned char WMFVersionString[];
 
 #import <WMF/MWKLanguageLinkController.h>
 #import <WMF/MWKLanguageFilter.h>
-#import <WMF/WMFNetworkUtilities.h>
 
 #import <WMF/UIScreen+WMFImageWidth.h>
-#import <WMF/NSURL+WMFMainPage.h>
-#import <WMF/WMFAssetsFile.h>
 
 #import <WMF/WMFNotificationsController.h>
-
-#import <WMF/MWNetworkActivityIndicatorManager.h>
 
 #import <WMF/MWKLanguageLinkController_Private.h>
 #import <WMF/WMFFaceDetectionCache.h>
@@ -99,6 +86,7 @@ FOUNDATION_EXPORT const unsigned char WMFVersionString[];
 #import <WMF/WMFContinueReadingContentSource.h>
 #import <WMF/WMFFeedContentSource.h>
 #import <WMF/WMFRandomContentSource.h>
+#import <WMF/WMFAnnouncementsContentSource.h>
 
 #import <WMF/WMFFeedContentFetcher.h>
 #import <WMF/WMFFeedDayResponse.h>
@@ -107,9 +95,8 @@ FOUNDATION_EXPORT const unsigned char WMFVersionString[];
 #import <WMF/WMFFeedImage.h>
 #import <WMF/WMFFeedNewsStory.h>
 #import <WMF/WMFFeedOnThisDayEvent.h>
+#import <WMF/WMFOnThisDayEventsFetcher.h>
 
-#import <WMF/WMFLocationManager.h>
-#import <WMF/CLLocationManager+WMFLocationManagers.h>
 #import <WMF/CLLocation+WMFBearing.h>
 #import <WMF/NSString+WMFDistance.h>
 #import <WMF/CLLocation+WMFComparison.h>
@@ -121,7 +108,6 @@ FOUNDATION_EXPORT const unsigned char WMFVersionString[];
 
 #import <WMF/EventLoggingFunnel.h>
 #import <WMF/MWKSearchResult.h>
-#import <WMF/NSDictionary+WMFCommonParams.h>
 
 #import <WMF/WMFArticle+Extensions.h>
 #import <WMF/WMFContentGroup+Extensions.h>
@@ -147,6 +133,4 @@ FOUNDATION_EXPORT const unsigned char WMFVersionString[];
 //Deprecated
 #import <WMF/MWKList.h>
 #import <WMF/MWKList+Subclass.h>
-#import <WMF/MWKSite.h>
-#import <WMF/MWKTitle.h>
 #import <WMF/WMFLegacyImageCache.h>

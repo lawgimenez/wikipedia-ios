@@ -57,6 +57,9 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
         super.viewWillAppear(animated)
         collectionViewUpdater?.isGranularUpdatingEnabled = true
         restoreScrollPositionIfNeeded()
+
+        /// Terrible hack to make back button text appropriate for iOS 14 - need to set the title on `WMFAppViewController`. For all app tabs, this is set in `viewWillAppear`.
+        parent?.navigationItem.backButtonTitle = title
     }
 
     private func restoreScrollPositionIfNeeded() {
@@ -108,6 +111,10 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
     }()
 
     // MARK - Refresh
+    
+    override func refreshControlActivated() {
+        super.refreshControlActivated()
+    }
     
     open override func refresh() {
         FeedFunnel.shared.logFeedRefreshed()
@@ -637,6 +644,7 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
     }
     
     func collectionViewUpdater<T: NSFetchRequestResult>(_ updater: CollectionViewUpdater<T>, didUpdate collectionView: UICollectionView) {
+		
         guard needsReloadVisibleCells else {
             return
         }
@@ -914,6 +922,7 @@ extension ExploreViewController: ExploreCardCollectionViewCellDelegate {
             exploreFeedSettingsViewController.dataStore = self.dataStore
             exploreFeedSettingsViewController.apply(theme: self.theme)
             let themeableNavigationController = WMFThemeableNavigationController(rootViewController: exploreFeedSettingsViewController, theme: self.theme)
+            themeableNavigationController.modalPresentationStyle = .formSheet
             self.present(themeableNavigationController, animated: true)
         }
         let hideThisCard = UIAlertAction(title: WMFLocalizedString("explore-feed-preferences-hide-card-action-title", value: "Hide this card", comment: "Title for action that allows users to hide a feed card"), style: .default) { (_) in

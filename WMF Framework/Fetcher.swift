@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 // Base class for combining a Session and Configuration to make network requests
 // Session handles constructing and making requests, Configuration handles url structure for the current target
@@ -19,7 +19,8 @@ open class Fetcher: NSObject {
     private let semaphore = DispatchSemaphore.init(value: 1)
     
     @objc override public convenience init() {
-        self.init(session: Session.shared, configuration: Configuration.current)
+        let dataStore = MWKDataStore.shared()
+        self.init(session: dataStore.session, configuration: dataStore.configuration)
     }
     
     @objc required public init(session: Session, configuration: Configuration) {
@@ -103,7 +104,7 @@ open class Fetcher: NSObject {
         let components = configuration.mediaWikiAPIURLForHost(URL?.host, with: queryParameters)
         let key = cancellationKey ?? UUID().uuidString
         let task = session.getJSONDictionary(from: components.url) { (result, response, error) in
-            let returnError = error ?? WMFErrorForApiErrorObject(result?["error"] as? [AnyHashable : Any])
+            let returnError = error ?? RequestError.from(result?["error"] as? [String : Any])
             completionHandler(result, response, returnError)
             self.untrack(taskFor: key)
         }
@@ -116,7 +117,7 @@ open class Fetcher: NSObject {
         
         let key = cancellationKey ?? UUID().uuidString
         let task = session.getJSONDictionary(from: urlRequest) { (result, response, error) in
-            let returnError = error ?? WMFErrorForApiErrorObject(result?["error"] as? [AnyHashable : Any])
+            let returnError = error ?? RequestError.from(result?["error"] as? [String : Any])
             completionHandler(result, response, returnError)
             self.untrack(taskFor: key)
         }
@@ -140,27 +141,21 @@ open class Fetcher: NSObject {
         return key
     }
     
-    @discardableResult public func performMobileAppsServicesGET<T: Decodable>(for URL: URL?, pathComponents: [String], priority: Float = URLSessionTask.defaultPriority, completionHandler: @escaping (_ result: T?, _ response: URLResponse?,  _ error: Error?) -> Swift.Void) -> URLSessionTask? {
-        
-        //The accept profile is case sensitive https://gerrit.wikimedia.org/r/#/c/356429/
-        let headers = ["Accept": "application/json; charset=utf-8; profile=\"https://www.mediawiki.org/wiki/Specs/Summary/1.1.2\""]
-        let taskURL = configuration.wikipediaMobileAppsServicesAPIURLComponentsForHost(URL?.host, appending: pathComponents).url
-        let key = UUID().uuidString
-        let task = session.jsonDecodableTask(with: taskURL, headers: headers, priority: priority) { (result: T?, response: URLResponse?, error: Error?) in
-            completionHandler(result, response, error)
-            self.untrack(taskFor: key)
-        }
-        track(task: task, for: key)
-        return task
-    }
-    
-    @discardableResult public func performMobileAppsServicesGET<T: Decodable>(for urlRequest: URLRequest, completionHandler: @escaping (_ result: T?, _ response: URLResponse?,  _ error: Error?) -> Swift.Void) -> URLSessionTask? {
+    /// Creates and kicks off a URLSessionTask, tracking it in case the session needs to cancel it later. From fetchers, prefer using this method over calling session.jsonDecodableTask directly as it ensures the task is tracked and uses the result type
+    @discardableResult public func trackedJSONDecodableTask<T: Decodable>(with urlRequest: URLRequest, completionHandler: @escaping (Result<T, Error>, HTTPURLResponse?) -> Swift.Void) -> URLSessionTask? {
         
         let key = UUID().uuidString
         let task = session.jsonDecodableTask(with: urlRequest) { (result: T?, response: URLResponse?, error: Error?) in
-            completionHandler(result, response, error)
-            self.untrack(taskFor: key)
+            defer {
+                 self.untrack(taskFor: key)
+            }
+            guard let result = result else {
+                completionHandler(.failure(error ?? RequestError.unexpectedResponse), response as? HTTPURLResponse)
+                return
+            }
+            completionHandler(.success(result), response as? HTTPURLResponse)
         }
+        
         track(task: task, for: key)
         return task
     }

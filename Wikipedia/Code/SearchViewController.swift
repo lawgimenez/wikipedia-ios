@@ -26,6 +26,9 @@ class SearchViewController: ArticleCollectionViewController, UISearchBarDelegate
             navigationBar.isAdjustingHidingFromContentInsetChangesEnabled = false
             searchBar.becomeFirstResponder()
         }
+
+        /// Terrible hack to make back button text appropriate for iOS 14 - need to set the title on `WMFAppViewController`. For all app tabs, this is set in `viewWillAppear`.
+        parent?.navigationItem.backButtonTitle = title
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -100,7 +103,7 @@ class SearchViewController: ArticleCollectionViewController, UISearchBarDelegate
 
     var siteURL: URL? {
         get {
-            return _siteURL ?? searchLanguageBarViewController?.currentlySelectedSearchLanguage?.siteURL() ?? MWKLanguageLinkController.sharedInstance().appLanguage?.siteURL() ?? NSURL.wmf_URLWithDefaultSiteAndCurrentLocale()
+            return _siteURL ?? searchLanguageBarViewController?.currentlySelectedSearchLanguage?.siteURL() ?? MWKDataStore.shared().languageLinkController.appLanguage?.siteURL() ?? NSURL.wmf_URLWithDefaultSiteAndCurrentLocale()
         }
         set {
             _siteURL = newValue
@@ -138,15 +141,10 @@ class SearchViewController: ArticleCollectionViewController, UISearchBarDelegate
         
         let start = Date()
         
-        MWNetworkActivityIndicatorManager.shared()?.push()
         fakeProgressController.start()
-        
-        let commonCompletion = {
-            MWNetworkActivityIndicatorManager.shared()?.pop()
-        }
+    
         let failure = { (error: Error, type: WMFSearchType) in
             DispatchQueue.main.async {
-                commonCompletion()
                 self.fakeProgressController.stop()
                 guard searchTerm == self.searchBar.text else {
                     return
@@ -159,7 +157,6 @@ class SearchViewController: ArticleCollectionViewController, UISearchBarDelegate
         
         let sucess = { (results: WMFSearchResults, type: WMFSearchType) in
             DispatchQueue.main.async {
-                commonCompletion()
                 guard searchTerm == self.searchBar.text else {
                     return
                 }

@@ -26,7 +26,7 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
     
 
 #if WMF_EVENT_LOGGING_DEV_DEBUG
-    private static let scheme = "http"
+    private static let scheme = "https"
     private static let host = "deployment.wikimedia.beta.wmflabs.org"
 #else
     private static let scheme = "https"
@@ -60,7 +60,8 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
         let permanentStorageURL = permanentStorageDirectory.appendingPathComponent("Events.sqlite")
         DDLogDebug("EventLoggingService: Events persistent store: \(permanentStorageURL)")
         
-        return EventLoggingService(session: Session.shared, permanentStorageURL: permanentStorageURL)
+        // SINGLETONTODO
+        return EventLoggingService(session: MWKDataStore.shared().session, permanentStorageURL: permanentStorageURL)
     }()
     
     @objc

@@ -12,23 +12,17 @@
 
 @implementation WMFAnnouncementsContentSource
 
-- (instancetype)initWithSiteURL:(NSURL *)siteURL {
+- (instancetype)initWithSiteURL:(NSURL *)siteURL session:(WMFSession *)session configuration:(WMFConfiguration *)configuration {
     NSParameterAssert(siteURL);
     self = [super init];
     if (self) {
         self.siteURL = siteURL;
+        self.fetcher = [[WMFAnnouncementsFetcher alloc] initWithSession:session configuration:configuration];
     }
     return self;
 }
 
 #pragma mark - Accessors
-
-- (WMFAnnouncementsFetcher *)fetcher {
-    if (_fetcher == nil) {
-        _fetcher = [[WMFAnnouncementsFetcher alloc] init];
-    }
-    return _fetcher;
-}
 
 - (void)removeAllContentInManagedObjectContext:(NSManagedObjectContext *)moc {
 }
@@ -79,7 +73,7 @@
 
 - (void)saveAnnouncements:(NSArray<WMFAnnouncement *> *)announcements inManagedObjectContext:(NSManagedObjectContext *)moc completion:(nullable dispatch_block_t)completion {
     [moc performBlock:^{
-        BOOL isLoggedIn = WMFSession.shared.isAuthenticated;
+        BOOL isLoggedIn = self.fetcher.session.isAuthenticated;
         [announcements enumerateObjectsUsingBlock:^(WMFAnnouncement *_Nonnull obj, NSUInteger idx, BOOL *_Nonnull stop) {
             NSURL *URL = [WMFContentGroup announcementURLForSiteURL:self.siteURL identifier:obj.identifier];
             WMFContentGroup *group = [moc fetchOrCreateGroupForURL:URL
@@ -90,13 +84,14 @@
                                                 customizationBlock:^(WMFContentGroup *_Nonnull group) {
                                                     group.contentPreview = obj;
                                                     group.placement = obj.placement;
-                                                    if ([obj.placement isEqualToString:@"article"]) {
-                                                        NSUserDefaults.standardUserDefaults.shouldCheckForArticleAnnouncements = YES;
-                                                    }
                                                 }];
             [group updateVisibilityForUserIsLoggedIn:isLoggedIn];
+            if (group.isVisible && [group.placement isEqualToString:@"article"]) {
+                NSUserDefaults.standardUserDefaults.shouldCheckForArticleAnnouncements = YES;
+            }
         }];
 
+        [[WMFSurveyAnnouncementsController shared] setAnnouncements:announcements forSiteURL:self.siteURL];
         if (completion) {
             completion();
         }
@@ -117,12 +112,23 @@
 
     [moc removeAllContentGroupsOfKind:WMFContentGroupKindTheme];
 
-    if (moc.wmf_isSyncRemotelyEnabled && !NSUserDefaults.standardUserDefaults.wmf_didShowReadingListCardInFeed && !WMFSession.shared.isAuthenticated) {
+    if (moc.wmf_isSyncRemotelyEnabled && !NSUserDefaults.standardUserDefaults.wmf_didShowReadingListCardInFeed && !self.fetcher.session.isAuthenticated) {
         NSURL *readingListContentGroupURL = [WMFContentGroup readingListContentGroupURL];
         [moc fetchOrCreateGroupForURL:readingListContentGroupURL ofKind:WMFContentGroupKindReadingList forDate:[NSDate date] withSiteURL:self.siteURL associatedContent:nil customizationBlock:NULL];
         NSUserDefaults.standardUserDefaults.wmf_didShowReadingListCardInFeed = YES;
     } else {
         [moc removeAllContentGroupsOfKind:WMFContentGroupKindReadingList];
+    }
+
+    // Workaround for the great fundraising mystery of 2019: https://phabricator.wikimedia.org/T247554
+    // TODO: Further investigate the root cause before adding the 2020 fundraising banner: https://phabricator.wikimedia.org/T247976
+    //also deleting IOSSURVEY20 because we want to bypass persistence and only consider in online mode
+    NSArray *announcements = [moc contentGroupsOfKind:WMFContentGroupKindAnnouncement];
+    for (WMFContentGroup *announcement in announcements) {
+        if (![announcement.key containsString:@"FUNDRAISING19"] && ![announcement.key containsString:@"IOSSURVEY20"]) {
+            continue;
+        }
+        [moc deleteObject:announcement];
     }
 }
 
@@ -138,7 +144,7 @@
         return;
     }
 #endif
-    BOOL isLoggedIn = WMFSession.shared.isAuthenticated;
+    BOOL isLoggedIn = self.fetcher.session.isAuthenticated;
     [moc enumerateContentGroupsOfKind:WMFContentGroupKindAnnouncement
                             withBlock:^(WMFContentGroup *_Nonnull group, BOOL *_Nonnull stop) {
                                 [group updateVisibilityForUserIsLoggedIn:isLoggedIn];

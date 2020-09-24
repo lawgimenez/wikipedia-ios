@@ -41,7 +41,6 @@ class DiffContainerViewController: ViewController, HintPresenting {
     private var firstRevision: WMFPageHistoryRevision?
     
     var animateDirection: DiffRevisionTransition.Direction?
-    private var hidesHistoryBackTitle: Bool = false
     
     lazy private(set) var fakeProgressController: FakeProgressController = {
         let progressController = FakeProgressController(progress: navigationBar, delegate: navigationBar)
@@ -104,14 +103,13 @@ class DiffContainerViewController: ViewController, HintPresenting {
         }
     }
     
-    init(siteURL: URL, theme: Theme, fromRevisionID: Int?, toRevisionID: Int?, type: DiffContainerViewModel.DiffType, articleTitle: String?, hidesHistoryBackTitle: Bool = false) {
+    init(siteURL: URL, theme: Theme, fromRevisionID: Int?, toRevisionID: Int?, type: DiffContainerViewModel.DiffType, articleTitle: String?) {
     
         self.siteURL = siteURL
         self.type = type
         self.articleTitle = articleTitle
         self.toModelRevisionID = toRevisionID
         self.fromModelRevisionID = fromRevisionID
-        self.hidesHistoryBackTitle = hidesHistoryBackTitle
         
         self.diffController = DiffController(siteURL: siteURL, pageHistoryFetcher: nil, revisionRetrievingDelegate: nil, type: type)
         self.containerViewModel = DiffContainerViewModel(type: type, fromModel: nil, toModel: nil, listViewModel: nil, articleTitle: articleTitle, byteDifference: nil, theme: theme)
@@ -162,10 +160,8 @@ class DiffContainerViewController: ViewController, HintPresenting {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if !hidesHistoryBackTitle {
-            navigationItem.backBarButtonItem = UIBarButtonItem(title: CommonStrings.historyTabTitle, style: .plain, target: nil, action: nil)
-        }
-        
+        setupBackButton()
+
         let onLoad = { [weak self] in
             
             guard let self = self else { return }
@@ -258,6 +254,23 @@ class DiffContainerViewController: ViewController, HintPresenting {
         diffListViewController?.apply(theme: theme)
         scrollingEmptyViewController?.apply(theme: theme)
         diffToolbarView?.apply(theme: theme)
+    }
+
+    private func setupBackButton() {
+        if #available(iOS 14.0, *) {
+            let buttonTitle: String
+            switch type {
+            case .compare: buttonTitle = CommonStrings.compareRevisionsTitle
+            case .single:
+                guard let toDate = toModel?.revisionDate as NSDate? else {
+                    return
+                }
+                let dateString = toDate.wmf_fullyLocalizedRelativeDateStringFromLocalDateToNow()
+                buttonTitle = String.localizedStringWithFormat(CommonStrings.revisionMadeFormat, dateString.lowercased())
+            }
+            navigationItem.backButtonTitle = buttonTitle
+            navigationItem.backButtonDisplayMode = .generic
+        }
     }
 }
 
@@ -375,6 +388,7 @@ private extension DiffContainerViewController {
         setupDiffListViewControllerIfNeeded()
         fetchIntermediateCountIfNeeded()
         fetchEditCountIfNeeded()
+        setupBackButton()
         apply(theme: theme)
     }
     
@@ -1038,6 +1052,8 @@ extension DiffContainerViewController: DiffHeaderActionDelegate {
             return
         }
         
+        EditHistoryCompareFunnel.shared.logRevisionView(url: siteURL)
+        
         let singleDiffVC = DiffContainerViewController(articleTitle: articleTitle, siteURL: siteURL, type: .single, fromModel: nil, toModel: revision, theme: theme, revisionRetrievingDelegate: revisionRetrievingDelegate,  firstRevision: firstRevision)
         push(singleDiffVC, animated: true)
     }
@@ -1158,12 +1174,16 @@ extension DiffContainerViewController: DiffToolbarViewDelegate {
             return
         }
         
+        EditHistoryCompareFunnel.shared.logThankTry(siteURL: siteURL)
+        
         guard !isAlreadySelected else {
+            EditHistoryCompareFunnel.shared.logThankFail(siteURL: siteURL)
             self.show(hintViewController: AuthorAlreadyThankedHintVC())
             return
         }
         
         guard !toModel.isAnon else {
+            EditHistoryCompareFunnel.shared.logThankFail(siteURL: siteURL)
             self.show(hintViewController: AnonymousUsersCannotBeThankedHintVC())
             return
         }
@@ -1174,30 +1194,32 @@ extension DiffContainerViewController: DiffToolbarViewDelegate {
             }, loginDismissedCompletion: nil)
             return
         }
+        
+        let thankCompletion: (Error?) -> Void = { (error) in
+            if error == nil {
+                self.diffToolbarView?.isThankSelected = true
+                EditHistoryCompareFunnel.shared.logThankSuccess(siteURL: self.siteURL)
+            } else {
+                EditHistoryCompareFunnel.shared.logThankFail(siteURL: self.siteURL)
+            }
+        }
 
         guard !UserDefaults.standard.wmf_didShowThankRevisionAuthorEducationPanel() else {
-            thankRevisionAuthor { (error) in
-                if error == nil {
-                    self.diffToolbarView?.isThankSelected = true
-                    }
-                }
+            thankRevisionAuthor(completion: thankCompletion)
             return
         }
 
         wmf_showThankRevisionAuthorEducationPanel(theme: theme, sendThanksHandler: {_ in
             UserDefaults.standard.wmf_setDidShowThankRevisionAuthorEducationPanel(true)
             self.dismiss(animated: true, completion: {
-                self.thankRevisionAuthor { (error) in
-                    if error == nil {
-                        self.diffToolbarView?.isThankSelected = true
-                        }
-                    }
+                self.thankRevisionAuthor(completion: thankCompletion)
             })
         })
     }
     
     var isLoggedIn: Bool {
-        return WMFAuthenticationManager.sharedInstance.isLoggedIn
+        // SINGLETONTODO
+        return MWKDataStore.shared().authenticationManager.isLoggedIn
     }
 }
 

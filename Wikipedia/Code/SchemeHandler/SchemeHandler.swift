@@ -11,16 +11,15 @@ enum SchemeHandlerError: Error {
     }
 }
 
-final class SchemeHandler: NSObject {
+class SchemeHandler: NSObject {
     let scheme: String
+    open var didReceiveDataCallback: ((WKURLSchemeTask, Data) -> Void)?
     private let session: Session
     private var activeSessionTasks: [URLRequest: URLSessionTask] = [:]
     private var activeCacheOperations: [URLRequest: Operation] = [:]
     private var activeSchemeTasks = NSMutableSet(array: [])
     
     private let cacheQueue: OperationQueue = OperationQueue()
-    
-    @objc public static let shared = SchemeHandler(scheme: "app", session: Session.shared)
     
     required init(scheme: String, session: Session) {
         self.scheme = scheme
@@ -43,8 +42,8 @@ extension SchemeHandler: WKURLSchemeHandler {
             return
         }
         
-        #if WMF_LOCAL
-        components.scheme = components.host == "localhost" ? "http" : "https"
+        #if WMF_LOCAL_PAGE_CONTENT_SERVICE
+        components.scheme = components.host == Configuration.Domain.localhost ? "http" : "https"
         #else
         components.scheme =  "https"
         #endif
@@ -102,46 +101,45 @@ extension SchemeHandler: WKURLSchemeHandler {
 private extension SchemeHandler {
     
     func urlRequestWithoutCustomScheme(from originalRequest: URLRequest, newURL: URL) -> URLRequest? {
-        guard let mutableRequest = (originalRequest as NSURLRequest).mutableCopy() as? NSMutableURLRequest else {
-            return nil
-        }
-        
+        var mutableRequest = originalRequest
         mutableRequest.url = newURL
         
-        var maybeRequest = mutableRequest.copy() as? URLRequest
+        //set persistentCacheItemType in header if it doesn't already exist
+        //set If-None-Match in header if it doesn't already exist
         
-        //reassign If-None-Match if needed. It seems like If-None-Match header gets lost between ArticleFetcher URLRequest creation and SchemeHandler.
-        if var request = maybeRequest,
-            let eTag = request.allHTTPHeaderFields?[Session.Header.persistentCacheETag],
-            request.allHTTPHeaderFields?[HTTPURLResponse.ifNoneMatchHeaderKey] == nil {
-            request.allHTTPHeaderFields?[HTTPURLResponse.ifNoneMatchHeaderKey] = eTag
-            maybeRequest = request
-        }
-        
-        //set persistent cache headers if they don't already exist
-        guard mutableRequest.allHTTPHeaderFields?[Session.Header.persistentCacheItemKey] == nil else {
-            return maybeRequest
-        }
+        let containsType = mutableRequest.allHTTPHeaderFields?[Header.persistentCacheItemType] != nil
+        let containsIfNoneMatch = mutableRequest.allHTTPHeaderFields?[URLRequest.ifNoneMatchHeaderKey] != nil
 
-        let headerProvider: CacheHeaderProviding
-        if isMimeTypeImage(type: (newURL as NSURL).wmf_mimeTypeForExtension()) {
-            headerProvider = ImageCacheHeaderProvider()
-        } else {
-            headerProvider = ArticleCacheHeaderProvider()
-        }
-        
-        if var request = maybeRequest {
+        if !containsType {
             
-            let header = headerProvider.requestHeader(urlRequest: request)
-            
-            for (key, value) in header {
-                request.setValue(value, forHTTPHeaderField: key)
+            let typeHeaders: [String: String]
+            if isMimeTypeImage(type: (newURL as NSURL).wmf_mimeTypeForExtension()) {
+                typeHeaders = session.typeHeadersForType(.image)
+            } else {
+                typeHeaders = session.typeHeadersForType(.article)
             }
             
-            return request
+            for (key, value) in typeHeaders {
+                mutableRequest.setValue(value, forHTTPHeaderField: key)
+            }
         }
         
-        return maybeRequest
+        guard !containsIfNoneMatch else {
+            return mutableRequest
+        }
+
+        let additionalHeaders: [String: String]
+        if isMimeTypeImage(type: (newURL as NSURL).wmf_mimeTypeForExtension()) {
+            additionalHeaders = session.additionalHeadersForType(.image, urlRequest: mutableRequest)
+        } else {
+            additionalHeaders = session.additionalHeadersForType(.article, urlRequest: mutableRequest)
+        }
+        
+        for (key, value) in additionalHeaders {
+            mutableRequest.setValue(value, forHTTPHeaderField: key)
+        }
+        
+        return mutableRequest
     }
     
     func isMimeTypeImage(type: String) -> Bool {
@@ -164,7 +162,7 @@ private extension SchemeHandler {
                     return
                 }
                 if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode != 200 {
-                    let error = RequestError.from(code: httpResponse.statusCode) ?? .unknown
+                    let error = RequestError.from(code: httpResponse.statusCode)
                     self.removeSessionTask(request: urlSchemeTask.request)
                     urlSchemeTask.didFailWithError(error)
                     self.removeSchemeTask(urlSchemeTask: urlSchemeTask)
@@ -182,6 +180,7 @@ private extension SchemeHandler {
                     return
                 }
                 urlSchemeTask.didReceive(data)
+                self.didReceiveDataCallback?(urlSchemeTask, data)
             }
         }, success: { [weak urlSchemeTask] in
             DispatchQueue.main.async {
@@ -195,7 +194,7 @@ private extension SchemeHandler {
                 self.removeSessionTask(request: urlSchemeTask.request)
                 self.removeSchemeTask(urlSchemeTask: urlSchemeTask)
             }
-        }) { [weak urlSchemeTask] error in
+        }, failure: { [weak urlSchemeTask] error in
             DispatchQueue.main.async {
                 
                 guard let urlSchemeTask = urlSchemeTask else {
@@ -208,7 +207,11 @@ private extension SchemeHandler {
                 urlSchemeTask.didFailWithError(error)
                 self.removeSchemeTask(urlSchemeTask: urlSchemeTask)
             }
-        }
+        }, cacheFallbackError: { error in
+            DispatchQueue.main.async {
+                WMFAlertManager.sharedInstance.showErrorAlert(error, sticky: false, dismissPreviousAlerts: false)
+            }
+        })
         
         if let dataTask = session.dataTask(with: request, callback: callback) {
             addSessionTask(request: request, dataTask: dataTask)

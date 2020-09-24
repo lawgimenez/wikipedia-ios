@@ -1,5 +1,5 @@
-
 import Foundation
+import WMF
 
 //WMFLocalizedStringWithDefaultValue(@"saved-pages-image-download-error", nil, nil, @"Failed to download images for this saved page.", @"Error message shown when one or more images fails to save for offline use.")
 
@@ -7,6 +7,7 @@ import Foundation
 final class SavedArticlesFetcher: NSObject {
     @objc static let saveToDiskDidFail = NSNotification.Name("SaveToDiskDidFail")
     @objc static let saveToDiskDidFailErrorKey = "error"
+    @objc static let saveToDiskDidFailArticleURLKey = "articleURL"
     
     @objc dynamic var progress: Progress = Progress()
     private var countOfFetchesInProcess: Int64 = 0 {
@@ -28,13 +29,8 @@ final class SavedArticlesFetcher: NSObject {
     
     @objc init?(dataStore: MWKDataStore) {
         self.dataStore = dataStore
-        
-        if let articleCacheController = dataStore.articleCacheControllerWrapper.cacheController as? ArticleCacheController {
-            self.articleCacheController = articleCacheController
-        } else {
-            return nil
-        }
-        
+        self.articleCacheController = dataStore.cacheController.articleCache
+
         spotlightManager = WMFSavedPageSpotlightManager(dataStore: dataStore)
         
         super.init()
@@ -76,13 +72,18 @@ private extension SavedArticlesFetcher {
         progress = Progress.discreteProgress(totalUnitCount: -1)
     }
     
+    private var articlesToFetchPredicate: NSPredicate {
+        let now = NSDate()
+        return NSPredicate(format: "savedDate != NULL && isDownloaded != YES && (downloadRetryDate == NULL || downloadRetryDate < %@)", now)
+    }
+    
     func calculateCountOfArticlesToFetch() -> Int64? {
         assert(Thread.isMainThread)
         
         let moc = dataStore.viewContext
         let request = WMFArticle.fetchRequest()
         request.includesSubentities = false
-        request.predicate = NSPredicate(format: "savedDate != NULL && isDownloaded != YES")
+        request.predicate = articlesToFetchPredicate
         
         do {
             let count = try moc.count(for: request)
@@ -150,7 +151,7 @@ private extension SavedArticlesFetcher {
         
         let moc = dataStore.viewContext
         let request = WMFArticle.fetchRequest()
-        request.predicate = NSPredicate(format: "savedDate != NULL && isDownloaded != YES")
+        request.predicate = articlesToFetchPredicate
         request.sortDescriptors = [NSSortDescriptor(key: "savedDate", ascending: true)]
         request.fetchLimit = 1
         
@@ -169,7 +170,8 @@ private extension SavedArticlesFetcher {
         }
         
         if let articleURL = article?.url,
-            let articleKey = articleURL.wmf_databaseKey {
+            let articleKey = article?.key,
+            let articleObjectID = article?.objectID {
             
             articleCacheController.add(url: articleURL, groupKey: articleKey, individualCompletion: { (itemResult) in
                 switch itemResult {
@@ -183,13 +185,13 @@ private extension SavedArticlesFetcher {
                     switch groupResult {
                     case .success(let itemKeys):
                         DDLogDebug("🥶group completion: \(articleKey), itemKeyCount: \(itemKeys.count)")
-                        self.didFetchArticle(with: articleKey)
+                        self.didFetchArticle(with: articleObjectID)
                         self.spotlightManager.addToIndex(url: articleURL as NSURL)
                         self.updateCountOfFetchesInProcess()
                     case .failure(let error):
                         DDLogDebug("🥶failure in groupCompletion of \(articleKey): \(error)")
                         self.updateCountOfFetchesInProcess()
-                        self.didFailToFetchArticle(with: articleKey, error: error)
+                        self.didFailToFetchArticle(with: articleObjectID, error: error)
                     }
                     updateAgain()
                 }
@@ -215,10 +217,12 @@ private extension SavedArticlesFetcher {
             
             if let articleToDelete = articleToDelete {
                 
-                guard let articleKey = articleToDelete.url?.wmf_databaseKey else {
+                guard let articleKey = articleToDelete.key else {
                     noArticleToDeleteCompletion()
                     return
                 }
+                
+                let articleObjectID = articleToDelete.objectID
                 
                 articleCacheController.remove(groupKey: articleKey, individualCompletion: { (itemResult) in
                     switch itemResult {
@@ -232,12 +236,15 @@ private extension SavedArticlesFetcher {
                         switch groupResult {
                         case .success:
                             DDLogDebug("🙈success in groupCompletion of \(articleKey)")
-                            self.didRemoveArticle(with: articleKey)
-                            self.updateCountOfFetchesInProcess()
-                        case .failure:
-                            DDLogDebug("🙈failure in groupCompletion of \(articleKey)")
+                        case .failure(let error):
+                            DDLogDebug("🙈failure in groupCompletion of \(articleKey): \(error)")
                             break
                         }
+                        // Ignoring failures to ensure the DB doesn't get stuck trying
+                        // to remove a cache group that doesn't exist.
+                        // TODO: Clean up these DB inconsistencies in the DatabaseHousekeeper
+                        self.didRemoveArticle(with: articleObjectID)
+                        self.updateCountOfFetchesInProcess()
                         updateAgain()
                     }
                 }
@@ -247,40 +254,101 @@ private extension SavedArticlesFetcher {
         }
     }
     
-    func didFetchArticle(with key: String) {
-        operateOnArticles(with: key) { (article) in
+    func didFetchArticle(with managedObjectID: NSManagedObjectID) {
+        operateOnArticle(with: managedObjectID) { (article) in
             article.isDownloaded = true
         }
     }
     
-    func didFailToFetchArticle(with key: String, error: Error) {
-        operateOnArticles(with: key) { (article) in
-            article.updatePropertiesForError(error as NSError)
-            article.isDownloaded = !isErrorRecoverableOnRetry(error)
+    func didFailToFetchArticle(with managedObjectID: NSManagedObjectID, error: Error) {
+        operateOnArticle(with: managedObjectID) { (article) in
+            handleFailure(with: article, error: error)
         }
     }
     
-    func isErrorRecoverableOnRetry(_ error: Error) -> Bool {
-        // TODO: handle different errors differently - set isDownloaded = true on items that need to be skipped (errors that won't recover on retry)
-        return true
+    func handleFailure(with article: WMFArticle, error: Error) {
+        var underlyingError: Error = error
+        if let cacheError = error as? CacheControllerError {
+            switch cacheError {
+            case .atLeastOneItemFailedInSync(let error):
+                fallthrough
+            case .atLeastOneItemFailedInFileWriter(let error):
+                underlyingError = error
+            default:
+                break
+            }
+        } else if let writerError = error as? ArticleCacheDBWriterError {
+            switch writerError {
+            case .failureFetchingMediaList(let error):
+                fallthrough
+            case .failureFetchingOfflineResourceList(let error):
+                underlyingError = error
+            case .oneOrMoreItemsFailedToMarkDownloaded(let errors):
+                underlyingError = errors.first ?? error
+            default:
+                break
+            }
+        }
+        if underlyingError is RequestError {
+            article.error = .apiFailed
+        } else {
+            let nsError = underlyingError as NSError
+            if nsError.domain == NSCocoaErrorDomain && nsError.code == NSFileWriteOutOfSpaceError {
+                let userInfo = [SavedArticlesFetcher.saveToDiskDidFailErrorKey: error]
+                NotificationCenter.default.post(name: SavedArticlesFetcher.saveToDiskDidFail, object: self, userInfo: userInfo)
+                stop()
+                article.error = .saveToDiskFailed
+            } else if nsError.domain == NSURLErrorDomain {
+                switch nsError.code {
+                case NSURLErrorTimedOut:
+                    fallthrough
+                case NSURLErrorCancelled:
+                    fallthrough
+                case NSURLErrorCannotConnectToHost:
+                    fallthrough
+                case NSURLErrorCannotFindHost:
+                    fallthrough
+                case NSURLErrorNetworkConnectionLost:
+                    fallthrough
+                case NSURLErrorNotConnectedToInternet:
+                    stop()
+                default:
+                    article.error = .apiFailed
+                }
+            } else {
+                article.error = .apiFailed
+            }
+        }
+        let newAttemptCount =  max(1, article.downloadAttemptCount + 1)
+        article.downloadAttemptCount = newAttemptCount
+        let secondsFromNowToAttempt: Int64
+        // pow() exists but this feels safer than converting to/from decimal, feel free to update if you know better
+        switch newAttemptCount {
+        case 1:
+            secondsFromNowToAttempt = 30
+        case 2:
+            secondsFromNowToAttempt = 900
+        case 3:
+            secondsFromNowToAttempt = 27000
+        case 4:
+            secondsFromNowToAttempt = 810000
+        default:
+            secondsFromNowToAttempt = 2419200 // 28 days later ☣
+        }
+        article.downloadRetryDate = Date(timeIntervalSinceNow: TimeInterval(integerLiteral: secondsFromNowToAttempt))
     }
 
-    func didRemoveArticle(with key: String) {
-        operateOnArticles(with: key) { (article) in
+    func didRemoveArticle(with managedObjectID: NSManagedObjectID) {
+        operateOnArticle(with: managedObjectID) { (article) in
             article.isDownloaded = false
         }
     }
     
-    func operateOnArticles(with key: String, articleBlock: (WMFArticle) -> Void) {
-        do {
-            let articles = try dataStore.viewContext.fetchArticles(withKey: key)
-            for article in articles {
-                articleBlock(article)
-            }
-        } catch (let error) {
-            DDLogError("Error fetching WMFArticles after caching: \(error)");
+    func operateOnArticle(with managedObjectID: NSManagedObjectID, articleBlock: (WMFArticle) -> Void) {
+        guard let article = dataStore.viewContext.object(with: managedObjectID) as? WMFArticle else {
+            return
         }
-        
+        articleBlock(article)
         do {
             try dataStore.save()
         } catch (let error) {
@@ -349,6 +417,7 @@ class MobileViewToMobileHTMLMigrationController: NSObject {
         }
 
         guard let nonNilArticle = article else {
+            stop()
             // No more articles to convert, ensure the legacy folder is deleted
             DispatchQueue.global(qos: .background).async {
                 self.dataStore.removeAllLegacyArticleData()

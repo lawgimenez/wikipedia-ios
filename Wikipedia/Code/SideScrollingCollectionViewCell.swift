@@ -49,13 +49,13 @@ public class SideScrollingCollectionViewCell: CollectionViewCell, SubCellProtoco
         descriptionLabel.isOpaque = true
         imageView.isOpaque = true
         
-        addSubview(titleLabel)
-        addSubview(subTitleLabel)
-        addSubview(descriptionLabel)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(subTitleLabel)
+        contentView.addSubview(descriptionLabel)
     
-        addSubview(imageView)
-        addSubview(collectionView)
-        addSubview(prototypeCell)
+        contentView.addSubview(imageView)
+        contentView.addSubview(collectionView)
+        contentView.addSubview(prototypeCell)
         
         wmf_configureSubviewsForDynamicType()
 
@@ -153,6 +153,8 @@ public class SideScrollingCollectionViewCell: CollectionViewCell, SubCellProtoco
     }
 
     public func resetContentOffset() {
+        /// Without a layout pass, RTL languages on LTR chrome have an incorrect initial inset.
+        layoutIfNeeded()
         let x: CGFloat = semanticContentAttributeOverride == .forceRightToLeft ? collectionView.contentSize.width - collectionView.bounds.size.width + collectionView.contentInset.right : -collectionView.contentInset.left
         collectionView.contentOffset = CGPoint(x: x, y: 0)
     }

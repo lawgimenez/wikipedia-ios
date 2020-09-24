@@ -11,18 +11,37 @@ window.wmf = wmf
 const utilities = require('./utilities')
 
 class SelectedTextEditInfo {
-  constructor(selectedAndAdjacentText, isSelectedTextInTitleDescription, sectionID) {
+  constructor(selectedAndAdjacentText, isSelectedTextInTitleDescription, sectionID, descriptionSource) {
     this.selectedAndAdjacentText = selectedAndAdjacentText
     this.isSelectedTextInTitleDescription = isSelectedTextInTitleDescription
     this.sectionID = sectionID
+    this.descriptionSource = descriptionSource
   }
 }
 
-const isSelectedTextInTitleDescription = selection => utilities.findClosest(selection.anchorNode, 'p#pagelib_edit_section_title_description') != null
-const isSelectedTextInArticleTitle = selection => utilities.findClosest(selection.anchorNode, 'h1.pagelib_edit_section_title') != null
+const getClosestFromSelection = (selection, selector) => {
+  if (!selection) {
+    return null
+  }
+  if (!selection.anchorNode) {
+    return null
+  }
+  if (!selection.anchorNode.parentElement) {
+    return null
+  }
+  return selection.anchorNode.parentElement.closest(selector)
+}
+
+const isSelectedTextInTitleDescription = selection => getClosestFromSelection(selection, 'p#pcs-edit-section-title-description') != null
+
+const isSelectedTextInArticleTitle = selection  => getClosestFromSelection(selection, 'h1.pcs-edit-section-title') != null
 
 const getSelectedTextSectionID = selection => {
-  const sectionIDString = utilities.findClosest(selection.anchorNode, 'div[id^="section_heading_and_content_block_"]').id.slice('section_heading_and_content_block_'.length)
+  const section = getClosestFromSelection(selection, 'section[data-mw-section-id]')
+  if (!section) {
+    return null
+  }
+  const sectionIDString = section.getAttribute('data-mw-section-id')
   if (sectionIDString == null) {
     return null
   }
@@ -43,10 +62,16 @@ const getSelectedTextEditInfo = () => {
   selection.removeAllRanges()
   selection.empty()
 
+  // EditTransform.IDS.TITLE_DESCRIPTION == 'pcs-edit-section-title-description'
+  const descriptionElement = document.getElementById('pcs-edit-section-title-description')
+  // EditTransform.DATA_ATTRIBUTE.DESCRIPTION_SOURCE == 'data-description-source'
+  const descriptionSource = descriptionElement && descriptionElement.getAttribute('data-description-source') || undefined
+
   return new SelectedTextEditInfo(
     selectedAndAdjacentText,
     isTitleDescriptionSelection,
-    sectionID
+    sectionID,
+    descriptionSource
   )
 }
 
@@ -222,7 +247,6 @@ const addSearchTermHighlights = (textNode, searchTerm) => {
 }
 
 const searchTermIndex = (textNode, searchTerm) => textNode.nodeValue.toLowerCase().indexOf(searchTerm)
-const isHidden = element => element.offsetParent === null
 
 const searchTermHighlightFilter = node => {
   if (node.tagName !== 'SPAN') {
@@ -254,7 +278,7 @@ const findAndHighlightAllMatchesForSearchTerm = searchTerm => {
 
   // const startTime = new Date()
   const matchMarker = node => addSearchTermHighlights(node, searchTerm.toLowerCase())
-  const matchFilter = node => !tagsToIgnore.has(node.parentElement.tagName) && !isHidden(node.parentElement)
+  const matchFilter = node => !tagsToIgnore.has(node.parentElement.tagName)
   walkBackwards(document.body, NodeFilter.SHOW_TEXT, matchFilter, matchMarker)
 
   const orderedMatchIDsToReport = [...document.querySelectorAll('span.findInPageMatch')].map(element => element.id)
@@ -298,18 +322,6 @@ exports.findAndHighlightAllMatchesForSearchTerm = findAndHighlightAllMatchesForS
 exports.useFocusStyleForHighlightedSearchTermWithId = useFocusStyleForHighlightedSearchTermWithId
 exports.removeSearchTermHighlights = removeSearchTermHighlights
 },{}],5:[function(require,module,exports){
-
-// Implementation of https://developer.mozilla.org/en-US/docs/Web/API/Element/closest
-const findClosest = (el, selector) => {
-  while ((el = el.parentElement) && !el.matches(selector));
-  return el
-}
-
-const scrollToFragment = fragmentId => {
-  location.hash = ''
-  location.hash = fragmentId
-}
-
 const accessibilityCursorToFragment = fragmentId => {
   /* Attempt to move accessibility cursor to fragment. We need to /change/ focus,
      in order to have the desired effect, so we first give focus to the body element,
@@ -323,6 +335,4 @@ const accessibilityCursorToFragment = fragmentId => {
 }
 
 exports.accessibilityCursorToFragment = accessibilityCursorToFragment
-exports.scrollToFragment = scrollToFragment
-exports.findClosest = findClosest
 },{}]},{},[1,2,3,4,5]);

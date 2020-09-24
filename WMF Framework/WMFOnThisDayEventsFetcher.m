@@ -14,9 +14,13 @@
     return supportedLanguages;
 }
 
++ (BOOL)isOnThisDaySupportedByLanguage:(NSString *)languageCode {
+    return [[WMFOnThisDayEventsFetcher supportedLanguages] containsObject:languageCode];
+}
+
 - (void)fetchOnThisDayEventsForURL:(NSURL *)siteURL month:(NSUInteger)month day:(NSUInteger)day failure:(WMFErrorHandler)failure success:(void (^)(NSArray<WMFFeedOnThisDayEvent *> *announcements))success {
     NSParameterAssert(siteURL);
-    if (siteURL == nil || siteURL.wmf_language == nil || ![[WMFOnThisDayEventsFetcher supportedLanguages] containsObject:siteURL.wmf_language] || month < 1 || day < 1) {
+    if (siteURL == nil || siteURL.wmf_language == nil || ![WMFOnThisDayEventsFetcher isOnThisDaySupportedByLanguage:siteURL.wmf_language] || month < 1 || day < 1) {
         NSError *error = [WMFFetcher invalidParametersError];
         failure(error);
         return;
@@ -25,7 +29,7 @@
     NSString *monthString = [NSString stringWithFormat:@"%lu", (unsigned long)month];
     NSString *dayString = [NSString stringWithFormat:@"%lu", (unsigned long)day];
     NSArray<NSString *> *path = @[@"feed", @"onthisday", @"events", monthString, dayString];
-    NSURLComponents *components = [self.configuration wikipediaMobileAppsServicesAPIURLComponentsForHost:siteURL.host appendingPathComponents:path];
+    NSURLComponents *components = [self.configuration wikiFeedsAPIURLComponentsForHost:siteURL.host appendingPathComponents:path];
     [self.session getJSONDictionaryFromURL:components.URL ignoreCache:YES completionHandler:^(NSDictionary<NSString *,id> * _Nullable result, NSHTTPURLResponse * _Nullable response, NSError * _Nullable error) {
         if (error) {
             failure(error);
