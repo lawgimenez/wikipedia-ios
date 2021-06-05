@@ -9,6 +9,7 @@
 // Author: KATRINE1992
 // Author: KATRINE1993
 // Author: Nemo bis
+// Author: NikosLikomitros
 // Author: Nikosgranturismogt
 // Author: Norhorn
 // Author: Protnet
@@ -126,9 +127,11 @@
 "continue-reading-empty-description" = "Εξερευνήστε τη Βικιπαίδεια για να διαβάσετε περισσότερα λήμματα";
 "continue-reading-empty-title" = "Δεν υπάρχουν πρόσφατα διαβασμένα λήμματα";
 "description-add-title" = "Προσθήκη περιγραφής";
+// Fuzzy
 "description-edit-for-article" = "Περιγραφή τίτλου για $1";
 "description-edit-learn-more" = "Μάθετε περισσότερα";
 "description-edit-length-warning" = "$1 από $2";
+// Fuzzy
 "description-edit-pencil-title" = "Επεξεργασία περιγραφή τίτλου";
 "description-edit-publish" = "Δημοσίευση περιγραφής";
 "description-edit-title" = "Επεξεργασία περιγραφής";
@@ -276,8 +279,6 @@
 "main-menu-account-logout-are-you-sure" = "Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;";
 "main-menu-account-logout-cancel" = "Ακύρωση";
 "main-menu-account-title-logged-in" = "Συνδεδεμένος ως: $1";
-"main-menu-debug-tweaks" = "Ρυθμίσεις προγραμματιστή";
-"main-menu-heading-debug" = "Αποσφαλμάτωση";
 "main-menu-heading-legal" = "Ιδιωτικότητα και Όροι";
 "main-menu-nearby" = "Κοντινά";
 "main-menu-privacy-policy" = "Πολιτική ιδιωτικότητας";
@@ -286,6 +287,7 @@
 "main-menu-title" = "Περισσότερα";
 "main-menu-zero-faq" = "Συχνές ερωτήσεις για το Wikipedia Zero";
 "menu-cancel-accessibility-label" = "Άκυρο";
+// Fuzzy
 "more-languages-tooltip-description" = "Αναζητήστε την Wikipedia σε σχεδόν 300 γλώσσες";
 "more-languages-tooltip-title" = "Προσθέστε γλώσσες";
 "move-articles-to-reading-list" = "Μετακίνηση {{PLURAL:$1|$1 λήμμα|$1 λημμάτων}} στη λίστα ανάγνωσης";
@@ -303,7 +305,6 @@
 "on-this-day-detail-header-date-range" = "από $1 - $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 ιστορικό γεγονός|$1 ιστορικά γεγονότα}}";
 "on-this-day-footer" = "Περισσότερα ιστορικά γεγονότα αυτής της μέρας";
-"on-this-day-footer-with-event-count" = "$1 Περισσότερα ιστορικά γεγονότα αυτή την ημέρα";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1 από $2 Βικιπαίδεια";
 "on-this-day-title" = "Αυτήν την μέρα";
 "page-protected-autoconfirmed" = "Αυτή η σελίδα είναι ημιπροστατευμένη";
@@ -463,6 +464,7 @@
 "welcome-explore-continue-button" = "Ξεκινήστε";
 "welcome-explore-new-ways-title" = "Νέοι τρόποι να εξερευνήσετε";
 "welcome-explore-tell-me-more-done-button" = "Κατάλαβα";
+// Fuzzy
 "welcome-intro-free-encyclopedia-description" = "Η Βικιπαίδεια γράφεται συνεργατικά από εθελοντές και αποτελείται από περισσότερα από 40 εκατομμύρια λήμματα σε σχεδόν 300 γλώσσες.";
 "welcome-intro-free-encyclopedia-more" = "Μάθετε περισσότερα σχετικά με τη Βικιπαίδεια";
 "welcome-intro-free-encyclopedia-more-about" = "Σχετικά με τη Βικιπαίδεια";
@@ -471,6 +473,7 @@
 "welcome-languages-add-button" = "Πρόσθεση άλλης γλώσσας";
 "welcome-languages-add-or-edit-button" = "Πρόσθεση ή επεξεργασία των προτιμώμενων γλωσσών";
 "welcome-languages-description" = "Έχουμε βρει τις ακόλουθες γλώσσες στην συσκευή σας:";
+// Fuzzy
 "welcome-languages-search-title" = "Αναζητήστε σε σχεδόν 300 γλώσσες";
 "welcome-notifications-tell-me-more-title" = "Περισσότερα σχετικά με τις ειδοποιήσεις";
 "welcome-send-data-helps-title" = "Βοηθήστε την εφαρμογή να γίνει καλύτερη";

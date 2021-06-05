@@ -1,4 +1,5 @@
 import Foundation
+import CocoaLumberjackSwift
 
 enum EventLoggingError {
     case generic
@@ -61,7 +62,12 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
         DDLogDebug("EventLoggingService: Events persistent store: \(permanentStorageURL)")
         
         // SINGLETONTODO
-        return EventLoggingService(session: MWKDataStore.shared().session, permanentStorageURL: permanentStorageURL)
+        let eventLoggingService = EventLoggingService(session: MWKDataStore.shared().session, permanentStorageURL: permanentStorageURL)
+        if let eventLoggingService = eventLoggingService {
+            MWKDataStore.shared().setupAbTestsController(withPersistenceService: eventLoggingService)
+        }
+        
+        return eventLoggingService
     }()
     
     @objc
@@ -106,11 +112,6 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
         self.managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         self.managedObjectContext.persistentStoreCoordinator = psc
         super.init()
-        if self.isEnabled {
-            self.session.xWMFUUID = appInstallID
-        } else {
-            self.session.xWMFUUID = nil
-        }
     }
 
     
@@ -118,6 +119,18 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
     public func reset() {
         self.resetSession()
         self.resetInstall()
+    }
+
+    @objc
+    func migrateShareUsageAndInstallIDToUserDefaults() {
+        let enabledNumber = libraryValue(for: Key.isEnabled) as? NSNumber
+        if enabledNumber != nil {
+            UserDefaults.standard.wmf_sendUsageReports = enabledNumber!.boolValue
+        } else {
+            UserDefaults.standard.wmf_sendUsageReports = false
+        }
+
+        UserDefaults.standard.wmf_appInstallId = libraryValue(for: Key.appInstallID) as? String
     }
 
     @objc
@@ -158,7 +171,9 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
                         DDLogError("EventLoggingService: Could not read NSBatchDeleteResult count")
                         return
                     }
-                    DDLogInfo("EventLoggingService: Pruned \(count) events")
+                    if count > 0 {
+                        DDLogInfo("EventLoggingService: Pruned \(count) events")
+                    }
                     
                 } catch let error {
                     DDLogError("EventLoggingService: Error pruning events: \(error.localizedDescription)")
@@ -347,7 +362,7 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
     private var semaphore = DispatchSemaphore(value: 1)
     
     private var libraryValueCache: [String: NSCoding] = [:]
-    private func libraryValue(for key: String) -> NSCoding? {
+    public func libraryValue(for key: String) -> NSCoding? {
         semaphore.wait()
         defer {
             semaphore.signal()
@@ -376,7 +391,7 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
         return value
     }
     
-    private func setLibraryValue(_ value: NSCoding?, for key: String) {
+    public func setLibraryValue(_ value: NSCoding?, for key: String) {
         semaphore.wait()
         defer {
             semaphore.signal()
@@ -390,35 +405,7 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
     
     @objc public var isEnabled: Bool {
         get {
-            var isEnabled = false
-            if let enabledNumber = libraryValue(for: Key.isEnabled) as? NSNumber {
-                isEnabled = enabledNumber.boolValue
-            } else {
-                setLibraryValue(NSNumber(booleanLiteral: false), for: Key.isEnabled) // set false so that it's cached and doesn't keep fetching
-            }
-            return isEnabled
-        }
-        set {
-            setLibraryValue(NSNumber(booleanLiteral: newValue), for: Key.isEnabled)
-            if newValue {
-                session.xWMFUUID = appInstallID
-            } else {
-                session.xWMFUUID = nil
-            }
-        }
-    }
-    
-    @objc public var appInstallID: String? {
-        get {
-            var installID = libraryValue(for: Key.appInstallID) as? String
-            if installID == nil || installID == "" {
-                installID = UUID().uuidString
-                setLibraryValue(installID as NSString?, for: Key.appInstallID)
-            }
-            return installID
-        }
-        set {
-            setLibraryValue(newValue as NSString?, for: Key.appInstallID)
+            return UserDefaults.standard.wmf_sendUsageReports
         }
     }
     
@@ -488,7 +475,7 @@ public class EventLoggingService : NSObject, URLSessionDelegate {
     }
     
     private func resetInstall() {
-        appInstallID = nil
+        UserDefaults.standard.wmf_appInstallId = nil
         lastLoggedSnapshot = nil
         loggedDaysInstalled = nil
         appInstallDate = nil
@@ -507,4 +494,8 @@ extension EventLoggingService: BackgroundFetcher {
             completion(.noData)
         }
     }
+}
+
+extension EventLoggingService: ABTestsPersisting {
+    
 }

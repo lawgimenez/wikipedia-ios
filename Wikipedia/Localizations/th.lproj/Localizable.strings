@@ -3,15 +3,20 @@
 // Author: Aefgh39622
 // Author: Ans
 // Author: B20180
+// Author: Bebiezaza
 // Author: CodeNameBOSS
 // Author: Geonuch
 // Author: Horus
+// Author: Just Sayori
 // Author: Karit
 // Author: Korrawit
 // Author: Nemo bis
 // Author: Patsagorn Y.
 // Author: Pon44695
 
+"aaald-new-discussion" = "การอภิปรายใหม่";
+"aaald-new-website-reference-title" = "เว็บไซต์";
+"aaald-revision-by-anonymous" = "การแก้ไขโดยผู้ใช้นิรนาม";
 "about-content-license" = "สัญญาอนุญาตเนื้อหา";
 "about-content-license-details" = "นอกเหนือจากที่ระบุไว้ เนื้อหาทั้งหมดใช้ได้ภายใต้ $1";
 "about-content-license-details-share-alike-license" = "สัญญาอนุญาตครีเอทีฟคอมมอนส์แบบแสดงที่มา-อนุญาตแบบเดียวกัน";
@@ -79,6 +84,7 @@
 "action-share" = "แบ่งปัน";
 "action-share-accessibility" = "แบ่งปัน";
 "action-sort" = "เรียงลำดับ";
+"action-thank-user-accessibility" = "ขอบคุณผู้ใช้";
 "action-undo" = "เลิกทำ";
 "action-unsave" = "เลิกบันทึก";
 "action-unsaved-accessibility-notification" = "เลิกบันทึกบทความแล้ว";
@@ -98,12 +104,15 @@
 "appearance-settings-set-automatic-table-opening" = "การตั้งค่าตาราง";
 "appearance-settings-text-sizing-example-text" = "ลากตัวเลื่อนเพื่อปรับเปลี่ยนขนาดข้อความของบทความ ปรับขนาดข้อความระบบของคุณเพื่อปรับขนาดพื้นที่ข้อความส่วนอื่นภายในแอป";
 "appearance-settings-theme-options" = "ตัวเลือกธีม";
+"article-about-title" = "เกี่ยวกับบทความนี้";
 "article-delete" = "ลบ";
 "article-deleted-accessibility-notification" = "ลบ{{PLURAL:$1|บทความ}}แล้ว";
 "article-languages-filter-placeholder" = "ค้นหาภาษา";
 "article-languages-label" = "เลือกภาษา";
 "article-languages-others" = "ภาษาอื่น";
 "article-languages-yours" = "ภาษาของคุณ";
+"article-read-more-title" = "อ่านเพิ่มเติม";
+"article-reference-view-title" = "แหล่งอ้างอิง $1";
 "article-save-error-not-enough-space" = "คุณมีพื้นที่บนอุปกรณ์ของคุณไม่เพียงพอที่จะบันทึกบทความนี้";
 "article-share" = "แชร์";
 "article-toolbar-reading-themes-controls-toolbar-item" = "กำลังอ่านการควบคุมธีม";
@@ -126,28 +135,34 @@
 "continue-reading-empty-description" = "สำรวจบทความเพิ่มเติมที่คุณอยากอ่านในวิกิพีเดีย";
 "continue-reading-empty-title" = "ไม่มีบทความที่อ่านล่าสุด";
 "description-add-title" = "เพิ่มคำอธิบาย";
+// Fuzzy
 "description-edit-for-article" = "คำอธิบายชื่อเรื่องสำหรับ $1";
 "description-edit-learn-more" = "เรียนรู้เพิ่มเติม";
 "description-edit-length-warning" = "$1 / $2";
+// Fuzzy
 "description-edit-license" = "การเปลี่ยนคำอธิบายชื่อเรื่องถือว่าคุณยอมรับ $1 และยอมเผยแพร่งานของคุณภายใต้สัญญาอนุญาต $2 อย่างถาวร";
 "description-edit-pencil-introduction" = "แก้ไขคำแนะนำ";
-"description-edit-pencil-title" = "แก้ไขคำอธิบายชื่อเรื่อง";
+"description-edit-pencil-title" = "แก้ไขคำอธิบายบทความ";
 "description-edit-placeholder-title" = "ควรกำหนดคำอธิบายอย่างสั้น ๆ";
 "description-edit-publish" = "เผยแพร่คำอธิบาย";
 "description-edit-title" = "แก้ไขคำอธิบาย";
 "description-edit-warning" = "พยายามเขียนคำอธิบายอย่างสั้น ๆ เพื่อให้ผู้ใช้เข้าใจหัวข้อบทความได้อย่างรวดเร็ว";
+// Fuzzy
 "description-help-about-description" = "คำอธิบายชื่อเรื่องใช้สรุปบทความเพื่อช่วยให้ผู้อ่านเข้าใจบทความได้อย่างรวดเร็ว";
 "description-help-about-title" = "เกี่ยวกับ";
 "description-help-about-wikidata" = "เกี่ยวกับวิกิสนเทศ";
 "description-help-more-info-description" = "คำอธิบายจะถูกเก็บและรักษาไว้บนวิกิสนเทศ ซึ่งเป็นโครงการของมูลนิธิวิกิมีเดียซึ่งจัดเตรียมฐานข้อมูลเสรีหลายภาษาที่ใช้งานร่วมกับวิกิพีเดียและโครงการอื่น ๆ";
 "description-help-more-info-title" = "ข้อมูลเพิ่มเติม";
 "description-help-tips-description" = "ควรเขียนคำอธิบายให้พอดีหนึ่งบรรทัด และควรมีความยาวตั้งแต่ 2-12 คำ และไม่ควรเขียนด้วยอักษรตัวพิมพ์ใหญ่หากไม่ใช่วิสามานยนาม";
+// Fuzzy
 "description-help-tips-example-description-one" = "คำอธิบายชื่อเรื่องสำหรับบทความเกี่ยวกับโมนาลิซา";
+// Fuzzy
 "description-help-tips-example-description-two" = "คำอธิบายชื่อเรื่องสำหรับบทความเกี่ยวกับยอดเขาเอเวอเรสต์";
 "description-help-tips-example-title-one" = "ภาพวาดโดยเลโอนาร์โด ดา วินชี";
 "description-help-tips-example-title-two" = "ภูเขาที่สูงที่สุดในโลก";
 "description-help-tips-for-example" = "ตัวอย่าง:";
 "description-help-tips-title" = "คำแนะนำการเขียนคำอธิบาย";
+// Fuzzy
 "description-help-title" = "วิธีเขียนคำอธิบายชื่อเรื่อง";
 "description-help-wikidata-guide" = "คู่มือวิกิสนเทศเกี่ยวกับการเขียนคำอธิบาย";
 "description-published-button-title" = "เสร็จสิ้น";
@@ -157,19 +172,40 @@
 "description-welcome-concise-sub-title" = "ควรเขียนให้พอดีหนึ่งบรรทัด และเขียนตั้งแต่ 2-12 คำ";
 "description-welcome-concise-title" = "ควรเขียนสั้น ๆ";
 "description-welcome-descriptions-sub-title" = "ใช้สรุปบทความเพื่อช่วยให้ผู้อ่านเข้าใจบทความได้อย่างรวดเร็ว";
+// Fuzzy
 "description-welcome-descriptions-title" = "คำอธิบายชื่อเรื่อง";
 "description-welcome-promise-title" = "ฉันสัญญาว่าจะไม่ใช้คุณลักษณะนี้ในทางที่ผิด";
 "description-welcome-start-editing-button" = "เริ่มแก้ไข";
+"diff-compare-header-from-info-heading" = "จาก:";
+"diff-compare-header-to-info-heading" = "ถึง:";
+"diff-compare-title" = "เปรียบเทียบรุ่นแก้ไข";
+"diff-context-lines-collapsed-button-title" = "แสดง";
+"diff-context-lines-expanded-button-title" = "ซ่อน";
+"diff-paragraph-moved" = "ย้ายย่อหน้า";
+"diff-paragraph-moved-direction-down" = "ลง";
+"diff-paragraph-moved-direction-up" = "ขึ้น";
+"diff-revision-error-title" = "ไม่สามารถดึงข้อมูลรุ่น";
+"diff-single-header-editor-number-edits-format" = "{{PLURAL:$1|การแก้ไข $1 ครั้ง|การแก้ไข $1 ครั้ง}}";
+"diff-single-header-subtitle-bytes-added" = "{{PLURAL:$1|เพิ่ม $1 ไบต์แล้ว}}";
+"diff-single-header-subtitle-bytes-removed" = "{{PLURAL:$1|เอา $1 ไบต์ออกแล้ว}}";
+"diff-single-header-summary-heading" = "ความย่อการแก้ไข";
+"diff-single-intro-title" = "บทนำ";
+"diff-single-line-format" = "บรรทัดที่ $1";
+"diff-thanks-sent" = "ส่งคำขอบคุณไปยัง $1 แล้ว";
 "dim-images" = "ลดแสงรูปภาพ";
 "edit-bold-accessibility-label" = "เพิ่มการจัดรูปแบบตัวเส้นหนา";
 "edit-bold-remove-accessibility-label" = "ลบการจัดรูปแบบตัวเส้นหนา";
 "edit-clear-formatting-accessibility-label" = "ลบการจัดรูปแบบ";
+"edit-comment-accessibility-label" = "เพิ่มไวยากรณ์ความเห็น";
+"edit-comment-remove-accessibility-label" = "เอาไวยากรณ์ความเห็นออก";
 "edit-direction-down-accessibility-label" = "ย้ายเคอร์เซอร์ไปด้านล่าง";
 "edit-direction-left-accessibility-label" = "ย้ายเคอร์เซอร์ไปด้านซ้าย";
 "edit-direction-right-accessibility-label" = "ย้ายเคอร์เซอร์ไปด้านขวา";
 "edit-direction-up-accessibility-label" = "ย้ายเคอร์เซอร์ไปด้านบน";
 "edit-increase-indent-depth-accessibility-label" = "เพิ่มความลึกการเยื้อง";
 "edit-indent-accessibility-label" = "เยื้องบรรทัดปัจจุบัน";
+"edit-italic-accessibility-label" = "เพิ่มการจัดรูปแบบตัวเอียง";
+"edit-italic-remove-accessibility-label" = "ลบการจัดรูปแบบตัวเอียง";
 "edit-link-accessibility-label" = "เพิ่มไวยากรณ์ลิงก์";
 "edit-link-display-text-title" = "ข้อความที่แสดงผล";
 "edit-link-link-target-title" = "เป้าหมายลิงก์";
@@ -181,6 +217,8 @@
 "edit-minor-text" = "เป็นการแก้ไขเล็กน้อย";
 "edit-published" = "เผยแพร่การแก้ไขแล้ว";
 "edit-published-subtitle" = "คุณทำให้วิกิพีเดียดีขึ้นสำหรับทุกคน";
+"edit-reference-accessibility-label" = "เพิ่มไวยากรณ์แหล่งอ้างอิง";
+"edit-reference-remove-accessibility-label" = "เอาไวยากรณ์แหล่งอ้างอิงออก";
 "edit-signature-accessibility-label" = "เพิ่มไวยากรณ์ลายเซ็น";
 "edit-signature-remove-accessibility-label" = "เอาไวยากรณ์ลายเส้นออก";
 "edit-strikethrough-accessibility-label" = "เพิ่มขีดเส้นทับ";
@@ -209,6 +247,7 @@
 "edit-watch-this-page-text" = "เฝ้าดูหน้านี้";
 "editing-welcome-be-bold-title" = "เสียงของคุณสำคัญ";
 "editing-welcome-citations-title" = "อ้างอิงแหล่งข้อมูลที่น่าเชื่อถือ";
+"empty-diff-compare-title" = "ไม่มีความแตกต่างระหว่างรุ่น";
 "empty-insert-media-title" = "เลือกไฟล์จากวิกิมีเดียคอมมอนส์";
 "empty-no-article-message" = "ขออภัย ไม่สามารถโหลดบทความนี้ได้";
 "empty-no-feed-action-message" = "คุณยังสามารถอ่านหน้าที่บันทึกไว้ได้";
@@ -421,8 +460,6 @@
 "main-menu-account-logout-are-you-sure" = "คุณแน่ใจว่าต้องการออกจากระบบหรือไม่";
 "main-menu-account-logout-cancel" = "ยกเลิก";
 "main-menu-account-title-logged-in" = "เข้าสู่ระบบในชื่อ $1 อยู่";
-"main-menu-debug-tweaks" = "การตั้งค่านักพัฒนา";
-"main-menu-heading-debug" = "ดีบั๊ก";
 "main-menu-heading-legal" = "ความเป็นส่วนตัวและข้อกำหนด";
 "main-menu-nearby" = "ใกล้เคียง";
 "main-menu-privacy-policy" = "นโยบายความเป็นส่วนตัว";
@@ -431,6 +468,7 @@
 "main-menu-title" = "เพิ่มเติม";
 "main-menu-zero-faq" = "คำถามที่พบบ่อยเกี่ยวกับ Wikipedia Zero";
 "menu-cancel-accessibility-label" = "ยกเลิก";
+// Fuzzy
 "more-languages-tooltip-description" = "ค้นหาวิกิพีเดียในกว่า 300 ภาษา";
 "more-languages-tooltip-title" = "เพิ่มภาษา";
 "move-articles-to-reading-list" = "ย้าย {{PLURAL:$1|$1 บทความ}}ลงในรายการอ่าน";
@@ -451,10 +489,15 @@
 "on-this-day-detail-header-date-range" = "ตั้งแต่ $1 - $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|เหตุการณ์ย้อนหลัง $1 เหตุการณ์}}";
 "on-this-day-footer" = "เหตุการณ์เพิ่มเติมในอดีตประจำวันนี้";
-"on-this-day-footer-with-event-count" = "เหตุการณ์เพิ่มเติม $1 เรื่องในอดีตประจำวันนี้";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1 จากวิกิพีเดียภาษา$2";
 "on-this-day-title" = "วันนี้ในอดีต";
 "original-tab-button-popover-description" = "แตะบน 'W' เพื่อกลับไปยังแท็บที่คุณเปิดก่อนหน้านี้";
+"page-history-compare-title" = "เปรียบเทียบ";
+"page-history-minor-edits" = "การแก้ไขเล็กน้อย";
+"page-history-revision-minor-edit-accessibility-label" = "การแก้ไขเล็กน้อย";
+"page-history-revision-size-diff-addition" = "เพิ่ม {{PLURAL:$1|$1 ไบต์}}แล้ว";
+"page-history-revision-size-diff-subtraction" = "เอา {{PLURAL:$1|$1 ไบต์}}ออกแล้ว";
+"page-location" = "ดูบนแผนที่";
 "page-protected-autoconfirmed" = "หน้านี้ถูกล็อกแบบกึ่งล็อก";
 "page-protected-can-not-edit" = "คุณไม่มีสิทธิ์แก้ไขหน้านี้";
 "page-protected-can-not-edit-title" = "หน้านี้ถูกล็อก";
@@ -463,9 +506,11 @@
 "pictured" = "ในภาพ";
 "places-accessibility-clear-saved-searches" = "ล้างการค้นหาที่บันทึก";
 "places-accessibility-group" = "$1 บทความ";
+"places-accessibility-recenter-map-on-user-location" = "ปรับจุดศูนย์กลางบนตำแหน่งที่ตั้งของคุณ";
 "places-accessibility-show-as-list" = "แสดงเป็นรายการ";
 "places-accessibility-show-as-map" = "แสดงเป็นแผนที่";
 "places-accessibility-show-more" = "แสดงบทความเพิ่มเติม";
+"places-empty-search-description" = "สำรวจเมือง ประเทศ ทวีป สถานที่สำคัญทางธรรมชาติ เหตุการณ์ทางประวัติศาสตร์ อาคาร และอื่น ๆ";
 "places-empty-search-title" = "ค้นหาบทความวิกิพีเดียเกี่ยวกับตำแหน่งที่ตั้งทางภูมิศาสตร์";
 "places-enable-location-action-button-title" = "เปิดใช้งานตำแหน่งที่ตั้ง";
 "places-enable-location-description" = "แอปจะเข้าถึงตำแหน่งของคุณเฉพาะตอนที่แอปหรือฟีเจอร์ปรากฏอยู่บนหน้าจอของคุณเท่านั้น";
@@ -492,6 +537,8 @@
 "places-title" = "สถานที่";
 "places-unknown-distance" = "ไม่ทราบระยะทาง";
 "potd-description-prefix" = "รูปภาพประจำวันที่ $1";
+"potd-empty-error-description" = "ไม่สามารถดึงข้อมูลรูปภาพประจำวันที่ $1 ได้";
+"preference-summary-eventlogging-opt-in" = "อนุญาตให้มูลนิธิวิกิมีเดียเก็บข้อมูลการใช้แอปของคุณเพื่อพัฒนาแอปให้ดีขึ้น";
 "preference-title-eventlogging-opt-in" = "ส่งรายงานการใช้";
 "rank-accessibility-label" = "หมายเลข $1";
 "readers-accessibility-label" = "ผู้อ่าน $1 คน";
@@ -499,6 +546,7 @@
 "reading-list-add-hint-title" = "เพิ่ม “$1” ลงไปยังรายการอ่านหรือไม่";
 "reading-list-add-saved-button-title" = "ใช่ เพิ่มลงไปยังรายการอ่านของฉัน";
 "reading-list-add-saved-title" = "พบบทความที่บันทึกไว้";
+"reading-list-api-error-generic" = "เกิดข้อผิดพลาดที่ไม่คาดคิดขณะซิงค์รายการอ่านของคุณ";
 "reading-list-create-new-list-button-title" = "สร้างรายการอ่าน";
 "reading-list-create-new-list-description" = "คำอธิบาย";
 "reading-list-create-new-list-reading-list-name" = "ชื่อรายการอ่าน";
@@ -528,6 +576,7 @@
 "reading-lists-article-api-failure" = "ไม่สามารถซิงค์บทความได้";
 "reading-lists-article-not-synced" = "ไม่ได้ซิงค์";
 "reading-lists-default-list-title" = "ที่บันทึกไว้";
+"reading-lists-delete-reading-list-alert-title" = "ลบ{{PLURAL:$1|รายการ|รายการ}}หรือไม่";
 "reading-lists-list-not-synced-limit-exceeded" = "ไม่ได้ซิงค์รายการเนื่องจากถึงขีดจำกัดแล้ว";
 "reading-lists-sort-saved-articles" = "เรียงบทความที่บันทึกไว้";
 "reading-themes-controls-accessibility-black-theme-button" = "ธีมสีดำ";
@@ -538,10 +587,16 @@
 "reading-themes-controls-accessibility-syntax-highlighting-switch" = "การเน้นไวยากรณ์";
 "reading-themes-controls-accessibility-text-size-slider" = "ตัวเลื่อนปรับขนาดข้อความ";
 "reading-themes-controls-syntax-highlighting" = "การเน้นไวยากรณ์";
+"reference-section-button-accessibility-label" = "ข้ามไปยังส่วนอ้างอิง";
 "reference-title" = "แหล่งอ้างอิง $1";
 "relative-date-days-ago" = "{{PLURAL:$1|0=วันนี้|1=เมื่อวาน|$1 วันที่ผ่านมา}}";
 "relative-date-hours-ago" = "{{PLURAL:$1|0=เมื่อสักครู่|$1 ชั่วโมงที่ผ่านมา|$1 ชั่วโมงที่ผ่านมา}}";
+"relative-date-hours-ago-abbreviated" = "$1 ชั่วโมงที่แล้ว";
+"relative-date-minutes-abbreviated" = "$1 นาที";
 "relative-date-minutes-ago" = "{{PLURAL:$1|0=เมื่อสักครู่|$1 นาทีที่ผ่านมา|$1 นาทีที่ผ่านมา}}";
+"relative-date-minutes-ago-abbreviated" = "$1 นาทีที่แล้ว";
+"relative-date-seconds-abbreviated" = "$1 วินาที";
+"relative-date-seconds-ago-abbreviated" = "$1 วินาทีที่แล้ว";
 "relative-date-years-ago" = "{{PLURAL:$1|0=ปีนี้|1=ปีที่ผ่านมา|$1 ปีที่ผ่านมา}}";
 "replace-button-accessibility" = "ดำเนินการ$1";
 "replace-buttons-replace-accessibility" = "แทนที่อินสแตนซ์เดียว";
@@ -600,8 +655,17 @@
 "settings-storage-and-syncing-server-sync-title" = "อัปเดตรายการอ่านที่ซิงค์";
 "settings-support" = "สนับสนุนวิกิพีเดีย";
 "settings-title" = "การตั้งค่า";
+"share-article-name-on-wikipedia" = "\"$1\" บน @Wikipedia:";
+"share-default-format" = "“$1” จาก “$2”: $3";
+"share-email-format" = "“$1”\n\nจาก “$2”\n\n$3";
 "share-get-directions-in-maps" = "ขอเส้นทาง";
 "share-menu-item" = "แบ่งปัน";
+"share-message-format" = "“$1” $2";
+"share-on-twitter-sign-off" = "ผ่านทาง @Wikipedia";
+"share-open-in-maps" = "เปิดในแผนที่";
+"share-social-format" = "“$1” ผ่านทางวิกิพีเดีย: $2";
+"share-social-mention-format" = "“$1” ผ่านทาง @Wikipedia: $2";
+"sort-by-recently-added-action" = "ที่เพิ่งเพิ่มล่าสุด";
 "sort-by-title-action" = "ชื่อเรื่อง";
 "status-saved-for-later" = "บันทึกไว้อ่านในภายหลังแล้ว";
 "status-saving-for-later" = "กำลังบันทึกไว้อ่านในภายหลัง...";
@@ -609,21 +673,32 @@
 "table-of-contents-close-accessibility-hint" = "ปิด";
 "table-of-contents-close-accessibility-label" = "ปิดสารบัญ";
 "table-of-contents-heading" = "เนื้อหา";
+"talk-page-add-discussion-accessibility-label" = "เพิ่มการอภิปราย";
+"talk-page-discussion-read-accessibility-label" = "อ่านแล้ว";
+"talk-page-discussion-unread-accessibility-label" = "ยังไม่ได้อ่าน";
 "talk-page-error-unable-to-post-reply" = "ไม่มีอินเทอร์เน็ต พิมไม่ติด";
+"talk-page-error-unable-to-post-topic" = "ไม่มีอินเทอร์เน็ต ไม่สามารถเผยแพร่การอภิปราย";
+"talk-page-link-user-action-sheet-title" = "หน้าผู้ใช้";
 "talk-page-new-subject-placeholder-text" = "หัวเรื่อง";
 "talk-page-new-subject-textfield-accessibility-label" = "หัวเรื่อง";
 "talk-page-new-topic-body-placeholder-text" = "เขียนการอภิปรายใหม่";
 "talk-page-new-topic-title" = "การอภิปรายใหม่";
 "talk-page-reply-title" = "ตอบกลับ";
+"talk-page-topic-title" = "การอภิปราย";
+"talk-pages-reply-button-title" = "ตอบกลับการอภิปรายนี้";
 "theme-black-display-name" = "ดำ";
 "theme-dark-display-name" = "มืด";
 "theme-default-display-name" = "ค่าปริยาย";
 "theme-sepia-display-name" = "ซีเปีย";
 "top-read-header-generic" = "วิกิพีเดีย";
 "top-read-header-with-language" = "วิกิพีเดียภาษา$1";
+"top-read-see-more" = "ดูบทความที่อ่านมากที่สุดเพิ่มเติม";
 "two-factor-login-continue" = "เข้าสู่ระบบต่อ";
+"two-factor-login-instructions" = "โปรดป้อนรหัสพิสูจน์ตัวตนแบบสองชั้น";
 "two-factor-login-title" = "เข้าสู่ระบบบัญชีของคุณ";
+"two-factor-login-with-backup-code" = "ใช้รหัสสำรองข้อมูลของคุณรหัสใดรหัสหนึ่ง";
 "two-factor-login-with-regular-code" = "ใช้รหัสการยืนยัน";
+"unknown-generic-text" = "ไม่ทราบ";
 "welcome-exploration-explore-feed-description" = "บทความแนะนำประจำวันจากชุมชนของเรา";
 "welcome-exploration-explore-feed-title" = "ฟีดสำรวจ";
 "welcome-exploration-on-this-day-description" = "ย้อนเวลากลับไปเพื่อเรียนรู้ว่าเกิดอะไรขึ้นในเวลาที่ผ่านมา";
@@ -633,15 +708,19 @@
 "welcome-explore-continue-button" = "เริ่มต้นใช้งาน";
 "welcome-explore-new-ways-title" = "วีธีใหม่ในการสำรวจ";
 "welcome-explore-tell-me-more-done-button" = "เข้าใจแล้ว";
+// Fuzzy
 "welcome-intro-free-encyclopedia-description" = "วิกิพีเดียนั้นร่วมกันเขียนขึ้นโดยอาสาสมัครและมีบทความมากกว่า 40 ล้านบทความในกว่า 300 ภาษา";
 "welcome-intro-free-encyclopedia-more" = "เรียนรู้เพิ่มเติมเกี่ยวกับวิกิพีเดีย";
 "welcome-intro-free-encyclopedia-more-about" = "เกี่ยวกับวิกิพีเดีย";
+"welcome-intro-free-encyclopedia-more-description" = "วิกิพีเดียเป็นโครงการสร้างสารานุกรมเสรีในทุกภาษาทั่วโลก ใครก็ตามที่มีการเข้าถึงอินเทอร์เน็ตสามารถเข้าร่วมได้อย่างเสรีด้วยการร่วมให้ข้อมูลที่เป็นกลางและมีแหล่งอ้างอิง";
 "welcome-intro-free-encyclopedia-title" = "สารานุกรมเสรี";
 "welcome-languages-add-button" = "เพิ่มภาษาอื่น";
 "welcome-languages-add-or-edit-button" = "เพิ่มหรือแก้ไขภาษาตามที่ต้องการ";
 "welcome-languages-description" = "เราได้พบภาษาดังต่อไปนี้บนอุปกรณ์ของคุณ:";
+// Fuzzy
 "welcome-languages-search-title" = "ค้นหาในกว่า 300 ภาษา";
 "welcome-notifications-tell-me-more-creation" = "การแจ้งเตือนถูกสร้างขึ้นและถูกส่งมายังอุปกรณ์ของคุณโดยแอป ไม่ใช่จากเซิร์ฟเวอร์ของเรา (หรือเซิร์ฟเวอร์บุคคลที่สาม)";
+"welcome-notifications-tell-me-more-storage" = "การตั้งค่าการแจ้งเตือนจะถูกเก็บบนอุปกรณ์และไม่ขึันอยู่กับข้อมูลหรือกิจกรรมส่วนบุคคล";
 "welcome-notifications-tell-me-more-title" = "เพิ่มเติมเกี่ยวกับการแจ้งเตือน";
 "welcome-send-data-helps-title" = "ช่วยทำให้แอปดีขึ้น";
 "welcome-send-data-learn-more" = "เรียนรู้เพิ่มเติมเกี่ยวกับข้อมูลที่รวบรวมมา";
@@ -650,9 +729,11 @@
 "wikitext-downloading" = "กำลังโหลดเนื้อหา...";
 "wikitext-preview-changes" = "กำลังดึงตัวอย่างการเปลี่ยนแปลงของคุณ...";
 "wikitext-preview-changes-none" = "ไม่มีการเปลี่ยนแปลงใดที่ต้องมีตัวอย่าง";
+"wikitext-preview-link-external-preview-description" = "ลิงก์นี้นำไปยังเว็บไซต์ภายนอก: $1";
 "wikitext-preview-link-external-preview-title" = "ลิงก์ภายนอก";
 "wikitext-preview-link-not-found-preview-description" = "วิกิพีเดียไม่มีบทความที่มีชื่อนี้";
 "wikitext-preview-link-not-found-preview-title" = "ไม่พบลิงก์ภายใน";
+"wikitext-preview-link-preview-description" = "ลิงก์นี้นำไปยัง '$1'";
 "wikitext-preview-link-preview-title" = "แสดงตัวอย่างลิงก์";
 "wikitext-preview-save-changes-title" = "บันทึกการเปลี่ยนแปลง";
 "wikitext-upload-captcha-error" = "เกิดข้อผิดพลาดการทวนสอบ CAPTCHA";

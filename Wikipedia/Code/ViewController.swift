@@ -238,6 +238,11 @@ class ViewController: PreviewingViewController, NavigationBarHiderDelegate {
             }
         }
     }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        navigationBar.updateHackyConstraint()
+    }
  
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -254,7 +259,12 @@ class ViewController: PreviewingViewController, NavigationBarHiderDelegate {
     
     var useNavigationBarVisibleHeightForScrollViewInsets: Bool = false
     
-    public final func updateScrollViewInsets(preserveAnimation: Bool = false) {
+    //override if needed to preserve scroll view inset animation
+    public var shouldAnimateWhileUpdatingScrollViewInsets: Bool {
+        return false
+    }
+    
+    public final func updateScrollViewInsets() {
         guard let scrollView = scrollView, scrollView.contentInsetAdjustmentBehavior == .never else {
             return
         }
@@ -292,7 +302,7 @@ class ViewController: PreviewingViewController, NavigationBarHiderDelegate {
             top += rc.frame.height
         }
         let contentInset = UIEdgeInsets(top: top, left: scrollView.contentInset.left, bottom: bottom, right: scrollView.contentInset.right)
-        if scrollView.setContentInset(contentInset, scrollIndicatorInsets: scrollIndicatorInsets, preserveContentOffset: navigationBar.isAdjustingHidingFromContentInsetChangesEnabled, preserveAnimation: preserveAnimation) {
+        if scrollView.setContentInset(contentInset, scrollIndicatorInsets: scrollIndicatorInsets, preserveContentOffset: navigationBar.isAdjustingHidingFromContentInsetChangesEnabled, preserveAnimation: shouldAnimateWhileUpdatingScrollViewInsets) {
             scrollViewInsetsDidChange()
         }
     }

@@ -1,6 +1,7 @@
 import Foundation
 import MapKit
 import WMF
+import CocoaLumberjackSwift
 
 struct PlaceSearchResult
 {
@@ -139,8 +140,8 @@ class PlaceSearchService
                     done()
                     return
                 }
-                let keys = savedPagesWithoutLocation.compactMap({ (article) -> String? in
-                    return article.key
+                let keys = savedPagesWithoutLocation.compactMap({ (article) -> WMFInMemoryURLKey? in
+                    return article.inMemoryKey
                 })
                 // Fetch summaries from the server and update WMFArticle objects
                 dataStore.articleSummaryController.updateOrCreateArticleSummariesForArticles(withKeys: keys) { (articles, _) in

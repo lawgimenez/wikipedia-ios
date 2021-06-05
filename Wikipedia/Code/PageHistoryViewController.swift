@@ -41,14 +41,14 @@ class PageHistoryViewController: ColumnarCollectionViewController {
         return false;
     }
 
-    private lazy var countsViewController = PageHistoryCountsViewController(pageTitle: pageTitle, locale: NSLocale.wmf_locale(for: pageURL.wmf_language))
+    private lazy var countsViewController = PageHistoryCountsViewController(pageTitle: pageTitle, locale: NSLocale.wmf_locale(for: pageURL.wmf_languageCode))
     private lazy var comparisonSelectionViewController: PageHistoryComparisonSelectionViewController = {
         let comparisonSelectionViewController = PageHistoryComparisonSelectionViewController(nibName: "PageHistoryComparisonSelectionViewController", bundle: nil)
         comparisonSelectionViewController.delegate = self
         return comparisonSelectionViewController
     }()
 
-    @objc init(pageTitle: String, pageURL: URL) {
+    init(pageTitle: String, pageURL: URL) {
         self.pageTitle = pageTitle
         self.pageURL = pageURL
         self.pageHistoryFetcherParams = PageHistoryRequestParameters(title: pageTitle)
@@ -448,7 +448,6 @@ class PageHistoryViewController: ColumnarCollectionViewController {
             } else {
                 cell.selectionOrder = nil
                 cell.selectionThemeModel = nil
-                cell.isSelected = false
             }
         } else {
             if let date = item.revisionDate {

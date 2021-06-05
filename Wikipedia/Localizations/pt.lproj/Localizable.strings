@@ -2,8 +2,10 @@
 // Exported from translatewiki.net
 // Author: Athena in Wonderland
 // Author: Diniscoelho
+// Author: Emma Franzen
 // Author: Felipe L. Ewald
 // Author: Fúlvio
+// Author: Giro720
 // Author: Hamilton Abreu
 // Author: Imperadeiro98
 // Author: Jkb8
@@ -18,6 +20,41 @@
 // Author: Vitorvicentevalente
 // Author: Webysther
 
+"aaald-added-text-description-2" = "$1 adicionado(s)";
+// Fuzzy
+"aaald-article-description-updated-description" = "Título de descrição do artigo atualizado";
+"aaald-article-insert-header" = "Atualizações significativas";
+"aaald-article-insert-last-updated" = "Última atualização";
+"aaald-article-insert-new-changes" = "Mudanças recentes";
+"aaald-article-insert-read-more" = "Ler mais atualizações";
+"aaald-characters-text-description" = "{{PLURAL:$1|0=carateres|carácter|carateres}}";
+"aaald-deleted-text-description-2" = "$1 eliminado(s)";
+"aaald-error-subitle" = "Atualizar para tentar novamente";
+"aaald-error-title" = "Não é possível carregar o histórico do artigo";
+"aaald-many-sections-description" = "em $1 secções";
+"aaald-multiple-changes-description" = "Várias mudanças realizadas";
+"aaald-multiple-references-added-description" = "Várias referências adicionadas";
+"aaald-new-book-reference-title" = "Livro";
+"aaald-new-discussion" = "Discussão nova";
+"aaald-new-journal-reference-database" = "via $1";
+"aaald-new-journal-reference-title" = "Periódico";
+"aaald-new-journal-reference-volume" = "Volume $1:";
+"aaald-new-news-reference-retrieved-date" = "Obtido em $1";
+"aaald-new-news-reference-title" = "Notícias";
+"aaald-new-talk-topic-description-format" = "$1 sobre este artigo";
+"aaald-new-website-reference-archive-date-text" = "do original em $1";
+"aaald-new-website-reference-archive-url-text" = "URL de archive.org";
+"aaald-new-website-reference-title" = "Site";
+"aaald-numerical-multiple-references-added-description" = "{{PLURAL:$1|0=Nenhuma referência adicionada|$1 referência adicionada|$1 referências adicionadas}}";
+"aaald-one-section-description" = "na secção $1";
+"aaald-revision-by-anonymous" = "Edição de utilizador anónimo";
+"aaald-revision-userInfo" = "Editado por $1 ($2 edições)";
+"aaald-single-reference-added-description" = "Referência adicionada";
+"aaald-small-change-description" = "{{PLURAL:$1|0=Nenhuma edição menor realizada|$1 edição menor realizada|$1 edições menores realizadas}}";
+"aaald-summary-title" = "{{PLURAL:$1|0=nenhuma mudança feita|$1 mudança feita|$1 mudanças feitas}} por {{PLURAL:$2|0=nenhum editor|$2 editor|$2 editores}} em {{PLURAL:$3|0=0 dias|$3 dia|$3 dias}}";
+"aaald-two-sections-description" = "nas secções $1 e $2";
+"aaald-vandalism-revert-description" = "Suspeita de vandalismo revertida";
+"aaald-view-full-history-button" = "Ver o histórico completo do artigo";
 "about-content-license" = "Licença de conteúdo";
 "about-content-license-details" = "Salvo indicação em contrário, o conteúdo está disponível ao abrigo da $1.";
 "about-content-license-details-share-alike-license" = "Licença Atribuição-CompartilhaIgual da Creative Commons";
@@ -113,6 +150,7 @@
 "article-about-title" = "Sobre este artigo";
 "article-delete" = "Eliminar";
 "article-deleted-accessibility-notification" = "{{PLURAL:$1|artigo eliminado|artigos eliminados}}";
+"article-fetcher-error-updated-content-timeout" = "A aplicação não conseguiu obter o conteúdo atualizado em tempo útil. Atualize esta página mais tarde para ver as suas mudanças refletidas.";
 "article-languages-filter-placeholder" = "Encontrar língua";
 "article-languages-label" = "Escolher língua";
 "article-languages-others" = "Outras línguas";
@@ -140,29 +178,37 @@
 "compass-direction" = "às $1 horas";
 "continue-reading-empty-description" = "Explorar na Wikipédia mais artigos para ler";
 "continue-reading-empty-title" = "Nenhum artigo lido recentemente";
+"data-migration-status" = "A atualizar...";
 "description-add-title" = "Adicionar descrição";
+// Fuzzy
 "description-edit-for-article" = "Título de descrição para $1";
 "description-edit-learn-more" = "Saber mais";
 "description-edit-length-warning" = "$1 / $2";
+// Fuzzy
 "description-edit-license" = "Ao alterar o título de descrição, concordo com as $1 e publico irrevogavelmente as minhas contribuições com a licença $2.";
 "description-edit-pencil-introduction" = "Editar introdução";
+// Fuzzy
 "description-edit-pencil-title" = "Editar título de descrição";
 "description-edit-placeholder-title" = "As descrições curtas são melhores";
 "description-edit-publish" = "Publicar descrição";
 "description-edit-title" = "Editar descrição";
 "description-edit-warning" = "Tente manter as descrições breves para que os utilizadores possam entender o assunto do artigo imediatamente";
+// Fuzzy
 "description-help-about-description" = "Os títulos de descrição sumarizam um artigo para ajudar os leitores a entender o assunto imediatamente";
 "description-help-about-title" = "Sobre";
 "description-help-about-wikidata" = "Sobre a wiki Wikidata";
 "description-help-more-info-description" = "As descrições são armazenadas na wiki Wikidata, um projeto da Wikimedia Foundation que fornece uma base de dados secundária gratuita, colaborativa e multilingue, que suporta a Wikipédia e outros projetos.";
 "description-help-more-info-title" = "Mais informações";
 "description-help-tips-description" = "Idealmente, as descrições devem caber numa linha e ter entre duas a doze palavras. Não têm maiúscula inicial a não ser que a primeira palavra seja um nome próprio.";
+// Fuzzy
 "description-help-tips-example-description-one" = "título de descrição para um artigo sobre a Mona Lisa";
+// Fuzzy
 "description-help-tips-example-description-two" = "título de descrição para um artigo sobre o monte Evereste";
 "description-help-tips-example-title-one" = "pintura de Leonardo da Vinci";
 "description-help-tips-example-title-two" = "Evereste, a montanha mais alta da Terra";
 "description-help-tips-for-example" = "Por exemploː";
 "description-help-tips-title" = "Dicas para criar descrições";
+// Fuzzy
 "description-help-title" = "Ajuda do título de descrição";
 "description-help-wikidata-guide" = "Guia Wikidata para escrever descrições";
 "description-published-button-title" = "Concluído";
@@ -172,6 +218,7 @@
 "description-welcome-concise-sub-title" = "Idealmente uma linha, com entre duas e doze palavras";
 "description-welcome-concise-title" = "Concisa";
 "description-welcome-descriptions-sub-title" = "Resume um artigo para ajudar os leitores a entenderem o assunto imediatamente";
+// Fuzzy
 "description-welcome-descriptions-title" = "Títulos de descrição";
 "description-welcome-promise-title" = "Ao começar, prometo não utilizar de forma irresponsável esta funcionalidade";
 "description-welcome-start-editing-button" = "Começar a editar";
@@ -282,6 +329,8 @@
 "empty-no-feed-message" = "Pode ver os seus artigos recomendados quando tiver acesso à Internet";
 "empty-no-history-message" = "Registo do que esteve a ler";
 "empty-no-history-title" = "Não há histórico para mostrar";
+"empty-no-other-article-languages-message" = "Este artigo ainda não foi escrito em nenhuma outra língua";
+"empty-no-other-article-languages-title" = "Nenhum outro idioma disponível";
 "empty-no-reading-lists-message" = "Criar listas de leitura de lugares a visitar, de temas preferidos e de muito mais";
 "empty-no-reading-lists-title" = "Organizar os artigos guardados com listas de leitura";
 "empty-no-saved-pages-in-reading-list-message" = "Guarde páginas nesta lista para vê-las aparecerem aqui";
@@ -492,8 +541,6 @@
 "main-menu-account-logout-are-you-sure" = "Tem a certeza de que pretende encerrar a sessão?";
 "main-menu-account-logout-cancel" = "Cancelar";
 "main-menu-account-title-logged-in" = "Sessão iniciada como $1";
-"main-menu-debug-tweaks" = "Definições de programação";
-"main-menu-heading-debug" = "Despistagem de defeitos";
 "main-menu-heading-legal" = "Privacidade e Condições";
 "main-menu-nearby" = "Aqui perto";
 "main-menu-privacy-policy" = "Normas de privacidade";
@@ -502,7 +549,7 @@
 "main-menu-title" = "Mais";
 "main-menu-zero-faq" = "Perguntas frequentes sobre a Wikipédia Zero";
 "menu-cancel-accessibility-label" = "Cancelar";
-"more-languages-tooltip-description" = "Pesquise a Wikipédia em quase 300 línguas";
+"more-languages-tooltip-description" = "Pesquise a Wikipédia em mais de 300 línguas";
 "more-languages-tooltip-title" = "Adicionar línguas";
 "move-articles-to-reading-list" = "Mover $1 {{PLURAL:$1|artigo|artigos}} para a lista de leitura";
 "navbar-title-mode-edit-wikitext-preview" = "Antevisão";
@@ -522,7 +569,7 @@
 "on-this-day-detail-header-date-range" = "de $1 - $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 acontecimento histórico|$1 acontecimentos históricos}}";
 "on-this-day-footer" = "Mais acontecimentos históricos neste dia";
-"on-this-day-footer-with-event-count" = "Mais $1 acontecimentos históricos neste dia";
+"on-this-day-footer-showing-event-count" = "Mais {{PLURAL:$1|$1 acontecimento histórico|$1 acontecimentos históricos}} neste dia";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1 da Wikipédia em $2";
 "on-this-day-title" = "Neste dia";
 "original-tab-button-popover-description" = "Toque no 'W' para regressar ao separador de onde começou";
@@ -670,6 +717,7 @@
 "reading-themes-controls-accessibility-syntax-highlighting-switch" = "Realce sintático";
 "reading-themes-controls-accessibility-text-size-slider" = "Controlo do tamanho do texto";
 "reading-themes-controls-syntax-highlighting" = "Realce sintático";
+"reference-section-button-accessibility-label" = "Saltar para a secção de referências";
 "reference-title" = "Referência $1";
 "relative-date-days-ago" = "{{PLURAL:$1|0=Hoje|1=Ontem|Há $1 dias}}";
 "relative-date-hours-abbreviated" = "$1h";
@@ -692,7 +740,6 @@
 "replace-replace-all-results-count" = "{{PLURAL:$1|$1 instância substituída|$1 instâncias substituídas}}";
 "replace-textfield-accessibility" = "Substituir";
 "replace-textfield-placeholder" = "Substituir por...";
-"request-feedback-on-error" = "Surgiu um problema na aplicação, sobre o qual os nossos programadores gostariam de saber mais. Por favor, toque aqui para nos enviar um correio eletrónico com os detalhes do erro.";
 "reverted-edit-back-to-article-button-title" = "Voltar ao artigo";
 "reverted-edit-notification-body" = "A sua edição do artigo $1 foi revertida por $2";
 "reverted-edit-notification-read-more-action-title" = "Ler mais";
@@ -780,6 +827,7 @@
 "table-of-contents-close-accessibility-label" = "Fechar índice";
 "table-of-contents-heading" = "Índice";
 "table-of-contents-hide-button-label" = "Ocultar índice";
+"table-of-contents-subheading-label" = "Subtítulo $1";
 "talk-page-add-discussion-accessibility-label" = "Adicionar discussão";
 "talk-page-discussion-accessibility-hint" = "Premir duas vezes para abrir o tópico de discussão";
 "talk-page-discussion-read-accessibility-label" = "Lido";
@@ -836,7 +884,7 @@
 "welcome-explore-continue-button" = "Começar";
 "welcome-explore-new-ways-title" = "Novas formas de explorar";
 "welcome-explore-tell-me-more-done-button" = "Entendi";
-"welcome-intro-free-encyclopedia-description" = "A Wikipédia é escrita de forma colaborativa por voluntários e contém mais de 40 milhões de artigos em quase 300 línguas.";
+"welcome-intro-free-encyclopedia-description" = "A Wikipédia é escrita de forma colaborativa por voluntários e contém mais de 40 milhões de artigos em mais de 300 línguas.";
 "welcome-intro-free-encyclopedia-more" = "Saiba mais sobre a Wikipédia";
 "welcome-intro-free-encyclopedia-more-about" = "Sobre a Wikipédia";
 "welcome-intro-free-encyclopedia-more-description" = "A Wikipédia é um projeto global para criar enciclopédias gratuitas em todas as línguas do mundo. Praticamente qualquer pessoa com acesso à Internet pode participar, fornecendo informação apresentada de um ponto de vista neutro e apoiada em referências.";
@@ -844,7 +892,7 @@
 "welcome-languages-add-button" = "Adicionar outra língua";
 "welcome-languages-add-or-edit-button" = "Adicionar ou editar as línguas preferidas";
 "welcome-languages-description" = "Encontrámos as seguintes línguas no seu dispositivo:";
-"welcome-languages-search-title" = "Pesquise em quase 300 línguas";
+"welcome-languages-search-title" = "Pesquise em mais de 300 línguas";
 "welcome-notifications-tell-me-more-creation" = "As notificações são criadas e enviadas para o dispositivo pela aplicação, e não a partir dos nossos servidores (nem dos servidores de terceiros).";
 "welcome-notifications-tell-me-more-storage" = "As preferências de notificação são armazenadas no dispositivo e não são baseadas em informações nem atividades privadas.";
 "welcome-notifications-tell-me-more-title" = "Mais sobre notificações";

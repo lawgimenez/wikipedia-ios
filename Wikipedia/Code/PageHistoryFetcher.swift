@@ -1,5 +1,4 @@
 import Foundation
-import Mantle
 import WMF
 
 public typealias EditCountsGroupedByType = [PageHistoryFetcher.EditCountType: (count: Int, limit: Bool)]
@@ -126,7 +125,8 @@ public final class PageHistoryFetcher: WMFLegacyFetcher {
     }
 
     private func editCountsURL(for editCountType: EditCountType, pageTitle: String, pageURL: URL, from fromRevisionID: Int? = nil , to toRevisionID: Int? = nil) -> URL? {
-        guard let project = pageURL.wmf_site?.host,
+        guard let project = pageURL.wmf_site,
+              project.host != nil,
         let title = pageTitle.percentEncodedPageTitleForPathComponents else {
             return nil
         }
@@ -141,8 +141,7 @@ public final class PageHistoryFetcher: WMFLegacyFetcher {
         } else {
             queryParameters = nil
         }
-        let components = configuration.mediaWikiRestAPIURLForHost(project, appending: pathComponents, queryParameters: queryParameters)
-        return components.url
+        return configuration.mediaWikiRestAPIURLForURL(project, appending: pathComponents, queryParameters: queryParameters)
     }
 
     private struct EditCount: Decodable {
@@ -259,7 +258,7 @@ private typealias RevisionsByDay = [Int: PageHistorySection]
 private typealias PagingInfo = (continueKey: String?, rvContinueKey: String?, batchComplete: Bool)
 open class HistoryFetchResults: NSObject {
     fileprivate let pagingInfo: PagingInfo
-    fileprivate let lastRevision: WMFPageHistoryRevision?
+    let lastRevision: WMFPageHistoryRevision?
     fileprivate var revisionsByDay: RevisionsByDay
     
     @objc open func getPageHistoryRequestParameters(_ articleURL: URL) -> PageHistoryRequestParameters {

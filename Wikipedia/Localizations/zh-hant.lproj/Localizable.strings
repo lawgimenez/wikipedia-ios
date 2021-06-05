@@ -15,10 +15,12 @@
 // Author: Liuxinyu970226
 // Author: Macofe
 // Author: Mikepanhu
+// Author: Neetp7k9
 // Author: Nemo bis
 // Author: Nharateh
 // Author: Reke
 // Author: Simon Shek
+// Author: Tsevener
 // Author: Wehwei
 // Author: Wwycheuk
 // Author: Xiplus
@@ -27,6 +29,40 @@
 // Author: 烈羽
 // Author: 神樂坂秀吉
 
+"aaald-added-text-description-2" = "$1已新增";
+"aaald-article-description-updated-description" = "條目描述已更新";
+"aaald-article-insert-header" = "重要更新";
+"aaald-article-insert-last-updated" = "上一次更新";
+"aaald-article-insert-new-changes" = "新的更改";
+"aaald-article-insert-read-more" = "閱讀更多更新內容";
+"aaald-characters-text-description" = "{{PLURAL:$1|0=字元|字元|字元}}";
+"aaald-deleted-text-description-2" = "$1已刪除";
+"aaald-error-subitle" = "重新整理來再次嘗試";
+"aaald-error-title" = "無法載入內嵌條目的歷史紀錄";
+"aaald-many-sections-description" = "在第 $1 段";
+"aaald-multiple-changes-description" = "做出多次更改";
+"aaald-multiple-references-added-description" = "添加多個參考資料";
+"aaald-new-book-reference-title" = "書籍";
+"aaald-new-discussion" = "新討論";
+"aaald-new-journal-reference-database" = "透過 $1";
+"aaald-new-journal-reference-title" = "期刊";
+"aaald-new-journal-reference-volume" = "卷 $1：";
+"aaald-new-news-reference-retrieved-date" = "檢索於 $1";
+"aaald-new-news-reference-title" = "新聞";
+"aaald-new-talk-topic-description-format" = "關於此條目的$1";
+"aaald-new-website-reference-archive-date-text" = "來自於 $1 的原有內容";
+"aaald-new-website-reference-archive-url-text" = "Archive.org URL";
+"aaald-new-website-reference-title" = "網站";
+"aaald-numerical-multiple-references-added-description" = "增加 {{PLURAL:$1|0=0|$1|$1}} 個參考資料";
+"aaald-one-section-description" = "在$1段落";
+"aaald-revision-by-anonymous" = "由匿名使用者做出的編輯";
+"aaald-revision-userInfo" = "由$1編輯（$2 次編輯數）";
+"aaald-single-reference-added-description" = "參考資料已添加";
+"aaald-small-change-description" = "做出 {{PLURAL:$1|0=0|$1|$1}} 次小更改";
+"aaald-summary-title" = "在 {{PLURAL:$3|0=0|$3|$3}} 天裡由 {{PLURAL:$2|0=0|$2|$2}} 位編者做出 {{PLURAL:$1|0=0|$1|$1}} 更改";
+"aaald-two-sections-description" = "在$1與$2段落";
+"aaald-vandalism-revert-description" = "疑似故意破壞";
+"aaald-view-full-history-button" = "查看完整的條目歷史";
 "about-content-license" = "內容許可協議";
 "about-content-license-details" = "除非另有聲明，內容皆基於$1授權。";
 "about-content-license-details-share-alike-license" = "創作共用 姓名標示 - 相同方式分享";
@@ -107,7 +143,7 @@
 "add-articles-to-reading-list" = "新增 {{PLURAL:$1|$1 個條目|$1 個條目}}至閱讀清單";
 "add-citation-title" = "新增引用";
 "announcements-dismiss" = "關閉";
-"app-store-keywords" = "維基百科,參考,wiki,百科全書,訊息,知識,研究,資訊,探索,學習";
+"app-store-keywords" = "維基百科、參考資料、wiki、百科全書、訊息、知識、研究、資訊、探索、學習";
 "app-store-release-notes" = "可完整客製化，且更容易讀取探索摘要。在地化、性能改進、並修正程式錯誤。";
 "app-store-short-description" = "下載維基百科應用程式來探索您附近的地點，同步條目以離線閱讀，並自訂化您的閱讀體驗。";
 "app-store-subtitle" = "自由的百科全書";
@@ -122,6 +158,7 @@
 "article-about-title" = "關於此條目";
 "article-delete" = "刪除";
 "article-deleted-accessibility-notification" = "{{PLURAL:$1|條目|條目}}已刪除";
+"article-fetcher-error-updated-content-timeout" = "應用程式無法即時檢索更新的內容。請稍後重新整理此頁面，以查看您所做出的更改。";
 "article-languages-filter-placeholder" = "尋找語言";
 "article-languages-label" = "選擇語言";
 "article-languages-others" = "其他語言";
@@ -144,35 +181,41 @@
 "button-skip" = "略過";
 "cancel" = "取消";
 "cc-zero" = "創用CC公眾領域貢獻宣告";
+"chinese-variants-alert-body" = "維基百科應用程式現在支援下列中文變體作為應用程式裡的主要語言或次要語言，使用您偏好的變體以更容易地閱讀、搜尋、編輯：\n\n简体（zh-hans）\n香港繁體（zh-hk）\n澳門繁體（zh-mo）\n大马简体（zh-my）\n新加坡简体（zh-sg）\n臺灣正體（zh-tw）";
+"chinese-variants-alert-title" = "中文變體支援更新";
 "clear-title-accessibility-label" = "清除";
 "close-button-accessibility-label" = "關閉";
 "compass-direction" = "在 $1 時";
 "continue-reading-empty-description" = "瀏覽維基百科以閱讀更多條目";
 "continue-reading-empty-title" = "沒有最近讀取的條目";
+"crimean-tatar-variants-alert-body" = "維基百科應用程式現在支援下列克里米亞韃靼語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\nQırımtatarca，拉丁字母克里米亞韃靼語（chr-latn）\nкъырымтатарджа，西里爾字母克里米亞韃靼語（crh-cyrl）";
+"crimean-tatar-variants-alert-title" = "克里米亞韃靼語異體字支援更新";
+"data-migration-status" = "更新中…";
 "description-add-title" = "添加描述";
-"description-edit-for-article" = "$1的標題描述";
+"description-edit-for-article" = "$1的條目描述";
 "description-edit-learn-more" = "了解更多";
 "description-edit-length-warning" = "$1 / $2";
-"description-edit-license" = "透過更改標題描述，我同意$1且依據$2許可協議不撤銷所發表出我的個人貢獻。";
+"description-edit-license" = "透過更改條目描述，我同意$1且依據$2許可協議不撤銷所發表出我的個人貢獻。";
 "description-edit-pencil-introduction" = "編輯簡介";
-"description-edit-pencil-title" = "編輯標題描述";
+"description-edit-pencil-title" = "編輯條目描述";
 "description-edit-placeholder-title" = "簡短的描述是最好的";
 "description-edit-publish" = "發布描述";
 "description-edit-title" = "編輯描述";
 "description-edit-warning" = "嘗試讓描述保持簡短，以讓使用者能立即了解條目的主題";
-"description-help-about-description" = "標題描述能概括條目，以幫助讀者快速了解內容。";
+"description-edit-warning-casing" = "在句子開頭的專有名詞應大寫。";
+"description-help-about-description" = "條目描述能概括條目，以幫助讀者快速了解內容。";
 "description-help-about-title" = "關於";
 "description-help-about-wikidata" = "關於維基數據";
 "description-help-more-info-description" = "描述會被保管在維基數據，那是維基媒體基金會計畫的另一個專案，是個自由、共同作業、多語言的二級資料庫，支援著維基百科及其它相類專案。";
 "description-help-more-info-title" = "更多資訊";
 "description-help-tips-description" = "描述盡量使用一行文字，且長度介於 2 到 12 個字元之間。另外除非第一個詞為專有名詞，否則不用大寫。";
-"description-help-tips-example-description-one" = "有關蒙娜麗莎條目的標題描述";
-"description-help-tips-example-description-two" = "有關聖母峰條目的標題描述";
+"description-help-tips-example-description-one" = "有關蒙娜麗莎條目的條目描述";
+"description-help-tips-example-description-two" = "有關聖母峰條目的條目描述";
 "description-help-tips-example-title-one" = "李奧納多·達文西的繪畫";
 "description-help-tips-example-title-two" = "地球第一高峰";
 "description-help-tips-for-example" = "例如：";
 "description-help-tips-title" = "建立描述的提示";
-"description-help-title" = "標題描述說明";
+"description-help-title" = "條目描述說明";
 "description-help-wikidata-guide" = "關於編寫描述的維基數據指引";
 "description-published-button-title" = "完成";
 "description-published-footer" = "您也可以以此應用程式編輯條目。下次可嘗試透過點選鉛筆圖示來修復錯別字與短句";
@@ -181,7 +224,7 @@
 "description-welcome-concise-sub-title" = "原則上為一行，介於 2 至 12 個字之間";
 "description-welcome-concise-title" = "保持簡短";
 "description-welcome-descriptions-sub-title" = "將條目概括來幫助讀者快速了解內容。";
-"description-welcome-descriptions-title" = "標題描述";
+"description-welcome-descriptions-title" = "條目描述";
 "description-welcome-promise-title" = "首先，我保證不會濫用此功能。";
 "description-welcome-start-editing-button" = "開始編輯";
 "diff-compare-header-from-info-heading" = "從：";
@@ -291,6 +334,8 @@
 "empty-no-feed-message" = "在有網路時，您可以看到推薦的條目";
 "empty-no-history-message" = "在此記錄您的閱讀歷程";
 "empty-no-history-title" = "無歷史可顯示";
+"empty-no-other-article-languages-message" = "這篇文章還未被翻譯成其他語言";
+"empty-no-other-article-languages-title" = "沒有別種語言可用";
 "empty-no-reading-lists-message" = "建立前往旅行的地點、喜愛的主題，以及更多其它事物的清單";
 "empty-no-reading-lists-title" = "組織已以閱讀清單儲存條目";
 "empty-no-saved-pages-in-reading-list-message" = "儲存頁面至此清單，以查看在此呈現的頁面";
@@ -368,7 +413,7 @@
 "explore-hide-card-prompt" = "隱藏此卡片";
 "explore-main-page-description" = "維基媒體計畫首頁";
 "explore-main-page-heading" = "維基百科今日";
-"explore-most-read-footer" = "所有被最多閱讀的條目";
+"explore-most-read-footer" = "所有被閱讀最多次的條目";
 "explore-most-read-generic-heading" = "最多閱讀";
 "explore-most-read-more-list-title-for-date" = "在 $1 的熱門條目";
 "explore-most-read-sub-heading-on-language-wikipedia" = "在$1維基百科";
@@ -423,6 +468,8 @@
 "forgot-password-instructions" = "在下方其一欄位填入來透過電子郵件接收密碼重新設定說明";
 "forgot-password-title" = "重設密碼";
 "forgot-password-username-or-email-title" = "或";
+"gan-variants-alert-body" = "維基百科應用程式現在支援下列贛語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\n贛語 原文（gan）\n赣语 简体（gan-hans）\n贛語 繁體（gan-hant）";
+"gan-variants-alert-title" = "贛語異體字支援更新";
 "history-clear-all" = "清除";
 "history-clear-cancel" = "取消";
 "history-clear-confirmation-heading" = "您確定要刪除您所有的近期項目嗎？";
@@ -484,6 +531,12 @@
 "intermediate-edits-editors-count-limited" = "由 $2 名以上使用者所做出 $1+ 個以上中間修訂未顯示出";
 "intermediate-edits-editors-limited-count" = "由 $2+ 名以上使用者所做出 {{PLURAL:$1|$1 個中間修訂}}未顯示出";
 "intermediate-edits-limited-editors-count" = "由 {{PLURAL:$2|$2 名使用者}}所做出 $1+ 個以上中間修訂未顯示出";
+"inuktitut-variants-alert-body" = "維基百科應用程式現在支援下列伊努克提圖特語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\nᐃᓄᒃᑎᑐᑦ ᑎᑎᕋᐅᓯᖅ ᓄᑖᖅ，音節文字伊努克提圖特語（ike-cans）\nInuktitut ilisautik，拉丁字母伊努克提圖特語（ike-latn）";
+"inuktitut-variants-alert-title" = "伊努克提圖特語異體字支援更新";
+"kazakh-variants-alert-body" = "維基百科應用程式現在支援下列哈薩克語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\nҚазақша，哈薩克語（kk）\nҚазақша Кирил，西里爾字母哈薩克語（kk-cyrl）\nqazaqşa latin，拉丁字母哈薩克語（kk-latin）\nتوتە قازاقشا，阿拉伯字母哈薩克語（kk-arab）";
+"kazakh-variants-alert-title" = "哈薩克語異體字支援更新";
+"kurdish-variants-alert-body" = "維基百科應用程式現在支援下列庫德語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\nKurdî Latînî，拉丁字母庫德語（ku-latn）\nكوردی，阿拉伯字母庫德語（kk-arab）";
+"kurdish-variants-alert-title" = "庫德語異體字支援更新";
 "languages-settings-title" = "語言";
 "languages-title" = "變更語言";
 "languages-wikipedia" = "維基百科語言";
@@ -501,8 +554,6 @@
 "main-menu-account-logout-are-you-sure" = "您確定要登出嗎？";
 "main-menu-account-logout-cancel" = "取消";
 "main-menu-account-title-logged-in" = "以 $1 的身分登入。";
-"main-menu-debug-tweaks" = "開發人員設定";
-"main-menu-heading-debug" = "除錯";
 "main-menu-heading-legal" = "隱私與條款";
 "main-menu-nearby" = "附近";
 "main-menu-privacy-policy" = "隱私政策";
@@ -511,7 +562,7 @@
 "main-menu-title" = "更多";
 "main-menu-zero-faq" = "維基百科零計劃常見問題";
 "menu-cancel-accessibility-label" = "取消";
-"more-languages-tooltip-description" = "在近 300 種語言的維基百科裡搜尋";
+"more-languages-tooltip-description" = "在超過 300 種語言的維基百科裡搜尋";
 "more-languages-tooltip-title" = "新增語言";
 "move-articles-to-reading-list" = "移動 {{PLURAL:$1|$1 個條目|$1 個條目}}至閱讀清單";
 "navbar-title-mode-edit-wikitext-preview" = "預覽";
@@ -531,7 +582,7 @@
 "on-this-day-detail-header-date-range" = "從 $1 到 $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 個歷史事件|$1 個歷史事件}}";
 "on-this-day-footer" = "更多歷史上的今天事件";
-"on-this-day-footer-with-event-count" = "更多 $1 個歷史上的今天事件";
+"on-this-day-footer-showing-event-count" = "更多 {{PLURAL:$1|$1|$1}} 個在今天的歷史事件";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "來自於$2維基百科的 $1";
 "on-this-day-title" = "歷史上的今天";
 "original-tab-button-popover-description" = "輕觸「W」來返回至您起始的分頁";
@@ -577,9 +628,9 @@
 "places-filter-button-title" = "篩選";
 "places-filter-no-saved-places" = "您已沒有儲存的地方";
 "places-filter-saved-articles" = "已儲存條目";
-"places-filter-top-articles" = "最多閱讀";
+"places-filter-top-articles" = "被閱讀最多次";
 "places-filter-top-articles-count" = "{{PLURAL:$1|$1 個條目|$1 個條目}}";
-"places-filter-top-read-articles" = "被最多閱讀的條目";
+"places-filter-top-read-articles" = "被閱讀最多次的條目";
 "places-location-enabled" = "位置已啟用";
 "places-no-saved-articles-have-location" = "您所儲存的條目皆未有位置訊息";
 "places-search-articles-that-match" = "$1符合「$2」";
@@ -679,6 +730,7 @@
 "reading-themes-controls-accessibility-syntax-highlighting-switch" = "語法突顯";
 "reading-themes-controls-accessibility-text-size-slider" = "文字大小滑動桿";
 "reading-themes-controls-syntax-highlighting" = "語法突顯";
+"reference-section-button-accessibility-label" = "跳到參考資料段落";
 "reference-title" = "參考資料 $1";
 "relative-date-days-ago" = "{{PLURAL:$1|0=今天|1=昨天|$1 天前}}";
 "relative-date-hours-abbreviated" = "$1 小時";
@@ -701,7 +753,6 @@
 "replace-replace-all-results-count" = "{{PLURAL:$1|$1 個項目已取代}}";
 "replace-textfield-accessibility" = "取代";
 "replace-textfield-placeholder" = "取代為：";
-"request-feedback-on-error" = "此應用程式已發生了問題，我們的開發人員想要瞭解更多有關於此的資料。請輕觸這裡向我們傳送一份含有錯誤詳細資料的電子信件。";
 "reverted-edit-back-to-article-button-title" = "返回條目";
 "reverted-edit-notification-body" = "您在條目$1所做的編輯被$2給回退";
 "reverted-edit-notification-read-more-action-title" = "延伸閱讀";
@@ -732,6 +783,8 @@
 "search-recent-title" = "近期搜尋";
 "search-result-redirected-from" = "重新導向自：$1";
 "search-title" = "搜尋";
+"serbian-variants-alert-body" = "維基百科應用程式現在支援下列塞爾維亞語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\nсрпски ћирилица，西里爾字母塞爾維亞語（sr-ec）\nsrpski latinica，拉丁字母塞爾維亞語（sr-el）";
+"serbian-variants-alert-title" = "塞爾維亞語異體字支援更新";
 "settings-account" = "帳號";
 "settings-appearance" = "閱讀偏好設定";
 "settings-clear-cache" = "清除快取資料";
@@ -744,7 +797,7 @@
 "settings-languages-feed-customization" = "透過自訂您的探索摘要設定，您可以管理在您的探索摘要裡所要顯示出的語言。";
 "settings-my-languages" = "我的語言";
 "settings-notifications" = "通知";
-"settings-notifications-info" = "經由我們推發通知提醒注意在維基百科上的被最多閱讀以及趨勢條目。所有提供內容皆考量到隱私及最新資料。";
+"settings-notifications-info" = "經由我們推發通知提醒注意在維基百科上的被閱讀最多次以及趨勢條目。所有提供內容皆考量到隱私及最新資料。";
 "settings-notifications-learn-more" = "了解更多通知內容";
 "settings-notifications-push-notifications" = "推發通知";
 "settings-notifications-system-turn-on" = "開啟通知";
@@ -789,6 +842,11 @@
 "table-of-contents-close-accessibility-label" = "關閉目錄";
 "table-of-contents-heading" = "內容";
 "table-of-contents-hide-button-label" = "隱藏目錄";
+"table-of-contents-subheading-label" = "副標題$1";
+"tachelhit-variants-alert-body" = "維基百科應用程式現在支援下列施盧赫語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\nⵜⴰⵛⵍⵃⵉⵜ，提非納字母施盧赫語（shi-tfng）\nTaclḥit，拉丁字母施盧赫語（shi-latn）";
+"tachelhit-variants-alert-title" = "施盧赫語異體字支援更新";
+"tajik-variants-alert-body" = "維基百科應用程式現在支援下列塔吉克語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\nтоҷикӣ кирилликӣ，西里爾字母塔吉克語（tg-cyrl）\ntojikī lotinī，拉丁字母塔吉克語（tg-latn）";
+"tajik-variants-alert-title" = "塔吉克語異體字支援更新";
 "talk-page-add-discussion-accessibility-label" = "新增討論";
 "talk-page-discussion-accessibility-hint" = "輕觸兩次來開啟討論串";
 "talk-page-discussion-read-accessibility-label" = "已讀";
@@ -828,7 +886,7 @@
 "theme-sepia-display-name" = "深褐";
 "top-read-header-generic" = "維基百科";
 "top-read-header-with-language" = "$1維基百科";
-"top-read-see-more" = "查看其它最多閱讀";
+"top-read-see-more" = "查看更多熱門條目";
 "two-factor-login-continue" = "繼續登入";
 "two-factor-login-instructions" = "請輸入雙重驗證代碼";
 "two-factor-login-title" = "登入至您的帳號";
@@ -836,6 +894,10 @@
 "two-factor-login-with-regular-code" = "使用驗證代碼";
 "unable-to-load-talk-page-title" = "無法載入對話頁";
 "unknown-generic-text" = "未知";
+"uzbek-variants-alert-body" = "維基百科應用程式現在支援下列烏茲別克語異體字作為應用程式裡的主要語言或次要語言，能以您首選的異體字來更易於閱讀、搜尋、編輯：\n\noʻzbekcha lotin，拉丁字母烏茲別克語（uz-latin）\nўзбекча кирилл，西里爾字母烏茲別克語（uz-cyrl）";
+"uzbek-variants-alert-title" = "烏茲別克語異體字支援更新";
+"variants-alert-dismiss-button" = "不用了，謝謝";
+"variants-alert-preferences-button" = "檢視您的偏好設定";
 "welcome-exploration-explore-feed-description" = "來自我們社群推薦的讀物及每日條目";
 "welcome-exploration-explore-feed-title" = "探索摘要";
 "welcome-exploration-on-this-day-description" = "返回時間來了解在歷史上的今天發生了什麼事";
@@ -845,7 +907,7 @@
 "welcome-explore-continue-button" = "入門";
 "welcome-explore-new-ways-title" = "探索的新方式";
 "welcome-explore-tell-me-more-done-button" = "了解";
-"welcome-intro-free-encyclopedia-description" = "維基百科是由各志願者們協作編寫，並包含將近 300 種語言的 4000 萬個條目。";
+"welcome-intro-free-encyclopedia-description" = "維基百科是由各志願者們協作編寫，並包含超過 300 種語言的 4000 萬個條目。";
 "welcome-intro-free-encyclopedia-more" = "了解更多關於維基百科";
 "welcome-intro-free-encyclopedia-more-about" = "關於維基百科";
 "welcome-intro-free-encyclopedia-more-description" = "維基百科是一個建立出世界上所有語言的自由百科全書之全球專案。實質上任何能訪問網際網路的人都可自由參與來貢獻出中立，俱有引用來源的訊息。";
@@ -853,7 +915,7 @@
 "welcome-languages-add-button" = "新增另一個語言";
 "welcome-languages-add-or-edit-button" = "新增或編輯首選語言";
 "welcome-languages-description" = "我們在您的裝置上找到以下語言：";
-"welcome-languages-search-title" = "在近 300 種語言裡搜尋";
+"welcome-languages-search-title" = "在超過 300 種語言裡搜尋";
 "welcome-notifications-tell-me-more-creation" = "通知是由此應用程式在您裝置上建立及發送，而非由我們或（其它第三方）的服務所為。";
 "welcome-notifications-tell-me-more-storage" = "通知的偏好設定是儲存在裝置上，而不是基於個人資訊或活動。";
 "welcome-notifications-tell-me-more-title" = "更多有關通知";

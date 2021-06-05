@@ -20,9 +20,45 @@
 // Author: Rockyfelle
 // Author: Sabelöga
 // Author: Skalman
+// Author: Smetanakaviar
 // Author: Technic2
+// Author: Tsevener
 // Author: WikiPhoenix
 
+"aaald-added-text-description-2" = "$1 lades till";
+"aaald-article-description-updated-description" = "Artikelbeskrivningen uppdaterades";
+"aaald-article-insert-header" = "Betydande uppdateringar";
+"aaald-article-insert-last-updated" = "Senast uppdaterad";
+"aaald-article-insert-new-changes" = "Nya ändringar";
+"aaald-article-insert-read-more" = "Läs fler uppdateringar";
+"aaald-characters-text-description" = "{{PLURAL:$1|0=tecken|tecken|tecken}}{{PLURAL:$1|}}";
+"aaald-deleted-text-description-2" = "$1 raderades";
+"aaald-error-subitle" = "Uppdatera för att försöka igen";
+"aaald-error-title" = "Kunde inte läsa in artikelhistoriken";
+"aaald-many-sections-description" = "i $1 avsnitt";
+"aaald-multiple-changes-description" = "Flera ändringar gjordes";
+"aaald-multiple-references-added-description" = "Flera referenser lades till";
+"aaald-new-book-reference-title" = "Bok";
+"aaald-new-discussion" = "Ny diskussion";
+"aaald-new-journal-reference-database" = "via $1";
+"aaald-new-journal-reference-title" = "Journal";
+"aaald-new-journal-reference-volume" = "Volym $1:";
+"aaald-new-news-reference-retrieved-date" = "Hämtade $1";
+"aaald-new-news-reference-title" = "Nyheter";
+"aaald-new-talk-topic-description-format" = "$1 om denna artikel";
+"aaald-new-website-reference-archive-date-text" = "från originalet den $1";
+"aaald-new-website-reference-archive-url-text" = "Webbadress för Archive.org";
+"aaald-new-website-reference-title" = "Webbplats";
+"aaald-numerical-multiple-references-added-description" = "{{PLURAL:$1|0=0 referens|$1 referens|$1 referenser}} lades till";
+"aaald-one-section-description" = "i avsnittet $1";
+"aaald-revision-by-anonymous" = "Redigering av anonym användare";
+"aaald-revision-userInfo" = "Redigering av $1 ($2 redigeringar)";
+"aaald-single-reference-added-description" = "Referens lades till";
+"aaald-small-change-description" = "{{PLURAL:$1|0=Inga mindre ändringar gjordes|$1 mindre ändring gjordes|$1 mindre ändringar gjordes}}";
+"aaald-summary-title" = "{{PLURAL:$1|0=0 ändringar|$1 ändring|$1 ändringar}} av {{PLURAL:$2|0=0 redigerare|$2 redigerare|$2 redigerare}} under {{PLURAL:$3|0=0 dag|$3 dag|$3 dagar}}";
+"aaald-two-sections-description" = "i avsnitten $1 och $2";
+"aaald-vandalism-revert-description" = "Misstänkt vandalism återställdes";
+"aaald-view-full-history-button" = "Visa artikelns fullständiga historik";
 "about-content-license" = "Innehållslicens";
 "about-content-license-details" = "Om inget annat anges är innehållet tillgängligt under $1.";
 "about-content-license-details-share-alike-license" = "Creative Commons Attribution-DelaLika";
@@ -118,6 +154,7 @@
 "article-about-title" = "Om denna artikel";
 "article-delete" = "Radera";
 "article-deleted-accessibility-notification" = "{{PLURAL:$1|artikel|artiklar}} raderades";
+"article-fetcher-error-updated-content-timeout" = "Appen kunde inte hämta det uppdaterade innehållet i tid. Uppdatera denna sida senare för att se dina ändringar.";
 "article-languages-filter-placeholder" = "Hitta språk";
 "article-languages-label" = "Välj språk";
 "article-languages-others" = "Andra språk";
@@ -140,35 +177,41 @@
 "button-skip" = "Hoppa över";
 "cancel" = "Avbryt";
 "cc-zero" = "Creative Commons CC0";
+"chinese-variants-alert-body" = "Wikipedia-appen stöder nu följande kinesiska varianter som huvudsakliga eller sekundära språk inom appen, som underlättar att läsa, söka och redigera i appen på dina önskade varianter:\n\n简体 kinesiska, förenklad (zh-hans)\n香港繁體 Hong Kong, traditionell (zh-hk)\n澳門繁體 Macau, traditionell (zh-mo)\n大马简体 Malaysia, förenklad (zh-my)\n新加坡简体 Singapore, förenklad (zh-sg)\n臺灣正體 Taiwan, traditionell (zh-tw)";
+"chinese-variants-alert-title" = "Uppdaterades till stöd för kinesiska varianter";
 "clear-title-accessibility-label" = "Rensa";
 "close-button-accessibility-label" = "Stäng";
 "compass-direction" = "mot klockan $1";
 "continue-reading-empty-description" = "Utforska Wikipedia för fler artiklar att läsa";
 "continue-reading-empty-title" = "Inga nyligen lästa artiklar";
+"crimean-tatar-variants-alert-body" = "Wikipediaappen stödjer följande krimtatariska varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\nQırımtatarca, Latin krimtatariska latinska (chr-latn)\nкъырымтатарджа, Кирил krimtatariska kyrilliska (crh-cyrl)";
+"crimean-tatar-variants-alert-title" = "Uppdaterades till stöd för krimtatariska varianter";
+"data-migration-status" = "Uppdaterar...";
 "description-add-title" = "Lägg till beskrivning";
-"description-edit-for-article" = "Titelbeskrivning för $1";
+"description-edit-for-article" = "Artikelbeskrivning för $1";
 "description-edit-learn-more" = "Läs mer";
 "description-edit-length-warning" = "$1 / $2";
-"description-edit-license" = "Genom att ändra titelbeskrivningen samtycker jag till $1 och att oåterkalleligt släppa mina bidrag under licensen $2.";
+"description-edit-license" = "Genom att ändra artikelbeskrivningen samtycker jag till $1 och att oåterkalleligt släppa mina bidrag under licensen $2.";
 "description-edit-pencil-introduction" = "Redigera inledningen";
-"description-edit-pencil-title" = "Redigera titelbeskrivningen";
+"description-edit-pencil-title" = "Redigera artikelbeskrivningen";
 "description-edit-placeholder-title" = "Korta beskrivningar är bäst";
 "description-edit-publish" = "Publicera beskrivning";
 "description-edit-title" = "Redigera beskrivning";
 "description-edit-warning" = "Försök att hålla beskrivningar korta så användare kan förstå artikeln ämne på ett ögonblick";
-"description-help-about-description" = "Titelbeskrivningar sammanfattar en artikel för att hjälpa läsare förstå ämnet med ett ögonkast.";
+"description-edit-warning-casing" = "Bara egennamn bör inledas med en versal, även i början av meningen.";
+"description-help-about-description" = "Artikelbeskrivningar sammanfattar en artikel för att hjälpa läsare förstå ämnet med ett ögonkast.";
 "description-help-about-title" = "Om";
 "description-help-about-wikidata" = "Om Wikidata";
 "description-help-more-info-description" = "Beskrivningar lagras och underhålls på Wikidata, ett projekt av Wikimedia Foundation som tillhandahåller en gratis, gemensam och flerspråkig sekundär databas som stödjer Wikipedia och andra projekt.";
 "description-help-more-info-title" = "Mer information";
 "description-help-tips-description" = "Beskrivningar bör helst vara en rad och är mellan två och tolv ord långt. De inleds inte med en versal om det första ordet inte är ett egennamn.";
-"description-help-tips-example-description-one" = "titelbeskrivning av en artikel om Mona Lisa";
-"description-help-tips-example-description-two" = "titelbeskrivning av en artikel om Mount Everest";
+"description-help-tips-example-description-one" = "artikelbeskrivning av en artikel om Mona Lisa";
+"description-help-tips-example-description-two" = "artikelbeskrivning av en artikel om Mount Everest";
 "description-help-tips-example-title-one" = "målning av Leonardo Da Vinci";
 "description-help-tips-example-title-two" = "Jordens högsta berg";
 "description-help-tips-for-example" = "Till exempel:";
 "description-help-tips-title" = "Tips för att skapa beskrivningar";
-"description-help-title" = "Hjälp om titelbeskrivningar";
+"description-help-title" = "Hjälp om artikelbeskrivningar";
 "description-help-wikidata-guide" = "Guide på Wikidata om att skriva beskrivningar";
 "description-published-button-title" = "Klar";
 "description-published-footer" = "Du kan även redigera artiklar i denna app. Försök att åtgärda stavfel och mindre meningar genom att klicka på pennikonen nästa gång.";
@@ -177,7 +220,7 @@
 "description-welcome-concise-sub-title" = "Ideellt en rad, mellan två till tolv ord";
 "description-welcome-concise-title" = "Gör den kort";
 "description-welcome-descriptions-sub-title" = "Sammanfattar en artikel för att hjälpa läsare förstå ämnet med ett ögonkast";
-"description-welcome-descriptions-title" = "Titelbeskrivningar";
+"description-welcome-descriptions-title" = "Artikelbeskrivningar";
 "description-welcome-promise-title" = "Genom att börja lovar jag att inte missbruka denna funktion";
 "description-welcome-start-editing-button" = "Börja redigera";
 "diff-compare-header-from-info-heading" = "Från:";
@@ -287,6 +330,8 @@
 "empty-no-feed-message" = "Du kan se dina rekommenderade artiklar när du har Internetåtkomst";
 "empty-no-history-message" = "Håll koll på vad du har läst här";
 "empty-no-history-title" = "Ingen historik att visa";
+"empty-no-other-article-languages-message" = "Denna artikel har inte ännu skrivits på något annat språk";
+"empty-no-other-article-languages-title" = "Inga andra språk är tillgängliga";
 "empty-no-reading-lists-message" = "Skapa listor för platser att resa till, favoritämnen och mycket mer";
 "empty-no-reading-lists-title" = "Organisera sparade artiklar med läslistor";
 "empty-no-saved-pages-in-reading-list-message" = "Spara sidor i denna lista för att se dem dyka upp här";
@@ -419,6 +464,8 @@
 "forgot-password-instructions" = "Fyll i ett av fälten nedan för att få instruktioner om lösenordsåterställning via e-post";
 "forgot-password-title" = "Återställ lösenord";
 "forgot-password-username-or-email-title" = "Eller";
+"gan-variants-alert-body" = "Wikipediaappen stödjer följande gan varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\n贛語 原文 gan (gan)\n赣语 简体 gan, förenklat (gan-hans)\n贛語 繁體 gan, traditionellt (gan-hant)";
+"gan-variants-alert-title" = "Uppdaterades till stöd för gan varianter";
 "history-clear-all" = "Rensa";
 "history-clear-cancel" = "Avbryt";
 "history-clear-confirmation-heading" = "Är du säker på att du vill radera alla dina senaste objekt?";
@@ -480,6 +527,12 @@
 "intermediate-edits-editors-count-limited" = "$1+ mellanliggande versioner av $2+ användare visas inte";
 "intermediate-edits-editors-limited-count" = "{{PLURAL:$1|$1 mellanliggande version|$1 mellanliggande versioner}} av $2+ användare visas inte";
 "intermediate-edits-limited-editors-count" = "$1+ mellanliggande versioner av {{PLURAL:$2|$2 användare}} visas inte";
+"inuktitut-variants-alert-body" = "Wikipediaappen stödjer följande inuktitut varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\nᐃᓄᒃᑎᑐᑦ ᑎᑎᕋᐅᓯᖅ ᓄᑖᖅ inuktitut, stavelseskrift (ike-cans)\nInuktitut ilisautik, inuktitut, latinska (ike-latn)";
+"inuktitut-variants-alert-title" = "Uppdaterades till stöd för inuktitut varianter";
+"kazakh-variants-alert-body" = "Wikipediaappen stödjer följande kazakiska varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\nҚазақша kazakiska (kk)\nҚазақша Кирил kazakiska, kyrilliska (kk-cyrl)\nqazaqşa latin kazakiska, latinska (kk-latn)\nتوتە قازاقشا kazakiska, arabiska (kk-arab)";
+"kazakh-variants-alert-title" = "Uppdaterades till stöd för kazakiska varianter";
+"kurdish-variants-alert-body" = "Wikipediaappen stödjer följande kurdiska varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\nKurdî Latînî kurdiska, latinska (ku-latn)\nكوردی kurdiska, arabiska (kk-arab)";
+"kurdish-variants-alert-title" = "Uppdaterades till stöd för kurdiska varianter";
 "languages-settings-title" = "Språk";
 "languages-title" = "Ändra språk";
 "languages-wikipedia" = "Wikipediaspråk";
@@ -497,8 +550,6 @@
 "main-menu-account-logout-are-you-sure" = "Är du säker på att du vill logga ut?";
 "main-menu-account-logout-cancel" = "Avbryt";
 "main-menu-account-title-logged-in" = "Inloggad som $1";
-"main-menu-debug-tweaks" = "Utvecklarinställningar";
-"main-menu-heading-debug" = "Felsökning";
 "main-menu-heading-legal" = "Integritet och villkor";
 "main-menu-nearby" = "I närheten";
 "main-menu-privacy-policy" = "Integritetspolicy";
@@ -507,7 +558,7 @@
 "main-menu-title" = "Mer";
 "main-menu-zero-faq" = "Vanliga frågor om Wikipedia Zero";
 "menu-cancel-accessibility-label" = "Avbryt";
-"more-languages-tooltip-description" = "Sök på Wikipedia på nästan 300 språk";
+"more-languages-tooltip-description" = "Sök på Wikipedia på över 300 språk";
 "more-languages-tooltip-title" = "Lägg till språk";
 "move-articles-to-reading-list" = "Flytta {{PLURAL:$1|$1 artikel|$1 artiklar}} till läslista";
 "navbar-title-mode-edit-wikitext-preview" = "Förhandsgranska";
@@ -527,7 +578,7 @@
 "on-this-day-detail-header-date-range" = "från $1 - $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 historisk händelse|$1 historiska händelser}}";
 "on-this-day-footer" = "Fler historiska händelser på denna dag";
-"on-this-day-footer-with-event-count" = "$1 fler historiska händelser på denna dag";
+"on-this-day-footer-showing-event-count" = "{{PLURAL:$1|$1 till historisk händelse|$1 fler historiska händelser}} på denna dag";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1 från Wikipedia på $2";
 "on-this-day-title" = "På denna dag";
 "original-tab-button-popover-description" = "Tryck på \"W\" för att återvända till fliken du började ifrån";
@@ -675,6 +726,7 @@
 "reading-themes-controls-accessibility-syntax-highlighting-switch" = "Syntaxmarkering";
 "reading-themes-controls-accessibility-text-size-slider" = "Reglage för textstorlek";
 "reading-themes-controls-syntax-highlighting" = "Syntaxmarkering";
+"reference-section-button-accessibility-label" = "Hoppa till referensavsnittet";
 "reference-title" = "Referens $1";
 "relative-date-days-ago" = "{{PLURAL:$1|0=Idag|1=Igår|$1 dygn sedan}}";
 "relative-date-hours-abbreviated" = "$1h";
@@ -697,7 +749,6 @@
 "replace-replace-all-results-count" = "{{PLURAL:$1|$1 instans ersättes|$1 instanser ersättes}}";
 "replace-textfield-accessibility" = "Ersätt";
 "replace-textfield-placeholder" = "Ersätt med…";
-"request-feedback-on-error" = "Appen har stött på ett problem som våra utvecklare vill veta mer om. Tryck här för att skicka ett e-postmeddelanden till oss med information om felet.";
 "reverted-edit-back-to-article-button-title" = "Tillbaka till artikeln";
 "reverted-edit-notification-body" = "Redigeringen du gjorde på artikeln $1 ångrades av $2";
 "reverted-edit-notification-read-more-action-title" = "Läs mer";
@@ -728,6 +779,8 @@
 "search-recent-title" = "Senaste sökningar";
 "search-result-redirected-from" = "Omdirigerad från: $1";
 "search-title" = "Sök";
+"serbian-variants-alert-body" = "Wikipediaappen stödjer följande serbiska varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\nсрпски ћирилица serbiska, kyrilliska (sr-ec)\nsrpski latinica serbiska, latinska (sr-el)";
+"serbian-variants-alert-title" = "Uppdaterades till stöd för serbiska varianter";
 "settings-account" = "Konto";
 "settings-appearance" = "Läsinställningar";
 "settings-clear-cache" = "Rensa cachedata";
@@ -782,9 +835,14 @@
 "status-saving-for-later" = "Spara till senare...";
 "table-of-contents-button-label" = "Innehållsförteckning";
 "table-of-contents-close-accessibility-hint" = "Stäng";
-"table-of-contents-close-accessibility-label" = "Stäng innehållsförteckning";
+"table-of-contents-close-accessibility-label" = "Fäll ihop innehållsförteckning";
 "table-of-contents-heading" = "Innehåll";
 "table-of-contents-hide-button-label" = "Dölj innehållsförteckning";
+"table-of-contents-subheading-label" = "Underrubrik $1";
+"tachelhit-variants-alert-body" = "Wikipediaappen stödjer följande tachelhit varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\nⵜⴰⵛⵍⵃⵉⵜ tachelhit, tifinagh (shi-tfng)\nTaclḥit tachelhit, latinska (shi-latn)";
+"tachelhit-variants-alert-title" = "Uppdaterades till stöd för tachelhit varianter";
+"tajik-variants-alert-body" = "Wikipediaappen stödjer följande tadzjikiska varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\nтоҷикӣ кирилликӣ tadzjikiska, kyrilliska (tg-cyrl)\ntojikī lotinī tadzjikiska, latinska (tg-latn)";
+"tajik-variants-alert-title" = "Uppdaterades till stöd för tadzjikiska varianter";
 "talk-page-add-discussion-accessibility-label" = "Lägg till diskussion";
 "talk-page-discussion-accessibility-hint" = "Dubbelknacka för att öppna diskussionstråden";
 "talk-page-discussion-read-accessibility-label" = "Läst";
@@ -832,6 +890,10 @@
 "two-factor-login-with-regular-code" = "Använd verifieringskod";
 "unable-to-load-talk-page-title" = "Kan inte läsa in diskussionssida";
 "unknown-generic-text" = "Okänd";
+"uzbek-variants-alert-body" = "Wikipediaappen stödjer följande uzbekiska varianter som primära eller sekundära språk i appen, vilket gör det enklare att läsa, söka och redigera på dina föredragna varianter:\n\noʻzbekcha lotin uzbekiska, latinska (uz-latin)\nўзбекча кирилл uzbekiska, kyrilliska (uz-cyrl)";
+"uzbek-variants-alert-title" = "Uppdaterades till stöd för uzbekiska varianter";
+"variants-alert-dismiss-button" = "Nej tack";
+"variants-alert-preferences-button" = "Granska dina inställningar";
 "welcome-exploration-explore-feed-description" = "Dagens artiklar och lästips från vår gemenskap";
 "welcome-exploration-explore-feed-title" = "Utforskarflöde";
 "welcome-exploration-on-this-day-description" = "Res bakåt i tiden för att ta reda på vad som hände idag i historien";
@@ -841,7 +903,7 @@
 "welcome-explore-continue-button" = "Kom igång";
 "welcome-explore-new-ways-title" = "Nya sätt att utforska";
 "welcome-explore-tell-me-more-done-button" = "Jag förstår";
-"welcome-intro-free-encyclopedia-description" = "Wikipedia är ett samarbete som skrivs av frivilliga och består av fler än 40 miljoner artiklar på nästan 300 språk.";
+"welcome-intro-free-encyclopedia-description" = "Wikipedia är ett samarbete som skrivs av frivilliga och består av fler än 40 miljoner artiklar på över 300 språk.";
 "welcome-intro-free-encyclopedia-more" = "Läs mer om Wikipedia";
 "welcome-intro-free-encyclopedia-more-about" = "Om Wikipedia";
 "welcome-intro-free-encyclopedia-more-description" = "Wikipedia är ett globalt projekt för att bygga fria uppslagsverk på alla världens språk. I princip alla med Internetåtkomst kan bidra med neutral källbelagd information.";
@@ -849,7 +911,7 @@
 "welcome-languages-add-button" = "Lägg till ett annat språk";
 "welcome-languages-add-or-edit-button" = "Lägg till eller redigera föredragna språk";
 "welcome-languages-description" = "Vi har hittat följande språk på din enhet:";
-"welcome-languages-search-title" = "Sök på nästan 300 språk";
+"welcome-languages-search-title" = "Sök på över 300 språk";
 "welcome-notifications-tell-me-more-creation" = "Notiser skapas och levereras på din enhet genom appen, inte från vår (eller tredje partens) servrar.";
 "welcome-notifications-tell-me-more-storage" = "Notisinställningarna lagras på enheten och bygger inte på personliga uppgifter eller aktiviteter.";
 "welcome-notifications-tell-me-more-title" = "Mer om notiser";

@@ -161,8 +161,6 @@
 "main-menu-account-logout-are-you-sure" = "Is u seker u wil uitteken?";
 "main-menu-account-logout-cancel" = "Kanselleer";
 "main-menu-account-title-logged-in" = "Aangeteken as $1";
-"main-menu-debug-tweaks" = "Ontwikkelaarinstellings";
-"main-menu-heading-debug" = "Ontfout";
 "main-menu-heading-legal" = "Privaatheid en Voorwaardes";
 "main-menu-nearby" = "Naby";
 "main-menu-privacy-policy" = "Privaatheidsbeleid";
@@ -171,6 +169,7 @@
 "main-menu-title" = "Meer";
 "main-menu-zero-faq" = "Gewilde vrae oor Wikipedia Zero";
 "menu-cancel-accessibility-label" = "Kanselleer";
+// Fuzzy
 "more-languages-tooltip-description" = "Deursoek Wikipedia in bykans 300 tale";
 "more-languages-tooltip-title" = "Voeg tale by";
 "navbar-title-mode-edit-wikitext-preview" = "Voorskou";
@@ -207,7 +206,6 @@
 "readers-accessibility-label" = "$1 lesers";
 "reading-list-limit-hit-for-unsorted-articles-button-title" = "Sorteer artikels";
 "reference-title" = "Verwysing $1";
-"request-feedback-on-error" = "Die toep het ’n probleem ervaar waarvan ons ontwikkelaars meer wil weet. Tik hier om aan ons ’n e-pos met die foutbesonderhede te stuur.";
 "saved-reading-lists-title" = "Leeslyste";
 // Fuzzy
 "saved-search-default-text" = "Soek";
@@ -261,6 +259,7 @@
 "welcome-languages-add-button" = "Voeg ’n ander taal toe";
 "welcome-languages-add-or-edit-button" = "Voeg voorkeurtale by of redigeer hulle";
 "welcome-languages-description" = "Ons het die volgende tale op die toestel gekry:";
+// Fuzzy
 "welcome-languages-search-title" = "Deursoek Wikipedia in bykans 300 tale";
 "wikitext-downloading" = "Laai inhoud...";
 "wikitext-preview-changes" = "Verkry voorskou van u wysigings...";

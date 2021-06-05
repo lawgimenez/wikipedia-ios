@@ -203,8 +203,6 @@
 "main-menu-account-logout-are-you-sure" = "Anjeun yakin rék kaluar log?";
 "main-menu-account-logout-cancel" = "Bolay";
 "main-menu-account-title-logged-in" = "Geus asup log minangka $1";
-"main-menu-debug-tweaks" = "Pangaturan pangembang";
-"main-menu-heading-debug" = "Debug";
 "main-menu-heading-legal" = "Privasi jeung Katangtuan";
 "main-menu-nearby" = "Sabudeureun";
 "main-menu-privacy-policy" = "Kawijakan privasi";
@@ -286,7 +284,6 @@
 // Fuzzy
 "relative-date-years-ago" = "{{PLURAL:$1|0=Taun ieu|Taun kamari|$1 taun kaliwat}}";
 "replace-method-button-accessibility" = "Ganti métodeu. Setél ka $1. Pilih jang ngarobah.";
-"request-feedback-on-error" = "Ieu aplikasi ngalaman masalah nu nyumebabkeun pangembang kami hayng mikanyaho leuwih jero. Pék totog di dieu pikeun ngirimkeun surélék kalawan wincikan kasalahan.";
 "saved-pages-image-download-error" = "Gagal ngundeur gambar pikeun ieu kaca kasimpen.";
 "saved-search-default-text" = "Paluruh artikel kasimpen";
 "saved-title" = "Kasimpen";
@@ -361,6 +358,7 @@
 "welcome-explore-continue-button" = "Mitembeyan";
 "welcome-explore-new-ways-title" = "Cara anyar pikeun ngalanglang";
 "welcome-explore-tell-me-more-done-button" = "Ngarti";
+// Fuzzy
 "welcome-intro-free-encyclopedia-description" = "Wikipédia ditulis sacara kolaboratif ku sukarélawan jeung ngawengku leuwih ti 40 yuta artikel dina ampir 300 basa.";
 "welcome-intro-free-encyclopedia-more" = "Teuleuman ngeunaan Wikipédia";
 "welcome-intro-free-encyclopedia-more-about" = "Ngeunaan Wikipedia";
@@ -369,6 +367,7 @@
 "welcome-languages-add-button" = "Tambahkeun basa lianna";
 "welcome-languages-add-or-edit-button" = "Tambahan atawa édit basa pinilih";
 "welcome-languages-description" = "Kami geus manggihan basa di handap dina pakakas anjeun:";
+// Fuzzy
 "welcome-languages-search-title" = "Paluruh di ampir 300 basa";
 "welcome-notifications-tell-me-more-creation" = "Iber dijieun sarta ditepikeun kana parangkat anjeun ku aplikasi, lain tina sérver kami (atawa pihak katiga).";
 "welcome-notifications-tell-me-more-storage" = "Préférénsi iber disimpen di parangkat sarta teu dumasar kana informasi atawa aktivitas pribadi.";

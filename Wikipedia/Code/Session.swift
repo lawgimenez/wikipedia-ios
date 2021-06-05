@@ -1,4 +1,5 @@
 import Foundation
+import CocoaLumberjackSwift
 
 public enum WMFCachePolicy {
     case foundation(URLRequest.CachePolicy)
@@ -73,7 +74,16 @@ public class Session: NSObject {
         }
     }
     
-    public var xWMFUUID: String? = nil // event logging uuid, set if enabled, nil if disabled
+    // event logging uuid, set if enabled, nil if disabled
+    private var xWMFUUID: String? {
+        get {
+            let userDefaults = UserDefaults.standard
+            if userDefaults.wmf_sendUsageReports {
+                return userDefaults.wmf_appInstallId
+            }
+            return nil
+        }
+    }
     
     private static let defaultCookieStorage: HTTPCookieStorage = {
         let storage = HTTPCookieStorage.shared
@@ -134,12 +144,15 @@ public class Session: NSObject {
     }
     
     deinit {
-        defaultURLSession.invalidateAndCancel()
+        teardown()
     }
     
-    public func cancelAllRequests() {
+    @objc public func teardown() {
+        guard defaultURLSession !== URLSession.shared else { // [NSURLSession sharedSession] may not be invalidated
+            return
+        }
         defaultURLSession.invalidateAndCancel()
-        defaultURLSession = Session.getURLSession(with: permanentCache, delegate: sessionDelegate)
+        defaultURLSession = URLSession.shared
     }
     
     public let wifiOnlyURLSession: URLSession = {
@@ -202,7 +215,7 @@ public class Session: NSObject {
             "Accept": "application/json; charset=utf-8",
             "Accept-Encoding": "gzip",
             "User-Agent": WikipediaAppUtils.versionedUserAgent(),
-            "Accept-Language": NSLocale.wmf_acceptLanguageHeaderForPreferredLanguages
+            "Accept-Language": requestURL.wmf_languageVariantCode ?? Locale.acceptLanguageHeaderForPreferredLanguages
         ]
         for (key, value) in defaultHeaders {
             guard headers[key] == nil else {
@@ -260,6 +273,29 @@ public class Session: NSObject {
     
     public func dataTask(with request: URLRequest, callback: Callback) -> URLSessionTask? {
         
+        //odd workaround to show an article as living doc icons in the article content web view.
+        let botIconName = ArticleAsLivingDocViewModel.Event.Large.botIconName
+        if let url = request.url,
+           url.absoluteString.contains(botIconName),
+           let imageData = UIImage(named: botIconName)?.pngData() {
+            let response = URLResponse(url: url, mimeType: "image/png", expectedContentLength: imageData.count, textEncodingName: nil)
+            callback.response?(response)
+            callback.data?(imageData)
+            callback.success()
+            return nil
+        }
+
+        let anonIconName = ArticleAsLivingDocViewModel.Event.Large.anonymousIconName
+        if let url = request.url,
+           url.absoluteString.contains(anonIconName),
+           let imageData = UIImage(named: anonIconName)?.pngData() {
+            let response = URLResponse(url: url, mimeType: "image/png", expectedContentLength: imageData.count, textEncodingName: nil)
+            callback.response?(response)
+            callback.data?(imageData)
+            callback.success()
+            return nil
+        }
+        
         if request.cachePolicy == .returnCacheDataElseLoad,
             let cachedResponse = permanentCache?.urlCache.cachedResponse(for: request) {
             callback.response?(cachedResponse.response)
@@ -275,12 +311,12 @@ public class Session: NSObject {
     
     public func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Swift.Void) -> URLSessionDataTask? {
         
-        let cachedCompletion = { (data: Data?, response: URLResponse?, error: Error?) -> Swift.Void in
+        let cachedCompletion = { [weak self] (data: Data?, response: URLResponse?, error: Error?) -> Swift.Void in
             
             if let httpResponse = response as? HTTPURLResponse,
                 httpResponse.statusCode == 304 {
                 
-                if let cachedResponse = self.permanentCache?.urlCache.cachedResponse(for: request) {
+                if let cachedResponse = self?.permanentCache?.urlCache.cachedResponse(for: request) {
                     completionHandler(cachedResponse.data, cachedResponse.response, nil)
                     return
                 }
@@ -288,7 +324,7 @@ public class Session: NSObject {
             
             if let _ = error {
                 
-                if let cachedResponse = self.permanentCache?.urlCache.cachedResponse(for: request) {
+                if let cachedResponse = self?.permanentCache?.urlCache.cachedResponse(for: request) {
                     completionHandler(cachedResponse.data, cachedResponse.response, nil)
                     return
                 }
@@ -519,6 +555,7 @@ public class Session: NSObject {
         var getRequest = request(with: url, method: .get)
         if ignoreCache {
             getRequest.cachePolicy = .reloadIgnoringLocalCacheData
+            getRequest.prefersPersistentCacheOverError = false
         }
         let task = jsonDictionaryTask(with: getRequest, completionHandler: completionHandler)
         task.resume()

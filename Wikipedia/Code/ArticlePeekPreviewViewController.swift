@@ -29,7 +29,7 @@ class ArticlePeekPreviewViewController: UIViewController, Peekable {
             return
         }
         isFetched = true
-        guard let key = articleURL.wmf_databaseKey else {
+        guard let key = articleURL.wmf_inMemoryKey else {
             completion?()
             return
         }
@@ -38,6 +38,7 @@ class ArticlePeekPreviewViewController: UIViewController, Peekable {
                 completion?()
             }
             guard let article = article else {
+                self.activityIndicatorView.stopAnimating()
                 return
             }
             self.updateView(with: article)

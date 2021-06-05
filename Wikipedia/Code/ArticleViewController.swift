@@ -1,5 +1,6 @@
 import UIKit
 import WMF
+import CocoaLumberjackSwift
 
 @objc(WMFArticleViewController)
 class ArticleViewController: ViewController, HintPresenting {
@@ -19,16 +20,14 @@ class ArticleViewController: ViewController, HintPresenting {
     internal var article: WMFArticle
     internal var mediaList: MediaList?
     
-    /// Use separate properties for URL and language since they're optional on WMFArticle and to save having to re-calculate them
+    /// Use separate properties for URL and language code since they're optional on WMFArticle and to save having to re-calculate them
     @objc public var articleURL: URL
-    let articleLanguage: String
+    let articleLanguageCode: String
     
     /// Set by the state restoration system
     /// Scroll to the last viewed scroll position in this case
     /// Also prioritize pulling data from cache (without revision/etag validation) so the user sees the article as quickly as possible
     var isRestoringState: Bool = false
-    /// Set internally to wait for content size changes to chill before restoring the scroll offset
-    var isRestoringStateOnNextContentSizeChange: Bool = false
     
     /// Called when initial load starts
     @objc public var loadCompletion: (() -> Void)?
@@ -40,7 +39,6 @@ class ArticleViewController: ViewController, HintPresenting {
     internal let dataStore: MWKDataStore
     
     private let cacheController: ArticleCacheController
-    let surveyTimerController: ArticleSurveyTimerController
     
     var session: Session {
         return dataStore.session
@@ -80,6 +78,17 @@ class ArticleViewController: ViewController, HintPresenting {
         return tapGR
     }()
     
+    //BEGIN: Article As Living Doc properties
+    private(set) var surveyTimerController: ArticleSurveyTimerController?
+    
+    @available(iOS 13.0, *)
+    lazy var articleAsLivingDocController = ArticleAsLivingDocController(delegate: self)
+    
+    var surveyAnnouncementResult: SurveyAnnouncementsController.SurveyAnnouncementResult? {
+        SurveyAnnouncementsController.shared.activeSurveyAnnouncementResultForArticleURL(articleURL)
+    }
+    //END: Article As Living Doc properties
+    
     @objc init?(articleURL: URL, dataStore: MWKDataStore, theme: Theme, schemeHandler: SchemeHandler? = nil) {
         guard let article = dataStore.fetchOrCreateArticle(with: articleURL) else {
                 return nil
@@ -87,16 +96,16 @@ class ArticleViewController: ViewController, HintPresenting {
         let cacheController = dataStore.cacheController.articleCache
 
         self.articleURL = articleURL
-        self.articleLanguage = articleURL.wmf_language ?? Locale.current.languageCode ?? "en"
+        self.articleLanguageCode = articleURL.wmf_languageCode ?? Locale.current.languageCode ?? "en"
         self.article = article
         
         self.dataStore = dataStore
         self.schemeHandler = schemeHandler ?? SchemeHandler(scheme: "app", session: dataStore.session)
         self.cacheController = cacheController
-
-        self.surveyTimerController = ArticleSurveyTimerController(articleURL: articleURL, surveyController: SurveyAnnouncementsController.shared)
         
         super.init(theme: theme)
+        
+        self.surveyTimerController = ArticleSurveyTimerController(delegate: self)
     }
     
     deinit {
@@ -119,10 +128,10 @@ class ArticleViewController: ViewController, HintPresenting {
     }()
     
     lazy var webView: WKWebView = {
-        return WMFWebView(frame: view.bounds, configuration: webViewConfiguration)
+        let webView = WMFWebView(frame: view.bounds, configuration: webViewConfiguration)
+        view.addSubview(webView)
+        return webView
     }()
-
-    private var verticalOffsetPercentageToRestore: CGFloat?
     
     // MARK: HintPresenting
     
@@ -251,24 +260,22 @@ class ArticleViewController: ViewController, HintPresenting {
     }
     
     internal func updateArticleMargins() {
-        messagingController.updateMargins(with: articleMargins, leadImageHeight: leadImageHeightConstraint.constant)
+        
+        let defaultUpdateBlock = {
+            self.messagingController.updateMargins(with: self.articleMargins, leadImageHeight: self.leadImageHeightConstraint.constant)
+        }
+        
+        if #available(iOS 13.0, *) {
+            if (articleAsLivingDocController.shouldAttemptToShowArticleAsLivingDoc) {
+                messagingController.customUpdateMargins(with: articleMargins, leadImageHeight: self.leadImageHeightConstraint.constant)
+            } else {
+                defaultUpdateBlock()
+            }
+        } else {
+            defaultUpdateBlock()
+        }
+        
         updateLeadImageMargins()
-    }
-
-    internal func stashOffsetPercentage() {
-        let offset = webView.scrollView.verticalOffsetPercentage
-        // negative and 0 offsets make small errors in scrolling, allow it to automatically handle those cases
-        if offset > 0 {
-            verticalOffsetPercentageToRestore = offset
-        }
-    }
-
-    private func restoreOffsetPercentageIfNecessary() {
-        guard let verticalOffsetPercentage = verticalOffsetPercentageToRestore else {
-            return
-        }
-        verticalOffsetPercentageToRestore = nil
-        webView.scrollView.verticalOffsetPercentage = verticalOffsetPercentage
     }
 
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -291,6 +298,7 @@ class ArticleViewController: ViewController, HintPresenting {
                 fakeProgressController.start()
             case .loaded:
                 fakeProgressController.stop()
+                rethemeWebViewIfNecessary()
             case .error:
                 fakeProgressController.stop()
             }
@@ -311,10 +319,18 @@ class ArticleViewController: ViewController, HintPresenting {
         setup()
         super.viewDidLoad()
         setupToolbar() // setup toolbar needs to be after super.viewDidLoad because the superview owns the toolbar
-        apply(theme: theme)
         setupForStateRestorationIfNecessary()
-        surveyTimerController.timerFireBlock = { [weak self] result in
-            self?.showSurveyAnnouncementPanel(surveyAnnouncementResult: result)
+        surveyTimerController?.timerFireBlock = { [weak self] in
+            guard let self = self,
+                  let result = self.surveyAnnouncementResult else {
+                return
+            }
+            
+            if #available(iOS 13.0, *) {
+                self.showSurveyAnnouncementPanel(surveyAnnouncementResult: result, linkState: self.articleAsLivingDocController.surveyLinkState)
+            } else {
+                self.showSurveyAnnouncementPanel(surveyAnnouncementResult: result, linkState: .notInExperiment)
+            }
         }
         if #available(iOS 14.0, *) {
             self.navigationItem.backButtonTitle = articleURL.wmf_title
@@ -328,7 +344,7 @@ class ArticleViewController: ViewController, HintPresenting {
         toolbarController.update()
         loadIfNecessary()
         startSignificantlyViewedTimer()
-        surveyTimerController.viewWillAppear(withState: state)
+        surveyTimerController?.viewWillAppear(withState: state)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -359,7 +375,7 @@ class ArticleViewController: ViewController, HintPresenting {
         cancelWIconPopoverDisplay()
         saveArticleScrollPosition()
         stopSignificantlyViewedTimer()
-        surveyTimerController.viewWillDisappear(withState: state)
+        surveyTimerController?.viewWillDisappear(withState: state)
     }
     
     // MARK: Article load
@@ -383,9 +399,9 @@ class ArticleViewController: ViewController, HintPresenting {
     }
     
     /// Waits for the article and article summary to finish loading (or re-loading) and performs post load actions
-    func setupArticleLoadWaitGroup() {
+    private func setupArticleLoadWaitGroup() {
         assert(Thread.isMainThread)
-        
+
         guard articleLoadWaitGroup == nil else {
             return
         }
@@ -393,35 +409,44 @@ class ArticleViewController: ViewController, HintPresenting {
         articleLoadWaitGroup = DispatchGroup()
         articleLoadWaitGroup?.enter() // will leave on setup complete
         articleLoadWaitGroup?.notify(queue: DispatchQueue.main) { [weak self] in
-            self?.setupFooter()
-            self?.shareIfNecessary()
-            self?.articleLoadWaitGroup = nil
+            
+            guard let self = self else {
+                return
+            }
+            
+            if #available(iOS 13.0, *) {
+                self.articleAsLivingDocController.articleContentFinishedLoading()
+            }
+            
+            self.setupFooter()
+            self.shareIfNecessary()
+            self.restoreScrollStateIfNecessary()
+            self.articleLoadWaitGroup = nil
         }
-        
-        guard let key = article.key else {
+    }
+    
+    internal func loadSummary(oldState: ViewState) {
+        guard let key = article.inMemoryKey else {
             return
         }
         
         articleLoadWaitGroup?.enter()
-        // async to allow the page network requests some time to go through
-        DispatchQueue.main.async {
-            let cachePolicy: URLRequest.CachePolicy? = self.state == .reloading ? .reloadRevalidatingCacheData : nil
-            self.dataStore.articleSummaryController.updateOrCreateArticleSummaryForArticle(withKey: key, cachePolicy: cachePolicy) { (article, error) in
-                defer {
-                    self.articleLoadWaitGroup?.leave()
-                    self.updateMenuItems()
-                }
-                guard let article = article else {
-                    return
-                }
-                self.article = article
-                // Handle redirects
-                guard let newKey = article.key, newKey != key, let newURL = article.url else {
-                    return
-                }
-                self.articleURL = newURL
-                self.addToHistory()
+        let cachePolicy: URLRequest.CachePolicy? = oldState == .reloading ? .reloadRevalidatingCacheData : nil
+        self.dataStore.articleSummaryController.updateOrCreateArticleSummaryForArticle(withKey: key, cachePolicy: cachePolicy) { (article, error) in
+            defer {
+                self.articleLoadWaitGroup?.leave()
+                self.updateMenuItems()
             }
+            guard let article = article else {
+                return
+            }
+            self.article = article
+            // Handle redirects
+            guard let newKey = article.inMemoryKey, newKey != key, let newURL = article.url else {
+                return
+            }
+            self.articleURL = newURL
+            self.addToHistory()
         }
     }
     
@@ -434,6 +459,10 @@ class ArticleViewController: ViewController, HintPresenting {
             showGenericError()
             state = .error
             return
+        }
+
+        if #available(iOS 13.0, *) {
+            articleAsLivingDocController.articleContentWillBeginLoading(traitCollection: traitCollection, theme: theme)
         }
 
         webView.load(request)
@@ -489,7 +518,82 @@ class ArticleViewController: ViewController, HintPresenting {
         significantlyViewedTimer = nil
     }
     
-    // MARK: State Restoration
+    // MARK: Scroll State Restoration
+    
+    /// Tracks desired scroll restoration.
+    /// This occurs when a user is re-opening the app and expects the article to be scrolled to the last position they were reading at or when a user taps on a link that goes to a particular section in another article.
+    /// The state needs to be preserved because the given offset or anchor will not be availble until after the page fully loads.
+    /// `scrollToOffset` and `scrollToAnchor` will track attempts made after each `webView.contentSize` change, hoping the requested offset or anchor is available. After a certain number of attempts, it's assumed that the value is invalid and the restoration logic gives up.
+    private enum ScrollRestorationState {
+        case none
+        /// Scroll to absolute Y offset
+        case scrollToOffset(_ offsetY: CGFloat, animated: Bool, attempt: Int = 1, maxAttempts: Int = 5, completion: ((Bool, Bool) -> Void)? = nil)
+        /// Scroll to percentage Y offset
+        case scrollToPercentage(_ percentageOffsetY: CGFloat)
+        /// Scroll to anchor, an id of an element on the page
+        case scrollToAnchor(_ anchor: String, attempt: Int = 1, maxAttempts: Int = 5, completion: ((Bool, Bool) -> Void)? = nil)
+    }
+    
+    private var scrollRestorationState: ScrollRestorationState = .none
+    
+    /// Checks scrollRestorationState and performs the necessary scroll restoration
+    private func restoreScrollStateIfNecessary() {
+        switch scrollRestorationState {
+        case .none:
+            break
+        case .scrollToOffset(let offset, let animated, let attempt, let maxAttempts, let completion):
+            scrollRestorationState = .none
+            self.scroll(to: CGPoint(x: 0, y: offset), animated: animated) { [weak self] (success) in
+                guard !success, attempt < maxAttempts else {
+                    completion?(success, attempt >= maxAttempts)
+                    return
+                }
+                self?.scrollRestorationState = .scrollToOffset(offset, animated: animated, attempt: attempt + 1, maxAttempts: maxAttempts, completion: completion)
+            }
+        case .scrollToPercentage(let verticalOffsetPercentage):
+            scrollRestorationState = .none
+            webView.scrollView.verticalOffsetPercentage = verticalOffsetPercentage
+        case .scrollToAnchor(let anchor, let attempt, let maxAttempts, let completion):
+            scrollRestorationState = .none
+            self.scroll(to: anchor, animated: true) { [weak self] (success) in
+                guard !success, attempt < maxAttempts else {
+                    completion?(success, attempt >= maxAttempts)
+                    return
+                }
+                self?.scrollRestorationState = .scrollToAnchor(anchor, attempt: attempt + 1, maxAttempts: maxAttempts, completion: completion)
+            }
+            
+            //HACK: Sometimes the `scroll_to_anchor` message is not triggered from the web view over the JS bridge, even after prepareForScrollToAnchor successfully goes through. This means the completion block above is queued to scrollToAnchorCompletions but never run. We are trying to scroll again here once more after a slight delay in hopes of triggering `scroll_to_anchor` again.
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.3) { [weak self] in
+                
+                guard let self = self else {
+                    return
+                }
+                
+                //This conditional check should target the bug a little closer, since scrollToAnchorCompletions are cleaned out after the last `scroll_to_anchor` message is received. Remaining scrollToAnchorCompletions at this point indicates that likely we're hitting the missing `scroll_to_anchor` message bug.
+                if (self.scrollToAnchorCompletions.count > 0) {
+                    self.scroll(to: anchor, animated: false)
+                }
+            }
+        }
+    }
+    
+    internal func stashOffsetPercentage() {
+        let offset = webView.scrollView.verticalOffsetPercentage
+        // negative and 0 offsets make small errors in scrolling, allow it to automatically handle those cases
+        if offset > 0 {
+            scrollRestorationState = .scrollToPercentage(offset)
+        }
+    }
+    
+    private func checkForScrollToAnchor(in response: HTTPURLResponse) {
+        guard let fragment = response.url?.fragment else {
+            return
+        }
+        scrollRestorationState = .scrollToAnchor(fragment, attempt: 1)
+    }
+    
+    // MARK: Article State Restoration
     
     /// Save article scroll position for restoration later
     func saveArticleScrollPosition() {
@@ -509,42 +613,30 @@ class ArticleViewController: ViewController, HintPresenting {
         setWebViewHidden(true, animated: false)
     }
     
-    /// If state needs to be restored, listen for content size changes and restore the scroll position when those changes stop occurring
-    func restoreStateIfNecessary() {
+    /// Translates an article's viewedScrollPosition or viewedFragment values to a scrollRestorationState. These values are saved to the article object when the ArticleVC disappears,the app is backgrounded, or an edit is made and the article is reloaded.
+    func assignScrollStateFromArticleFlagsIfNecessary() {
         guard isRestoringState else {
             return
         }
         isRestoringState = false
-        isRestoringStateOnNextContentSizeChange = true
-        perform(#selector(restoreState), with: nil, afterDelay: 0.5) // failsafe, attempt to restore state after half a second regardless
+        let scrollPosition = CGFloat(article.viewedScrollPosition)
+        if scrollPosition > 0 {
+            scrollRestorationState = .scrollToOffset(scrollPosition, animated: false, completion: { [weak self] success, maxedAttempts in
+                if (success || maxedAttempts) {
+                    self?.setWebViewHidden(false, animated: true)
+                }
+            })
+        } else if let fragment = article.viewedFragment {
+            scrollRestorationState = .scrollToAnchor(fragment, completion: { [weak self] success, maxedAttempts in
+                if (success || maxedAttempts) {
+                    self?.setWebViewHidden(false, animated: true)
+                }
+            })
+        } else {
+            setWebViewHidden(false, animated: true)
+        }
     }
     
-    /// If state is supposed to be restored after the next content size change, restore that state
-    /// This should be called in a debounced manner when article content size changes
-    func restoreStateIfNecessaryOnContentSizeChange() {
-        guard isRestoringStateOnNextContentSizeChange else {
-            return
-        }
-        isRestoringStateOnNextContentSizeChange = false
-        let scrollPosition = CGFloat(article.viewedScrollPosition)
-        guard scrollPosition < webView.scrollView.bottomOffsetY else {
-            return
-        }
-        restoreState()
-    }
-    
-    /// Scroll to the state restoration scroll position now, canceling any previous attempts
-    @objc func restoreState() {
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(restoreState), object: nil)
-        let scrollPosition = CGFloat(article.viewedScrollPosition)
-        if scrollPosition > 0 && scrollPosition < webView.scrollView.bottomOffsetY {
-            scroll(to: CGPoint(x: 0, y: scrollPosition), animated: false)
-        } else if let anchor = article.viewedFragment {
-            scroll(to: anchor, animated: false)
-        }
-        setWebViewHidden(false, animated: true)
-    }
-
     func setWebViewHidden(_ hidden: Bool, animated: Bool, completion: ((Bool) -> Void)? = nil) {
         let block = {
             self.webView.alpha = hidden ? 0 : 1
@@ -583,6 +675,17 @@ class ArticleViewController: ViewController, HintPresenting {
         tableOfContentsController.apply(theme: theme)
         findInPage.view?.apply(theme: theme)
         if state == .loaded {
+            messagingController.updateTheme(theme)
+        }
+    }
+    
+    private func rethemeWebViewIfNecessary() {
+        // Sometimes the web view theme and article theme is out if sync
+        // The last call to update the theme comes before the web view is fully loaded to accept a theme change
+        // In this case we are checking and triggering a web view theme change once more after the JS bridge indicates it's loaded
+        // https://phabricator.wikimedia.org/T275239
+        if let webViewTheme = messagingController.parameters?.theme,
+           webViewTheme != self.theme.webName {
             messagingController.updateTheme(theme)
         }
     }
@@ -652,6 +755,11 @@ class ArticleViewController: ViewController, HintPresenting {
     }
 
     internal func performWebViewRefresh(_ revisionID: UInt64? = nil) {
+
+        if #available(iOS 13.0, *) {
+            articleAsLivingDocController.articleDidTriggerPullToRefresh()
+        }
+
         #if WMF_LOCAL_PAGE_CONTENT_SERVICE // on local PCS builds, reload everything including JS and CSS
             webView.reloadFromOrigin()
         #else // on release builds, just reload the page with a different cache policy
@@ -675,8 +783,8 @@ class ArticleViewController: ViewController, HintPresenting {
             showGenericError()
             return
         }
-        // Check if this is the same article by comparing database keys
-        guard resolvedURL.wmf_databaseKey == articleURL.wmf_databaseKey else {
+        // Check if this is the same article by comparing in-memory keys
+        guard resolvedURL.wmf_inMemoryKey == articleURL.wmf_inMemoryKey else {
             navigate(to: resolvedURL)
             return
         }
@@ -684,7 +792,11 @@ class ArticleViewController: ViewController, HintPresenting {
         guard let anchor = resolvedURL.fragment?.removingPercentEncoding else {
             return
         }
-        scroll(to: anchor, animated: true)
+        
+        if #available(iOS 13.0, *) {
+            articleAsLivingDocController.handleArticleAsLivingDocLinkForAnchor(anchor, articleURL: articleURL)
+        }
+
     }
     
     // MARK: Table of contents
@@ -798,6 +910,7 @@ private extension ArticleViewController {
         }
     }
     
+    /// Track and debounce `contentSize` changes to wait for a desired scroll position to become available. See `ScrollRestorationState` for more information.
     func contentSizeDidChange() {
         // debounce
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(debouncedContentSizeDidChange), object: nil)
@@ -805,23 +918,22 @@ private extension ArticleViewController {
     }
     
     @objc func debouncedContentSizeDidChange() {
-        restoreOffsetPercentageIfNecessary()
-        restoreStateIfNecessaryOnContentSizeChange()
+        restoreScrollStateIfNecessary()
     }
     
     @objc func didReceiveArticleUpdatedNotification(_ notification: Notification) {
-        toolbarController.setSavedState(isSaved: article.isSaved)
+        toolbarController.setSavedState(isSaved: article.isAnyVariantSaved)
     }
     
     @objc func applicationWillResignActive(_ notification: Notification) {
         saveArticleScrollPosition()
         stopSignificantlyViewedTimer()
-        surveyTimerController.willResignActive(withState: state)
+        surveyTimerController?.willResignActive(withState: state)
     }
     
     @objc func applicationDidBecomeActive(_ notification: Notification) {
         startSignificantlyViewedTimer()
-        surveyTimerController.didBecomeActive(withState: state)
+        surveyTimerController?.didBecomeActive(withState: state)
     }
     
     func setupSearchButton() {
@@ -874,6 +986,11 @@ private extension ArticleViewController {
         imageTopConstraint.priority = UILayoutPriority(rawValue: 999)
         let imageBottomConstraint = leadImageContainerView.bottomAnchor.constraint(equalTo: leadImageView.bottomAnchor, constant: leadImageBorderHeight)
         NSLayoutConstraint.activate([topConstraint, leadingConstraint, trailingConstraint, leadImageHeightConstraint, imageTopConstraint, imageBottomConstraint, leadImageLeadingMarginConstraint, leadImageTrailingMarginConstraint])
+        
+        if #available(iOS 13.0, *) {
+            articleAsLivingDocController.setupLeadImageView()
+        }
+
     }
     
     func setupPageContentServiceJavaScriptInterface(with completion: @escaping () -> Void) {
@@ -899,13 +1016,18 @@ private extension ArticleViewController {
     
     func setupPageContentServiceJavaScriptInterface(with userGroups: [String]) {
         let areTablesInitiallyExpanded = UserDefaults.standard.wmf_isAutomaticTableOpeningEnabled
-        messagingController.setup(with: webView, language: articleLanguage, theme: theme, layoutMargins: articleMargins, leadImageHeight: leadImageHeight, areTablesInitiallyExpanded: areTablesInitiallyExpanded, userGroups: userGroups)
+
+        if #available(iOS 13.0, *) {
+            messagingController.shouldAttemptToShowArticleAsLivingDoc = articleAsLivingDocController.shouldAttemptToShowArticleAsLivingDoc
+        }
+
+        messagingController.setup(with: webView, languageCode: articleLanguageCode, theme: theme, layoutMargins: articleMargins, leadImageHeight: leadImageHeight, areTablesInitiallyExpanded: areTablesInitiallyExpanded, userGroups: userGroups)
     }
     
     func setupToolbar() {
         enableToolbar()
         toolbarController.apply(theme: theme)
-        toolbarController.setSavedState(isSaved: article.isSaved)
+        toolbarController.setSavedState(isSaved: article.isAnyVariantSaved)
         setToolbarHidden(false, animated: false)
     }
     
@@ -1021,6 +1143,7 @@ extension ArticleViewController: WKNavigationDelegate {
             return
         }
         currentETag = response.allHeaderFields[HTTPURLResponse.etagHeaderKey] as? String
+        checkForScrollToAnchor(in: response)
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
@@ -1044,7 +1167,6 @@ extension ArticleViewController: WKNavigationDelegate {
             shouldPerformWebRefreshAfterScrollViewDeceleration = false
         }
     }
-
 }
 
 extension ViewController  { // Putting extension on ViewController rather than ArticleVC allows for re-use by EditPreviewVC
@@ -1065,4 +1187,84 @@ extension ViewController  { // Putting extension on ViewController rather than A
             return viewForCalculation.readableContentGuide.layoutFrame.minX
         }
     }
+}
+
+//MARK: Article As Living Doc Protocols
+
+@available(iOS 13.0, *)
+extension ArticleViewController: ArticleAsLivingDocViewControllerDelegate {
+    func livingDocViewWillPush() {
+        surveyTimerController?.livingDocViewWillPush(withState: state)
+    }
+    
+    func livingDocViewWillAppear() {
+        surveyTimerController?.livingDocViewWillAppear(withState: state)
+    }
+    
+    var articleAsLivingDocViewModel: ArticleAsLivingDocViewModel? {
+        return articleAsLivingDocController.articleAsLivingDocViewModel
+    }
+    
+    func fetchNextPage(nextRvStartId: UInt, theme: Theme) {
+        articleAsLivingDocController.fetchNextPage(nextRvStartId: nextRvStartId, traitCollection: traitCollection, theme: theme)
+    }
+
+    var isFetchingAdditionalPages: Bool {
+        return articleAsLivingDocController.isFetchingAdditionalPages
+    }
+}
+
+extension ArticleViewController: ArticleAsLivingDocControllerDelegate {
+    var abTestsController: ABTestsController {
+        return dataStore.abTestsController
+    }
+    
+    var isInValidSurveyCampaignAndArticleList: Bool {
+        surveyAnnouncementResult != nil
+    }
+    
+    func extendTimerForPresentingModal() {
+        surveyTimerController?.extendTimer()
+    }
+}
+
+extension ArticleViewController: ArticleSurveyTimerControllerDelegate {
+    var displayDelay: TimeInterval? {
+        surveyAnnouncementResult?.displayDelay
+    }
+    
+    var shouldAttemptToShowArticleAsLivingDoc: Bool {
+        if #available(iOS 13.0, *) {
+            return articleAsLivingDocController.shouldAttemptToShowArticleAsLivingDoc
+        } else {
+            return false
+        }
+    }
+    
+    var userHasSeenSurveyPrompt: Bool {
+        
+        guard let identifier = surveyAnnouncementResult?.campaignIdentifier else {
+            return false
+        }
+        
+        return SurveyAnnouncementsController.shared.userHasSeenSurveyPrompt(forCampaignIdentifier: identifier)
+    }
+    
+    var shouldShowArticleAsLivingDoc: Bool {
+        if #available(iOS 13.0, *) {
+            return articleAsLivingDocController.shouldShowArticleAsLivingDoc
+        } else {
+            return false
+        }
+    }
+    
+    var livingDocSurveyLinkState: ArticleAsLivingDocSurveyLinkState {
+        if #available(iOS 13.0, *) {
+            return articleAsLivingDocController.surveyLinkState
+        } else {
+            return .notInExperiment
+        }
+    }
+    
+    
 }

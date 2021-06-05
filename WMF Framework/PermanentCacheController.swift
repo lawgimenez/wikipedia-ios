@@ -11,7 +11,7 @@ public final class PermanentCacheController: NSObject {
     /// - Parameter session: the session to utilize for image and article requests
     /// - Parameter configuration: the configuration to utilize for configuring requests
     /// - Parameter preferredLanguageDelegate: the preferredLanguageDelegate to utilize for determining the user's preferred languages
-    @objc public init(moc: NSManagedObjectContext, session: Session, configuration: Configuration, preferredLanguageDelegate: WMFPreferredLanguageCodesProviding) {
+    @objc public init(moc: NSManagedObjectContext, session: Session, configuration: Configuration, preferredLanguageDelegate: WMFPreferredLanguageInfoProvider) {
         imageCache = ImageCacheController(moc: moc, session: session, configuration: configuration)
         articleCache = ArticleCacheController(moc: moc, imageCacheController: imageCache, session: session, configuration: configuration, preferredLanguageDelegate: preferredLanguageDelegate)
         urlCache = PermanentlyPersistableURLCache(moc: moc)
@@ -24,6 +24,17 @@ public final class PermanentCacheController: NSObject {
     /// Exists on this @objc PermanentCacheController so it can be accessed from WMFDataStore
     @objc public static func setupCoreDataStack(_ completion: @escaping (NSManagedObjectContext?, Error?) -> Void) {
         CacheController.setupCoreDataStack(completion)
+    }
+    
+    /// Performs any necessary teardown on CacheController's internal storage
+    /// Exists on this @objc PermanentCacheController so it can be accessed from WMFDataStore
+    @objc public func teardown(_ completion: @escaping () -> Void) {
+        imageCache.cancelAllTasks()
+        articleCache.cancelAllTasks()
+        managedObjectContext.perform {
+            // Give a bit of a buffer for other async activity to cease
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(100), execute: completion)
+        }
     }
     
     @objc public func fetchImage(withURL url: URL?, failure: @escaping (Error) -> Void, success: @escaping (ImageDownload) -> Void) {

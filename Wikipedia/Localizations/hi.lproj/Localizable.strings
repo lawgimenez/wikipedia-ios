@@ -22,6 +22,7 @@
 // Author: चक्रपाणी
 // Author: संजीव कुमार
 
+"aaald-article-insert-last-updated" = "आखरी अपडेट";
 "about-content-license" = "सामग्री लाइसेंस";
 "about-content-license-details" = "जब तक अलग से बताया गया हो तब तक सामग्री $1 के अंतर्गत उपलब्ध है।";
 "about-content-license-details-share-alike-license" = "क्रिएटिव कॉमन्स अट्ट्रिब्यूशन-शेयरअलाइक लाइसेंस";
@@ -223,8 +224,6 @@
 "main-menu-account-logout-are-you-sure" = "क्या आप वास्तव में लॉग आउट करना चाहते हैं?";
 "main-menu-account-logout-cancel" = "रद्द करें";
 "main-menu-account-title-logged-in" = "$1 के रूप में लॉगड इन";
-"main-menu-debug-tweaks" = "डेवलपर सेटिंग्स";
-"main-menu-heading-debug" = "डीबग";
 "main-menu-heading-legal" = "गोपनीयता और शर्तें";
 "main-menu-nearby" = "पास में";
 "main-menu-privacy-policy" = "गोपनीयता नीति";
@@ -233,6 +232,7 @@
 "main-menu-title" = "अधिक";
 "main-menu-zero-faq" = "विकिपीडिया ज़ीरो FAQ";
 "menu-cancel-accessibility-label" = "रद्द करें";
+// Fuzzy
 "more-languages-tooltip-description" = "विजीपीडिया को लगभग 300 भाषाओं में खोजें";
 "more-languages-tooltip-title" = "भाषाएँ जोड़ें";
 "navbar-title-mode-edit-wikitext-preview" = "पूर्वावलोकन";
@@ -313,7 +313,6 @@
 "relative-date-minutes-ago" = "{{PLURAL:$1|0=बिल्कुल अभी|$1 मिनट पहले|$1 मिनट पहले}}";
 // Fuzzy
 "relative-date-years-ago" = "{{PLURAL:$1|0=इस वर्ष|पिछला वर्ष|$1 वर्ष पहले}}";
-"request-feedback-on-error" = "ऐप ने एक समस्या का सामना किया है जिसके बारे में हमारे डेवलपर्स अधिक जानना चाहेंगे। एरर डिटेल्स के साथ हमें ईमेल भेजने के किये कृपया यहाँ टैप करें।";
 "saved-pages-image-download-error" = "सहेजे गए पेज के लिए चित्र डाउनलोड करने में विफल रहे।";
 // Fuzzy
 "saved-pages-progress-syncing" = "अनुच्छेद सिंकिंग प्रगति में हैं...";
@@ -391,6 +390,7 @@
 "welcome-explore-continue-button" = "शुरू करें";
 "welcome-explore-new-ways-title" = "खोजने के नए तरीके";
 "welcome-explore-tell-me-more-done-button" = "समझ में आया";
+// Fuzzy
 "welcome-intro-free-encyclopedia-description" = "विकिपीडिया को स्वयंसेवकों द्वारा आपसी सहयोग से लिखा जाता है और इसमें लगभग 300 भाषाओं के 40 मिलियन से अधिक लेख मौजूद हैं।";
 "welcome-intro-free-encyclopedia-more" = "विकिपीडिया के बारे में अधिक जानें";
 "welcome-intro-free-encyclopedia-more-about" = "विकिपीडिया के बारे में";
@@ -399,6 +399,7 @@
 "welcome-languages-add-button" = "दूसरी भाषा जोड़ें";
 "welcome-languages-add-or-edit-button" = "पसंदीदा भाषाओं को जोड़ें या संपादित करें";
 "welcome-languages-description" = "हमें आपकी डिवाइस पर निम्न भाषाएँ मिली हैं:";
+// Fuzzy
 "welcome-languages-search-title" = "लगभग 300 भाषाओं में खोजें";
 "welcome-notifications-tell-me-more-creation" = "आप की डिवाइस पर नोटिफिकेशन एप द्वारा बनाये और भेजे जाते हैं, न कि हमारे (या थर्ड पार्टी) सर्वर्स द्वारा।";
 "welcome-notifications-tell-me-more-storage" = "नोटिफिकेशन वरीयताएं डिवाइस पर स्टोर की जातीं हैं और ये व्यक्तिगत जानकारी या क्रियाकलाप पर आधारित नहीं हैं।";

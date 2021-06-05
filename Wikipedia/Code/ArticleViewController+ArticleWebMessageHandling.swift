@@ -1,4 +1,7 @@
+import WMF
+
 extension ArticleViewController: ArticleWebMessageHandling {
+    
     func didRecieve(action: ArticleWebMessagingController.Action) {
         dismissReferencesPopover()
         switch action {
@@ -28,17 +31,20 @@ extension ArticleViewController: ArticleWebMessageHandling {
             showTitleDescriptionEditor(with: .none, funnelSource: .titleDescription)
         case .scrollToAnchor(let anchor, let rect):
             scrollToAnchorCompletions.popLast()?(anchor, rect)
+            scrollToAnchorCompletions.removeAll()
         case .viewInBrowser:
             navigate(to: self.articleURL, useSafari: true)
+        case .aaaldInsertOnScreen:
+            handleAaaLDInsertOnScreenEvent()
         }
     }
     
     func handleTableOfContents(items: [TableOfContentsItem]) {
-        let titleItem = TableOfContentsItem(id: -1, titleHTML: article.displayTitleHTML, anchor: "", rootItemId: -1, indentationLevel: 0)
+        let titleItem = TableOfContentsItem(id: 0, titleHTML: article.displayTitleHTML, anchor: "", rootItemId: 0, indentationLevel: 0)
         var allItems: [TableOfContentsItem] = [titleItem]
         allItems.append(contentsOf: items)
-        let aboutThisArticleTitle = CommonStrings.aboutThisArticleTitle(with: articleLanguage)
-        let readMoreTitle = CommonStrings.readMoreTitle(with: articleLanguage)
+        let aboutThisArticleTitle = CommonStrings.aboutThisArticleTitle(with: articleLanguageCode)
+        let readMoreTitle = CommonStrings.readMoreTitle(with: articleLanguageCode)
         let aboutThisArticleItem = TableOfContentsItem(id: -2, titleHTML: aboutThisArticleTitle, anchor: PageContentService.Footer.Menu.fragment, rootItemId: -2, indentationLevel: 0)
         allItems.append(aboutThisArticleItem)
         let readMoreItem = TableOfContentsItem(id: -3, titleHTML: readMoreTitle, anchor: PageContentService.Footer.ReadMore.fragment, rootItemId: -3, indentationLevel: 0)
@@ -47,17 +53,19 @@ extension ArticleViewController: ArticleWebMessageHandling {
     }
     
     func handlePCSDidFinishInitialSetup() {
+        let oldState = state
         state = .loaded
         showWIconPopoverIfNecessary()
         refreshControl.endRefreshing()
-        surveyTimerController.articleContentDidLoad()
+        surveyTimerController?.articleContentDidLoad()
+        loadSummary(oldState: oldState)
         initialSetupCompletion?()
         initialSetupCompletion = nil
     }
     
     @objc func handlePCSDidFinishFinalSetup() {
+        assignScrollStateFromArticleFlagsIfNecessary()
         articleLoadWaitGroup?.leave()
-        restoreStateIfNecessary()
         addToHistory()
         syncCachedResourcesIfNeeded()
     }
@@ -91,7 +99,7 @@ extension ArticleViewController: ArticleWebMessageHandling {
     
     func setupFooter() {
         // Always use Configuration.production for related articles
-        guard let baseURL = Configuration.production.pageContentServiceAPIURLComponentsForHost(articleURL.host, appending: []).url else {
+        guard let baseURL = Configuration.production.pageContentServiceAPIURLForURL(articleURL, appending: []) else {
             return
         }
         var menuItems: [PageContentService.Footer.Menu.Item] = [.talkPage, .lastEdited, .pageIssues, .disambiguation]
@@ -99,5 +107,10 @@ extension ArticleViewController: ArticleWebMessageHandling {
             menuItems.append(.coordinate)
         }
         messagingController.addFooter(articleURL: articleURL, restAPIBaseURL: baseURL, menuItems: menuItems, lastModified: article.lastModifiedDate)
+    }
+    
+    func handleAaaLDInsertOnScreenEvent() {
+        surveyTimerController?.userDidScrollPastLivingDocArticleContentInsert(withState: state)
+        ArticleAsLivingDocFunnel.shared.logArticleContentInsertShown()
     }
 }

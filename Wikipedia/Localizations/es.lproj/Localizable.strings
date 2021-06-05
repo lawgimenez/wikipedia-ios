@@ -2,9 +2,11 @@
 // Exported from translatewiki.net
 // Author: Agusbou2015
 // Author: Andru1013
+// Author: Asierog
 // Author: Astroemi
 // Author: Canaan9801
 // Author: Carlosmg.dg
+// Author: DannyS712
 // Author: David.novella
 // Author: Dgstranz
 // Author: Dschultz
@@ -33,6 +35,7 @@
 // Author: Mynor Archila
 // Author: Nemo bis
 // Author: Nick
+// Author: Papouten
 // Author: Pginer
 // Author: RicardoSGZ
 // Author: Rodm23
@@ -44,6 +47,13 @@
 // Author: Yllelder
 // Author: Zpizza
 
+"aaald-added-text-description-2" = "$1 añadido";
+"aaald-article-insert-new-changes" = "Cambios nuevos";
+"aaald-deleted-text-description-2" = "$1 eliminado";
+"aaald-many-sections-description" = "en $1 secciones";
+"aaald-new-discussion" = "Nueva discusión";
+"aaald-new-website-reference-title" = "Sitio web";
+"aaald-one-section-description" = "en la sección $1";
 "about-content-license" = "Licencia del contenido";
 "about-content-license-details" = "A menos que se especifique lo contrario, el contenido está disponible bajo una $1.";
 "about-content-license-details-share-alike-license" = "Licencia Creative Commons Atribución-CompartirIgual";
@@ -167,28 +177,34 @@
 "continue-reading-empty-description" = "Explorar más artículos para leer en Wikipedia";
 "continue-reading-empty-title" = "No hay artículos leídos recientemente";
 "description-add-title" = "Añadir descripción";
+// Fuzzy
 "description-edit-for-article" = "Descripción de título para $1";
 "description-edit-learn-more" = "Más información";
 "description-edit-length-warning" = "$1 / $2";
-"description-edit-license" = "Al cambiar la descripción del título, acepto los $1 y la publicación irrevocable de mis contribuciones bajo la licencia $2.";
+"description-edit-license" = "Al cambiar la descripción del artículo, acepto los $1 y la publicación irrevocable de mis contribuciones bajo la licencia $2.";
 "description-edit-pencil-introduction" = "Editar introducción";
+// Fuzzy
 "description-edit-pencil-title" = "Editar descripción de título";
 "description-edit-placeholder-title" = "Las descripciones cortas son mejor";
 "description-edit-publish" = "Publicar descripción";
 "description-edit-title" = "Editar descripción";
 "description-edit-warning" = "Prueba mantener las descripciones cortas, así los usuarios pueden entender el tema del artículo en una mirada";
+// Fuzzy
 "description-help-about-description" = "Las descripciones de título resumen un artículo para ayudar a que los lectores entiendan el tema rápidamente.";
 "description-help-about-title" = "Acerca de";
 "description-help-about-wikidata" = "Sobre Wikidata";
 "description-help-more-info-description" = "Las descripciones se almacenan y mantienen en Wikidata, un proyecto de la Fundación Wikimedia que proporciona una base de datos secundaria, libre, colaborativa y multilingüe, que apoya a Wikipedia y a otros proyectos.";
 "description-help-more-info-title" = "Más información";
 "description-help-tips-description" = "Idealmente, las descripciones deberían caber en una línea, y tener entre dos y doce palabras. No están en mayúsculas, a menos que la primera palabra sea un sustantivo propio.";
+// Fuzzy
 "description-help-tips-example-description-one" = "descripción de título para un artículo sobre la Mona Lisa";
+// Fuzzy
 "description-help-tips-example-description-two" = "descripción de título para un artículo sobre el Monte Everest";
 "description-help-tips-example-title-one" = "pintura de Leonardo da Vinci";
 "description-help-tips-example-title-two" = "la montaña más alta de la Tierra";
 "description-help-tips-for-example" = "Por ejemplo:";
 "description-help-tips-title" = "Consejos para crear descripciones";
+// Fuzzy
 "description-help-title" = "Ayuda de descripción del título";
 "description-help-wikidata-guide" = "Guía de Wikidata para escribir descripciones";
 "description-published-button-title" = "Hecho";
@@ -198,6 +214,7 @@
 "description-welcome-concise-sub-title" = "Idealmente una línea, entre dos a doce palabras";
 "description-welcome-concise-title" = "\nSé breve";
 "description-welcome-descriptions-sub-title" = "\nResume un artículo para ayudar a los lectores a entender el tema de un vistazo";
+// Fuzzy
 "description-welcome-descriptions-title" = "Descripciones de títulos";
 "description-welcome-promise-title" = "Para empezar, prometo no abusar de esta característica";
 "description-welcome-start-editing-button" = "Empezar a editar";
@@ -385,7 +402,7 @@
 "explore-hide-card-prompt" = "Ocultar esta tarjeta";
 "explore-main-page-description" = "Página principal de los proyectos Wikimedia";
 "explore-main-page-heading" = "Hoy en Wikipedia";
-"explore-most-read-footer" = "Todos los artículos más leídos";
+"explore-most-read-footer" = "Artículos más leídos";
 "explore-most-read-generic-heading" = "Más leídos";
 "explore-most-read-more-list-title-for-date" = "Los más leídos el $1";
 "explore-most-read-sub-heading-on-language-wikipedia" = "En Wikipedia en $1";
@@ -518,8 +535,6 @@
 "main-menu-account-logout-are-you-sure" = "¿Confirmas que quieres salir de la sesión?";
 "main-menu-account-logout-cancel" = "Cancelar";
 "main-menu-account-title-logged-in" = "Sesión iniciada como $1";
-"main-menu-debug-tweaks" = "Configuración del desarrollador";
-"main-menu-heading-debug" = "Depurar";
 "main-menu-heading-legal" = "Privacidad y términos";
 "main-menu-nearby" = "Cercanos";
 "main-menu-privacy-policy" = "Normativa de privacidad";
@@ -528,7 +543,7 @@
 "main-menu-title" = "Más";
 "main-menu-zero-faq" = "Preguntas frecuentes de Wikipedia Zero";
 "menu-cancel-accessibility-label" = "Cancelar";
-"more-languages-tooltip-description" = "Buscar en las casi 300 lenguas de Wikipedia";
+"more-languages-tooltip-description" = "Buscar en más de 300 lenguas de Wikipedia";
 "more-languages-tooltip-title" = "Añadir idiomas";
 "move-articles-to-reading-list" = "Trasladar {{PLURAL:$1|$1 artículo|$1 artículos}} a la lista de lectura";
 "navbar-title-mode-edit-wikitext-preview" = "Previsualización";
@@ -548,7 +563,6 @@
 "on-this-day-detail-header-date-range" = "de $1 - $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 acontecimiento histórico|$1 acontecimientos históricos}}";
 "on-this-day-footer" = "Más acontecimientos históricos en este día";
-"on-this-day-footer-with-event-count" = "$1 eventos históricos más en un día como hoy";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1, de Wikipedia en $2";
 "on-this-day-title" = "Un día como hoy";
 "original-tab-button-popover-description" = "Pulsa en la 'W' para volver a la pestaña desde la que comenzaste";
@@ -594,7 +608,7 @@
 "places-filter-button-title" = "Filtrar";
 "places-filter-no-saved-places" = "No tienes lugares guardados";
 "places-filter-saved-articles" = "Artículos guardados";
-"places-filter-top-articles" = "Más leídos";
+"places-filter-top-articles" = "Los más leídos";
 "places-filter-top-articles-count" = "{{PLURAL:$1|$1 artículo|$1 artículos}}";
 "places-filter-top-read-articles" = "Artículos más leídos";
 "places-location-enabled" = "Ubicación habilitada";
@@ -718,7 +732,6 @@
 "replace-replace-all-results-count" = "{{PLURAL:$1|$1 elemento fue reemplazado|$1 elementos fueron reemplazados}}";
 "replace-textfield-accessibility" = "Reemplazar";
 "replace-textfield-placeholder" = "Reemplazar por…";
-"request-feedback-on-error" = "La aplicación ha detectado un problema sobre el cual nuestros desarrolladores les gustaría saber más. Pulsa aquí para enviarnos un correo electrónico con los detalles del error.";
 "reverted-edit-back-to-article-button-title" = "Volver al artículo";
 "reverted-edit-notification-body" = "La edición que hiciste del artículo $1 ha sido rechazada por $2";
 "reverted-edit-notification-read-more-action-title" = "Leer más";
@@ -860,7 +873,7 @@
 "welcome-explore-continue-button" = "Empezar";
 "welcome-explore-new-ways-title" = "Nuevas formas de explorar";
 "welcome-explore-tell-me-more-done-button" = "Entendido";
-"welcome-intro-free-encyclopedia-description" = "Un colectivo de voluntarios escribe Wikipedia, la cual consiste de más de 40 millones de artículos en casi 300 lenguas.";
+"welcome-intro-free-encyclopedia-description" = "Un colectivo de voluntarios escribe Wikipedia, la cual consiste de más de 40 millones de artículos en más de 300 lenguas.";
 "welcome-intro-free-encyclopedia-more" = "Más información sobre Wikipedia";
 "welcome-intro-free-encyclopedia-more-about" = "Acerca de Wikipedia";
 "welcome-intro-free-encyclopedia-more-description" = "Wikipedia es un proyecto mundial para crear enciclopedias libres en todas las lenguas del planeta. Virtualmente cualquier persona que cuente con acceso a Internet está invitada a aportarnos información neutral y respaldada con referencias.";
@@ -868,7 +881,7 @@
 "welcome-languages-add-button" = "Añadir otro idioma";
 "welcome-languages-add-or-edit-button" = "Añadir o editar idiomas preferidos";
 "welcome-languages-description" = "Encontramos estos idiomas en el dispositivo:";
-"welcome-languages-search-title" = "Busca en cerca de 300 lenguas";
+"welcome-languages-search-title" = "Busca en más de 300 lenguas";
 "welcome-notifications-tell-me-more-creation" = "Las notificaciones las crea y entrega la aplicación en el dispositivo, no desde nuestros servidores (ni desde terceros).";
 "welcome-notifications-tell-me-more-storage" = "Las preferencias de notificación se almacenan en el dispositivo y no se basan en información o actividad personal.";
 "welcome-notifications-tell-me-more-title" = "Más acerca de las notificaciones";

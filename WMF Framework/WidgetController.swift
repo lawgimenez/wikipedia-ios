@@ -1,5 +1,6 @@
 import Foundation
 import WidgetKit
+import CocoaLumberjackSwift
 
 @objc(WMFWidgetController)
 public final class WidgetController: NSObject {
@@ -36,8 +37,7 @@ public final class WidgetController: NSObject {
         getRetainedSharedDataStore { dataStore in
             task(dataStore, { result in
                 DispatchQueue.main.async {
-                    self.releaseSharedDataStore()
-                    DispatchQueue.main.async {
+                    self.releaseSharedDataStore {
                         userCompletion(result)
                     }
                 }
@@ -45,10 +45,39 @@ public final class WidgetController: NSObject {
         }
     }
     
+    public func fetchNewestWidgetContentGroup(with kind: WMFContentGroupKind, in dataStore: MWKDataStore, isNetworkFetchAllowed: Bool, isAnyLanguageAllowed: Bool = false, completion:  @escaping (WMFContentGroup?) -> Void) {
+        fetchCachedWidgetContentGroup(with: kind, isAnyLanguageAllowed: isAnyLanguageAllowed, in: dataStore) { (contentGroup) in
+            guard let todaysContentGroup = contentGroup, todaysContentGroup.isForToday else {
+                guard isNetworkFetchAllowed else {
+                    completion(contentGroup)
+                    return
+                }
+                self.updateFeedContent(in: dataStore) {
+                    // if there's no cached content group after update, return nil
+                    self.fetchCachedWidgetContentGroup(with: kind, isAnyLanguageAllowed: isAnyLanguageAllowed, in: dataStore, completion: completion)
+                }
+                return
+            }
+            completion(todaysContentGroup)
+        }
+    }
+    
+    private func fetchCachedWidgetContentGroup(with kind: WMFContentGroupKind, isAnyLanguageAllowed: Bool, in dataStore: MWKDataStore, completion:  @escaping (WMFContentGroup?) -> Void) {
+        assert(Thread.isMainThread, "Cached widget content group must be fetched from the main queue")
+        let moc = dataStore.viewContext
+        let siteURL = isAnyLanguageAllowed ? dataStore.primarySiteURL : nil
+        completion(moc.newestGroup(of: kind, forSiteURL: siteURL))
+    }
+    
+    public func updateFeedContent(in dataStore: MWKDataStore, completion: @escaping () -> Void) {
+        dataStore.feedContentController.performDeduplicatedFetch(completion)
+    }
+    
     private var dataStoreRetainCount: Int = 0
     private var _dataStore: MWKDataStore?
     private var completions: [(MWKDataStore) -> Void] = []
     private var isCreatingDataStore: Bool = false
+    private var backgroundActivity: NSObjectProtocol?
     
     /// Returns a `MWKDataStore`for use with widget updates.
     /// Manages a shared instance and a reference count for use by multiple widgets.
@@ -65,6 +94,7 @@ public final class WidgetController: NSObject {
             return
         }
         isCreatingDataStore = true
+        backgroundActivity = ProcessInfo.processInfo.beginActivity(options: [.background, .suddenTerminationDisabled, .automaticTerminationDisabled], reason: "Wikipedia Extension - " + UUID().uuidString)
         let dataStore = MWKDataStore()
         dataStore.performLibraryUpdates {
             DispatchQueue.main.async {
@@ -79,21 +109,41 @@ public final class WidgetController: NSObject {
     }
     
     /// Releases the shared `MWKDataStore` returned by `getRetainedSharedDataStore()`.
-    private func releaseSharedDataStore() {
+    private func releaseSharedDataStore(completion: @escaping () -> Void) {
         assert(Thread.isMainThread, "Data store must be released from the main queue")
         dataStoreRetainCount -= 1
         guard dataStoreRetainCount <= 0 else {
+            completion()
+            return
+        }
+        dataStoreRetainCount = 0
+        let asyncBackgroundActivity = backgroundActivity
+        defer {
+            backgroundActivity = nil
+        }
+        let finishBackgroundActivity = {
+            if let asyncBackgroundActivity = asyncBackgroundActivity {
+                ProcessInfo.processInfo.endActivity(asyncBackgroundActivity)
+            }
+        }
+        guard let dataStoreToTeardown = _dataStore else {
+            completion()
+            finishBackgroundActivity()
             return
         }
         _dataStore = nil
-        dataStoreRetainCount = 0
-        #if DEBUG
-        DispatchQueue.main.async {
+        dataStoreToTeardown.teardown {
+            completion()
+            finishBackgroundActivity()
+            #if DEBUG
+            guard !self.isCreatingDataStore, self._dataStore == nil else { // Don't check open files if another MWKDataStore was created after this one was destroyed
+                return
+            }
             let openFiles = self.openFilePaths()
             let openSqliteFile = openFiles.first(where: { $0.hasSuffix(".sqlite") })
             assert(openSqliteFile == nil, "There should be no open sqlite files (which in our case are Core Data persistent stores) in the shared app container after the data store is released. The widget still has a lock on these files: \(openFiles)")
+            #endif
         }
-        #endif
     }
     
     #if DEBUG

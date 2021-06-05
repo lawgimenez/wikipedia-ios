@@ -7,17 +7,19 @@
 
 @property (readwrite, nonatomic, strong) NSURL *siteURL;
 @property (readwrite, nonatomic, strong) WMFAnnouncementsFetcher *fetcher;
+@property (readwrite, nonatomic, strong) MWKDataStore *userDataStore;
 
 @end
 
 @implementation WMFAnnouncementsContentSource
 
-- (instancetype)initWithSiteURL:(NSURL *)siteURL session:(WMFSession *)session configuration:(WMFConfiguration *)configuration {
+- (instancetype)initWithSiteURL:(NSURL *)siteURL userDataStore:(MWKDataStore *)userDataStore {
     NSParameterAssert(siteURL);
     self = [super init];
     if (self) {
         self.siteURL = siteURL;
-        self.fetcher = [[WMFAnnouncementsFetcher alloc] initWithSession:session configuration:configuration];
+        self.userDataStore = userDataStore;
+        self.fetcher = [[WMFAnnouncementsFetcher alloc] initWithSession: userDataStore.session configuration: userDataStore.configuration];
     }
     return self;
 }
@@ -32,9 +34,6 @@
 }
 
 - (void)loadContentForDate:(NSDate *)date inManagedObjectContext:(NSManagedObjectContext *)moc force:(BOOL)force addNewContent:(BOOL)shouldAddNewContent completion:(nullable dispatch_block_t)completion {
-#if WMF_ANNOUNCEMENT_DATE_IGNORE
-    // for testing, don't require the app to exit once before loading announcements
-#else
     if ([[NSUserDefaults standardUserDefaults] wmf_appResignActiveDate] == nil) {
         [moc performBlock:^{
             [self updateVisibilityOfAnnouncementsInManagedObjectContext:moc addNewContent:shouldAddNewContent];
@@ -44,7 +43,6 @@
         }];
         return;
     }
-#endif
     [self.fetcher fetchAnnouncementsForURL:self.siteURL
         force:force
         failure:^(NSError *_Nonnull error) {
@@ -86,12 +84,9 @@
                                                     group.placement = obj.placement;
                                                 }];
             [group updateVisibilityForUserIsLoggedIn:isLoggedIn];
-            if (group.isVisible && [group.placement isEqualToString:@"article"]) {
-                NSUserDefaults.standardUserDefaults.shouldCheckForArticleAnnouncements = YES;
-            }
         }];
 
-        [[WMFSurveyAnnouncementsController shared] setAnnouncements:announcements forSiteURL:self.siteURL];
+        [[WMFSurveyAnnouncementsController shared] setAnnouncements:announcements forSiteURL:self.siteURL dataStore:self.userDataStore];
         if (completion) {
             completion();
         }
@@ -100,20 +95,16 @@
 
 - (void)updateVisibilityOfNotificationAnnouncementsInManagedObjectContext:(NSManagedObjectContext *)moc addNewContent:(BOOL)shouldAddNewContent {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-#if WMF_ANNOUNCEMENT_DATE_IGNORE
-    // for testing, don't require the app to exit once before loading announcements
-#else
     //Only make these visible for previous users of the app
     //Meaning a new install will only see these after they close the app and reopen
     if ([userDefaults wmf_appResignActiveDate] == nil) {
         return;
     }
-#endif
 
     [moc removeAllContentGroupsOfKind:WMFContentGroupKindTheme];
 
     if (moc.wmf_isSyncRemotelyEnabled && !NSUserDefaults.standardUserDefaults.wmf_didShowReadingListCardInFeed && !self.fetcher.session.isAuthenticated) {
-        NSURL *readingListContentGroupURL = [WMFContentGroup readingListContentGroupURL];
+        NSURL *readingListContentGroupURL = [WMFContentGroup readingListContentGroupURLWithLanguageVariantCode:self.siteURL.wmf_languageVariantCode];
         [moc fetchOrCreateGroupForURL:readingListContentGroupURL ofKind:WMFContentGroupKindReadingList forDate:[NSDate date] withSiteURL:self.siteURL associatedContent:nil customizationBlock:NULL];
         NSUserDefaults.standardUserDefaults.wmf_didShowReadingListCardInFeed = YES;
     } else {
@@ -135,15 +126,11 @@
 - (void)updateVisibilityOfAnnouncementsInManagedObjectContext:(NSManagedObjectContext *)moc addNewContent:(BOOL)shouldAddNewContent {
     [self updateVisibilityOfNotificationAnnouncementsInManagedObjectContext:moc addNewContent:shouldAddNewContent];
 
-#if WMF_ANNOUNCEMENT_DATE_IGNORE
-    // for testing, don't require the app to exit once before loading announcements
-#else
     //Only make these visible for previous users of the app
     //Meaning a new install will only see these after they close the app and reopen
     if ([[NSUserDefaults standardUserDefaults] wmf_appResignActiveDate] == nil) {
         return;
     }
-#endif
     BOOL isLoggedIn = self.fetcher.session.isAuthenticated;
     [moc enumerateContentGroupsOfKind:WMFContentGroupKindAnnouncement
                             withBlock:^(WMFContentGroup *_Nonnull group, BOOL *_Nonnull stop) {

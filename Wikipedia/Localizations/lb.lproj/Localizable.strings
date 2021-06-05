@@ -1,6 +1,5 @@
 // Messages for Luxembourgish (Lëtzebuergesch)
 // Exported from translatewiki.net
-// Author: Abijeet Patro
 // Author: JoeWalshWMF
 // Author: Les Meloures
 // Author: Macofe
@@ -8,6 +7,11 @@
 // Author: Robby
 // Author: Soued031
 
+"aaald-article-insert-header" = "Bedeitend Aktualiséierungen";
+"aaald-article-insert-last-updated" = "Lescht Aktualiséierung";
+"aaald-article-insert-new-changes" = "Nei Ännerungen";
+"aaald-new-book-reference-title" = "Buch";
+"aaald-new-news-reference-title" = "Neiegkeeten";
 "about-content-license" = "Lizenz vum Inhalt";
 "about-content-license-details" = "Wann et net anescht uginn ass, ass den Inhalt ënnert enger $1 disponibel.";
 "about-content-license-details-share-alike-license" = "Creative-Commons-Attribution-ShareAlike Lizenz";
@@ -99,10 +103,12 @@
 "button-saved-remove" = "Vu gespäichert ewechhuelen";
 "button-skip" = "Iwwersprangen";
 "cancel" = "Ofbriechen";
+"clear-title-accessibility-label" = "Eidel maachen";
 "close-button-accessibility-label" = "Zoumaachen";
 "compass-direction" = "um $1 Auer";
 "continue-reading-empty-description" = "Wikipedia fir méi Artikelen entdecken";
 "continue-reading-empty-title" = "Keng rezent geliesen Artikelen";
+"data-migration-status" = "Aktualiséieren...";
 "description-add-title" = "Beschreiwung derbäisetzen";
 "description-edit-learn-more" = "Fir méi ze wëssen";
 "description-edit-publish" = "Beschreiwung verëffentlechen";
@@ -113,13 +119,18 @@
 "description-help-tips-for-example" = "Zum Beispill:";
 "description-published-button-title" = "Fäerdeg";
 "description-welcome-concise-title" = "Haalt Iech kuerz";
+"diff-compare-header-from-info-heading" = "Vum:";
 "diff-compare-header-heading" = "Versioune vergläichen";
+"diff-compare-header-to-info-heading" = "Fir:";
 "diff-compare-title" = "Versioune vergläichen";
 "diff-context-lines-collapsed-button-title" = "Weisen";
 "diff-context-lines-expanded-button-title" = "Verstoppen";
+"diff-multi-line-format" = "Linnen $1 - $2";
 "diff-paragraph-moved" = "Abschnitt geréckelt";
 "diff-revision-error-title" = "Versioun konnt net geluede ginn";
 "diff-single-intro-title" = "Aféierung";
+"diff-single-line-format" = "Linn $1";
+"diff-thanks-anonymous-no-thanks" = "Anonym Benotzer kënne kee Merci kréien";
 "diff-thanks-send-button-title" = "'Merci' schécken";
 "diff-thanks-send-title" = "'Merci' ëffentlech schécken";
 "diff-thanks-sent" = "Äre 'Merci' gouf dem $1 geschéckt";
@@ -152,6 +163,7 @@
 "empty-no-feed-message" = "Dir kënnt Är recommandéiert Artikele gesi wann Dir Internet hutt.";
 "empty-no-history-message" = "Behaalt eng Trace vun deem wat Dir hei gelies hutt";
 "empty-no-history-title" = "Keen Historique vu Versioune weisen";
+"empty-no-other-article-languages-title" = "Keng aner Sprooch disponibel";
 "empty-no-saved-pages-in-reading-list-message" = "Späichert Säiten an dëser Lëscht fir se hei ze gesinn";
 "empty-no-saved-pages-in-reading-list-title" = "An dëser Lëscht si keng Säite gespäichert";
 "empty-no-saved-pages-message" = "Säite späichere fir se spéider offline ze kucken";
@@ -221,6 +233,7 @@
 "find-clear-button-accessibility" = "Sichen eidelmaachen";
 "find-infolabel-number-matches" = "$1 / $2";
 "find-replace-header" = "Sichen an Ersetzen";
+"find-textfield-accessibility" = "Sichen";
 "forgot-password-button-title" = "Zrécksetzen";
 "forgot-password-email-sent" = "Eng E-Mail mat Instruktioune wéi d'Passwuert zréckgesat gi kann, gouf gschéckt";
 "forgot-password-title" = "Passwuert zrécksetzen";
@@ -286,8 +299,6 @@
 "main-menu-account-logout-are-you-sure" = "Sidd Dir sécher datt Dir Iech wëllt ausloggen?";
 "main-menu-account-logout-cancel" = "Ofbriechen";
 "main-menu-account-title-logged-in" = "Ageloggt als $1";
-"main-menu-debug-tweaks" = "Astellunge fir Entwéckler";
-"main-menu-heading-debug" = "Feeler analyséieren";
 "main-menu-heading-legal" = "Dateschutz a Konditiounen";
 "main-menu-nearby" = "An der Noperschaft";
 "main-menu-privacy-policy" = "Dateschutz";
@@ -296,7 +307,7 @@
 "main-menu-title" = "Méi";
 "main-menu-zero-faq" = "Wikipedia Zero FAQ";
 "menu-cancel-accessibility-label" = "Ofbriechen";
-"more-languages-tooltip-description" = "Op Wikipedia a bal 300 Sprooche sichen";
+"more-languages-tooltip-description" = "Op Wikipedia a méi wéi 300 Sprooche sichen";
 "more-languages-tooltip-title" = "Sproochen derbäisetzen";
 "navbar-title-mode-edit-wikitext-preview" = "Kucken ouni ofzespäicheren";
 "nearby-distance-label-feet" = "$1 Féiss";
@@ -313,10 +324,10 @@
 "number-thousands" = "$1 D";
 "on-this-day-detail-header-date-range" = "vu(n) $1 bis $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|een historescht Evenement|$1 historesch Evenementer}}";
-"on-this-day-footer-with-event-count" = "$1 weider historesch Evenementer op dësem Dag";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1 vu Wikipedia op $2";
 "on-this-day-title" = "Op dësem Dag";
 "page-history-anonymous-edits" = "anonym Ännerungen";
+"page-history-compare-title" = "Vergläichen";
 "page-history-minor-edits" = "kleng Ännerungen";
 "page-history-revision-author-accessibility-label" = "Auteur: $1";
 "page-history-revision-comment-accessibility-label" = "Bemierkung $1";
@@ -324,11 +335,13 @@
 "page-history-revision-minor-edit-accessibility-label" = "Kleng Ännerung";
 "page-history-revision-size-diff-addition" = "({{PLURAL:$1|1 Byte|$1 Byten}}) derbäigesat";
 "page-history-stats-text" = "{{PLURAL:$1|1 Ännerung|$1 Ännerungen}} zanter $2";
+"page-location" = "Op enger Kaart weisen";
 "page-protected-autoconfirmed" = "Dës Säit ass hallef gespaart.";
 "page-protected-can-not-edit" = "Dir hutt net d'Recht fir dës Säit z'änneren";
 "page-protected-can-not-edit-title" = "Dës Säit ass gespaart";
 "page-protected-other" = "Dës Säit gouf fir dës Niveaue gespaart: $1";
 "page-protected-sysop" = "Dës Säit ass komplett gespaart.";
+"page-similar-titles" = "Änlech Säiten";
 "pictured" = "als Bild";
 "places-accessibility-clear-saved-searches" = "Gespäichert Ufroe, fir ze sichen, läschen";
 "places-accessibility-group" = "$1 Artikelen";
@@ -414,7 +427,6 @@
 "replace-infolabel-method-replace-all" = "All ersetzen";
 "replace-textfield-accessibility" = "Ersetzen";
 "replace-textfield-placeholder" = "Ersetzen duerch...";
-"request-feedback-on-error" = "Bei der App ass e Feeler geschitt iwwer deen eis Entwéckler méi wësse wëllen. Klickt wgl. hei fir eis eng E-Mail mat den Detailer vum Feeler ze schécken.";
 "reverted-edit-back-to-article-button-title" = "Zréck op den Artikel";
 "reverted-edit-notification-read-more-action-title" = "Liest méi";
 "saved-all-articles-title" = "All Artikelen";
@@ -498,6 +510,7 @@
 "talk-page-reply-title" = "Äntwerten";
 "talk-page-title-user-talk" = "Benotzerdiskussioun";
 "talk-page-topic-title" = "Diskussioun";
+"talk-pages-reply-button-title" = "Op dës Diskussioun äntweren";
 "theme-black-display-name" = "Schwaarz";
 "theme-dark-display-name" = "Däischter";
 "theme-default-display-name" = "Standard";
@@ -511,6 +524,8 @@
 "two-factor-login-with-backup-code" = "Benotzt ee vun Äre Backup-Coden";
 "two-factor-login-with-regular-code" = "Verificatiouns-Code benotzen";
 "unknown-generic-text" = "Onbekannt";
+"variants-alert-dismiss-button" = "Nee, merci";
+"variants-alert-preferences-button" = "Kuckt Är Astellungen no";
 "welcome-exploration-on-this-day-title" = "Op dësem Dag";
 "welcome-explore-continue-button" = "Fir unzefänken";
 "welcome-explore-new-ways-title" = "Nei Manéiere fir z'entdecken";
@@ -521,7 +536,7 @@
 "welcome-languages-add-button" = "Eng aner Sprooch derbäisetzen";
 "welcome-languages-add-or-edit-button" = "Lieblingssproochen derbäisetzen oder änneren";
 "welcome-languages-description" = "Op Ärem Apparat hu mir dës Sprooche fonnt:";
-"welcome-languages-search-title" = "A bal 300 Sprooche sichen";
+"welcome-languages-search-title" = "A méi wéi 300 Sprooche sichen";
 "welcome-notifications-tell-me-more-creation" = "Notifikatioune ginn duerch d'App op Ärem Apparat ugeluecht an ausgeliwwert, net vun eise Serveren (oder enger drëtter Säit).";
 "welcome-notifications-tell-me-more-storage" = "D'Astellunge fir d'Notifikatioune sinn um Apparat gespäichert a baséieren net op perséinlechen Informatiounen oder der Aktivitéit.";
 "welcome-notifications-tell-me-more-title" = "Méi iwwer Notifikatiounen";

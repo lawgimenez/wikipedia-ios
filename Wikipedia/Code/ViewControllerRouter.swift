@@ -26,6 +26,20 @@ class ViewControllerRouter: NSObject {
             }
         }
 
+        /// For Article as a Living Doc modal - fix the nav bar in place
+        if #available(iOS 13.0, *), navigationController.children.contains(where: { $0 is ArticleAsLivingDocViewController }) {
+            if let vc = viewController as? SinglePageWebViewController, navigationController.modalPresentationStyle == .pageSheet {
+                vc.doesUseSimpleNavigationBar = true
+                vc.navigationBar.isBarHidingEnabled = false
+            }
+        }
+        
+        //pass along doesUseSimpleNavigationBar SinglePageWebViewController settings to the next one if needed
+        if let lastWebVC = navigationController.children.last as? SinglePageWebViewController,
+           let nextWebVC = viewController as? SinglePageWebViewController {
+            nextWebVC.doesUseSimpleNavigationBar = lastWebVC.doesUseSimpleNavigationBar
+        }
+
         if let presentedVC = navigationController.presentedViewController {
             presentedVC.dismiss(animated: false, completion: showNewVC)
         } else {
@@ -83,7 +97,7 @@ class ViewControllerRouter: NSObject {
             return presentOrPush(talkPageVC, with: completion)
         case .onThisDay(let indexOfSelectedEvent):
             let dataStore = appViewController.dataStore
-            guard let contentGroup = dataStore.viewContext.newestVisibleGroup(of: .onThisDay, forSiteURL: dataStore.languageLinkController.appLanguage?.siteURL()), let onThisDayVC = contentGroup.detailViewControllerWithDataStore(dataStore, theme: theme) as? OnThisDayViewController else {
+            guard let contentGroup = dataStore.viewContext.newestVisibleGroup(of: .onThisDay, forSiteURL: dataStore.primarySiteURL), let onThisDayVC = contentGroup.detailViewControllerWithDataStore(dataStore, theme: theme) as? OnThisDayViewController else {
                 completion()
                 return false
             }

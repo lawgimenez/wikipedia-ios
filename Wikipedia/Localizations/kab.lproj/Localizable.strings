@@ -1,10 +1,18 @@
 // Messages for Kabyle (Taqbaylit)
 // Exported from translatewiki.net
 // Author: Belkacem77
+// Author: Bilalbill
 // Author: Macofe
 // Author: Mhenni
 // Author: SlimaneAmiri
 
+"aaald-article-insert-last-updated" = "Asetrer aneggar";
+"aaald-article-insert-new-changes" = "Isniflen imaynuten";
+"aaald-article-insert-read-more" = "Ɣer ugar n isetraren";
+"aaald-new-book-reference-title" = "Adlis";
+"aaald-new-journal-reference-title" = "Aɣmis";
+"aaald-new-news-reference-title" = "Isallen";
+"aaald-new-talk-topic-description-format" = "$1 ɣef umagrad-a";
 "about-content-license" = "Turagt n ugbur";
 "about-content-license-details" = "Arama yettwammel kan akken-nniḍen, agbur yella daw n $1.";
 "about-content-license-details-share-alike-license" = "Turagt Creative Commons Attribution-ShareAlike";
@@ -51,9 +59,19 @@
 "account-creation-passwords-mismatched" = "Urtan n wawal uffir ur mṣadan ara.";
 "account-creation-saving" = "Asekles...";
 "account-creation-title" = "Rnu amiḍan";
+"action-add-to" = "Rnu ɣer...";
+"action-add-to-reading-list" = "Rnu ɣer wumuɣ yettwaɣran";
+"action-add-to-reading-list-short" = "Rnu ɣer wumuɣ";
+"action-cancel" = "Kkes";
 // Fuzzy
 "action-find-in-page" = "Af-d deg usebter";
+"action-language-accessibility" = "Snifel tutlayt";
+"action-move-to" = "Smimmeḍ ɣer...";
+"action-move-to-reading-list" = "Smimmeḍ ɣer wumuɣ yettwaɣran";
+"action-next-revision-accessibility" = "Aceggeṛ i d-itteddun";
+"action-previous-revision-accessibility" = "Aceggeṛ yezrin";
 "action-read" = "Ɣeṛ";
+"action-redo" = "Ales";
 "action-save" = "Sekles";
 "action-saved" = "Yettwasekles";
 "action-saved-accessibility" = "Yettwasekles. Rmed akken ad tekkseḍ asekles.";
@@ -194,8 +212,6 @@
 "main-menu-account-logout-are-you-sure" = "Tebɣiḍ ad teffɣed?";
 "main-menu-account-logout-cancel" = "Sefsex";
 "main-menu-account-title-logged-in" = "Yeqqen s yisem $1";
-"main-menu-debug-tweaks" = "Iɣewwaṛen n uneflay";
-"main-menu-heading-debug" = "Tamseɣtayt";
 "main-menu-heading-legal" = "Tabaḍnit d tiwtilin";
 "main-menu-nearby" = "S lqeṛban";
 "main-menu-privacy-policy" = "Tasertit n tbaḍnit";
@@ -271,7 +287,6 @@
 "relative-date-minutes-ago" = "{{PLURAL:$1|0=tura kan|$1 n tesdat|$1 n tisdatin aya}}";
 // Fuzzy
 "relative-date-years-ago" = "{{PLURAL:$1|0=Aseggas-a|Aseggas yezrin|$1 n useggas aya}}";
-"request-feedback-on-error" = "Asnas yemmuger-d ugur anida ineflayen-nneɣ ad bɣan ad ẓren ugar fell-as. Nnal dagi akken aɣ-d-azneḍ imayl s telqayt ɣef tuccḍa.";
 "saved-pages-image-download-error" = "Ur izmir ara ad d-isali tugniwin n usebter-agi yettwaskelsen.";
 "saved-title" = "Yettwasekles";
 "search-button-accessibility-label" = "Nadi di Wikipedia";
@@ -343,6 +358,7 @@
 "welcome-explore-continue-button" = "Bdu";
 "welcome-explore-new-ways-title" = "Tarrayin-nniden n usnirem";
 "welcome-explore-tell-me-more-done-button" = "Awi-t";
+// Fuzzy
 "welcome-intro-free-encyclopedia-description" = "Wikipedia uran-tt iwiziwen s uɛiwen , llant deg-s ugar n 40 n imeyaln n imagraden s 300 n tutlayin gar-asent taqbaylit.";
 "welcome-intro-free-encyclopedia-more" = "Issin ugar ɣef Wikipedia";
 "welcome-intro-free-encyclopedia-more-about" = "Ɣef Wikipedia";
@@ -351,6 +367,7 @@
 "welcome-languages-add-button" = "Rnu tutlayt-nniḍen";
 "welcome-languages-add-or-edit-button" = "Rnu neɣ ẓreg tutlayin tebɣiḍ";
 "welcome-languages-description" = "Nufa-d tutlayin-agi deg ibenk-ik:";
+// Fuzzy
 "welcome-languages-search-title" = "Nadi di 300 n tutlayin";
 "welcome-notifications-tell-me-more-creation" = "Ilɣa ttwarnan sakin ttwaznen ar yibenk-ik s usnas, mačči s iqeddacen-nneɣ (neɣ wiyaḍ).";
 "welcome-notifications-tell-me-more-storage" = "Ismenyifen n ilɣa ttwaskelsen ɣef yibenk, ur yebnin ara ɣef telɣut neɣ armud udmawan.";

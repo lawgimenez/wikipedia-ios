@@ -130,28 +130,35 @@
 "continue-reading-empty-description" = "Esploru Vikipedion por legi pliajn artikolojn";
 "continue-reading-empty-title" = "Neniuj laste legitaj artikoloj";
 "description-add-title" = "Aldoni priskribon";
+// Fuzzy
 "description-edit-for-article" = "Titola priskribo por $1";
 "description-edit-learn-more" = "Ekscii pli";
 "description-edit-length-warning" = "$1 / $2";
+// Fuzzy
 "description-edit-license" = "Ŝanĝante la titolan priskribon, mi konsentas kun la $1 kaj nenuligeble eldonas miajn kontribuojn laŭ la permesilo $2.";
 "description-edit-pencil-introduction" = "Redakti enkondukon";
+// Fuzzy
 "description-edit-pencil-title" = "Redakti titolan priskribon";
 "description-edit-placeholder-title" = "Mallongaj priskriboj estas plej bonaj";
 "description-edit-publish" = "Publikigi priskribon";
 "description-edit-title" = "Redakti priskribon";
 "description-edit-warning" = "Provu teni priskribojn mallongaj por ke uzantoj povu kompreni la temon de la artikolo unuavide.";
+// Fuzzy
 "description-help-about-description" = "Titolaj priskriboj resumas artikolon por helpi legantojn kompreni la temon unuavide.";
 "description-help-about-title" = "Pri";
 "description-help-about-wikidata" = "Pri Vikidatumoj";
 "description-help-more-info-description" = "Priskriboj estas konservataj sur Vikidatumoj, projekto de la Vikimedia Fondaĵo kiu provizas liberan, kunlaboran, multilingvan, duarangan datumbazon subtenanta Vikipedion kaj aliajn projektojn.";
 "description-help-more-info-title" = "Ekscii pli";
 "description-help-tips-description" = "Priskriboj ideale estu ne pli longaj ol unu linio kaj konsistas el ĝis dek vortoj. Ne aperu en ĝi majuskloj (ankaŭ ne komence), krom se la unua vorto estas nomo.";
+// Fuzzy
 "description-help-tips-example-description-one" = "titola priskribo por artikolo pri la Mona Lisa";
+// Fuzzy
 "description-help-tips-example-description-two" = "titola priskribo por artikolo pri Monto Everest";
 "description-help-tips-example-title-one" = "pentraĵo de Leonardo Da Vinci";
 "description-help-tips-example-title-two" = "plej alta monto de la tero";
 "description-help-tips-for-example" = "Ekzemple:";
 "description-help-tips-title" = "Konsiletoj por krei priskribojn";
+// Fuzzy
 "description-help-title" = "Helpo pri titola priskribo";
 "description-help-wikidata-guide" = "Vikidatumoj-manlibro pri skribado de priskriboj";
 "description-published-button-title" = "Farite";
@@ -161,6 +168,7 @@
 "description-welcome-concise-sub-title" = "Ideale unu linio, inter du kaj dek du vortoj";
 "description-welcome-concise-title" = "Skribu mallonge";
 "description-welcome-descriptions-sub-title" = "Resumas artikolon por helpi legantojn kompreni la temon unuavide";
+// Fuzzy
 "description-welcome-descriptions-title" = "Titolaj priskriboj";
 "description-welcome-promise-title" = "Ekante, mi promesas ne misuzi ĉi tiun eblon";
 "description-welcome-start-editing-button" = "Ekredakti";
@@ -445,8 +453,6 @@
 "main-menu-account-logout-are-you-sure" = "Ĉu vi certas, ke vi volas elsaluti?";
 "main-menu-account-logout-cancel" = "Nuligi";
 "main-menu-account-title-logged-in" = "Ensalutinta kiel $1";
-"main-menu-debug-tweaks" = "Programistaj agordoj";
-"main-menu-heading-debug" = "Sencimigi";
 "main-menu-heading-legal" = "Privateco kaj uzkondiĉoj";
 "main-menu-nearby" = "Ĉirkaŭe";
 "main-menu-privacy-policy" = "Politiko pri privateco";
@@ -455,6 +461,7 @@
 "main-menu-title" = "Pli";
 "main-menu-zero-faq" = "Oftaj demandoj pri Vikipedio Zero";
 "menu-cancel-accessibility-label" = "Nuligi";
+// Fuzzy
 "more-languages-tooltip-description" = "Serĉi tra Vikipedio en preskaŭ 300 lingvoj";
 "more-languages-tooltip-title" = "Aldoni lingvojn";
 "move-articles-to-reading-list" = "Movi {{PLURAL:$1|$1 artikolon|$1 artikolojn}} al legolisto";
@@ -475,7 +482,6 @@
 "on-this-day-detail-header-date-range" = "de $1 - $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 historia evento|$1 historiaj eventoj}}";
 "on-this-day-footer" = "Pli da historiaj eventoj en ĉi tiu tago";
-"on-this-day-footer-with-event-count" = "$1 pli da historiaj eventoj en ĉi tiu tago";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1 de $2 Vikipedio";
 "on-this-day-title" = "En ĉi tiu tago";
 "original-tab-button-popover-description" = "Tuŝetu sur 'W' por reveni al la taba folio de kiu vi startis";
@@ -618,7 +624,6 @@
 "replace-replace-all-results-count" = "{{PLURAL:$1|$1 ero anstataŭigita|$1 eroj anstataŭigitaj}}";
 "replace-textfield-accessibility" = "Anstataŭigi";
 "replace-textfield-placeholder" = "Anstataŭigi per…";
-"request-feedback-on-error" = "La aplikaĵo ekhavis problemon pri kiu niaj programistoj ŝatus scii pli. Bonvolu tuŝeti ĉi tie por sendi retmesaĝon al ni kun la eraro-detaloj.";
 "reverted-edit-back-to-article-button-title" = "Reen al la artikolo";
 "reverted-edit-notification-body" = "La redakto de la artikolo $1 kiun vi faris, estas malfarita de $2";
 "reverted-edit-notification-read-more-action-title" = "Legi pli";
@@ -759,6 +764,7 @@
 "welcome-explore-continue-button" = "Komenci";
 "welcome-explore-new-ways-title" = "Novaj manieroj por esplori";
 "welcome-explore-tell-me-more-done-button" = "Komprenite";
+// Fuzzy
 "welcome-intro-free-encyclopedia-description" = "Vikipedio estas kunlabore verkita de volontuloj kaj konsistas de pli ol 40 milionoj da artikoloj en preskaŭ 300 lingvoj.";
 "welcome-intro-free-encyclopedia-more" = "Ekscii pli pri Vikipedio";
 "welcome-intro-free-encyclopedia-more-about" = "Pri Vikipedio";
@@ -767,6 +773,7 @@
 "welcome-languages-add-button" = "Aldoni alian lingvon";
 "welcome-languages-add-or-edit-button" = "Aldoni aŭ redakti preferatajn lingvojn";
 "welcome-languages-description" = "Ni trovis la sekvajn lingvojn sur via aparato:";
+// Fuzzy
 "welcome-languages-search-title" = "Serĉi en preskaŭ 300 lingvoj";
 "welcome-notifications-tell-me-more-creation" = "Sciigoj estas kreitaj kaj liveritaj sur via aparato per la aplikaĵo, ne de nia servilo (aŭ de servilo de ekstera provizanto).";
 "welcome-notifications-tell-me-more-storage" = "Sciigaj preferoj estas konservitaj sur aparatoj kaj ne estas bazitaj sur personaj informoj aŭ persona agado.";

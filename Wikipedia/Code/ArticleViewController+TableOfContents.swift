@@ -1,3 +1,5 @@
+import CocoaLumberjackSwift
+
 extension ArticleViewController : ArticleTableOfContentsDisplayControllerDelegate {
     func getVisibleSection(with completion: @escaping (_ sectionID: Int, _ anchor: String) -> Void) {
         webView.evaluateJavaScript("window.wmf.elementLocation.getFirstOnScreenSection(\(navigationBar.visibleHeight))") { (result, error) in
@@ -35,7 +37,7 @@ extension ArticleViewController : ArticleTableOfContentsDisplayControllerDelegat
     }
     
     var tableOfContentsSemanticContentAttribute: UISemanticContentAttribute {
-        return MWLanguageInfo.semanticContentAttribute(forWMFLanguage: articleURL.wmf_language)
+        return MWKLanguageLinkController.semanticContentAttribute(forContentLanguageCode: articleURL.wmf_contentLanguageCode)
     }
     
     func tableOfContentsDisplayControllerDidRecreateTableOfContentsViewController() {
@@ -73,7 +75,7 @@ extension ArticleViewController : ArticleTableOfContentsDisplayControllerDelegat
     public var tableOfContentsArticleLanguageURL: URL? {
         let articleNSURL = self.articleURL as NSURL
         if articleNSURL.wmf_isNonStandardURL {
-            return NSURL.wmf_URL(withDefaultSiteAndlanguage: "en")
+            return NSURL.wmf_URL(withDefaultSiteAndLanguageCode: "en")
         } else {
             return articleNSURL.wmf_site
         }

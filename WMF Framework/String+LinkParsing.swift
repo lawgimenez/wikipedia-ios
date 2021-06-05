@@ -2,19 +2,19 @@
 extension String {
     static let namespaceRegex = try! NSRegularExpression(pattern: "^(.+?)_*:_*(.*)$")
     // Assumes the input is the remainder of a /wiki/ path
-    func namespaceOfWikiResourcePath(with language: String) -> PageNamespace {
+    func namespaceOfWikiResourcePath(with languageCode: String) -> PageNamespace {
         guard let namespaceString = String.namespaceRegex.firstReplacementString(in: self) else {
             return .main
         }
-        return WikipediaURLTranslations.commonNamespace(for: namespaceString, in: language) ?? .main
+        return WikipediaURLTranslations.commonNamespace(for: namespaceString, in: languageCode) ?? .main
     }
     
-    func namespaceAndTitleOfWikiResourcePath(with language: String) -> (namespace: PageNamespace, title: String) {
+    func namespaceAndTitleOfWikiResourcePath(with languageCode: String) -> (namespace: PageNamespace, title: String) {
         guard let result = String.namespaceRegex.firstMatch(in: self) else {
             return (.main, self)
         }
         let namespaceString = String.namespaceRegex.replacementString(for: result, in: self, offset: 0, template: "$1")
-        guard let namespace = WikipediaURLTranslations.commonNamespace(for: namespaceString, in: language) else {
+        guard let namespace = WikipediaURLTranslations.commonNamespace(for: namespaceString, in: languageCode) else {
             return (.main, self)
         }
         let title = String.namespaceRegex.replacementString(for: result, in: self, offset: 0, template: "$2")
@@ -49,6 +49,12 @@ public extension String {
      var denormalizedPageTitle: String? {
         return replacingOccurrences(of: " ", with: "_").precomposedStringWithCanonicalMapping
      }
+    
+    var asTalkPageFragment: String? {
+        let denormalizedName = replacingOccurrences(of: " ", with: "_")
+        let unlinkedName = denormalizedName.replacingOccurrences(of: "[[", with: "").replacingOccurrences(of: "]]", with: "")
+        return unlinkedName.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.wmf_encodeURIComponentAllowed())
+    }
     
     //assumes string is already normalized
     var googleFormPercentEncodedPageTitle: String? {

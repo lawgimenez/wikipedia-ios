@@ -9,14 +9,18 @@
 // Author: Macofe
 // Author: Mohammed Galib Hasan
 // Author: Nemo bis
+// Author: R4356th
 // Author: Rasal Lia
 // Author: Sayma Jahan
+// Author: Tahmid
 // Author: Tahmid02016
 // Author: Tauhid16
+// Author: WikiAbuHuraira
 // Author: আজিজ
 // Author: আফতাবুজ্জামান
 // Author: ফাহাদ কাজমী
 
+"aaald-article-description-updated-description" = "নিবন্ধের বিবরণ হালনাগাদ করা হয়েছে";
 "about-content-license" = "বিষয়বস্তুর লাইসেন্স";
 "about-content-license-details" = "অন্যথায় নির্দিষ্ট করা না থাকলে, বিষয়বস্তু $1-এর অধীনে উপলব্ধ।";
 "about-content-license-details-share-alike-license" = "ক্রিয়েটিভ কমন্স অ্যাট্রিবিউশন শেয়ার অ্যালাইক";
@@ -107,11 +111,14 @@
 "description-add-title" = "বিবরণ যোগ করুন";
 "description-edit-learn-more" = "আরও জানুন";
 "description-edit-length-warning" = "$1/$2";
+"description-edit-pencil-title" = "নিবন্ধের বিবরণ সম্পাদনা করুন";
 "description-edit-title" = "বিবরণ সম্পাদনা করুন";
 "description-help-about-wikidata" = "উইকিউপাত্ত সম্পর্কে";
 "description-help-more-info-title" = "আরও তথ্য";
 "description-help-tips-for-example" = "উদাহরণস্বরূপ:";
+"description-help-title" = "নিবন্ধের বিবরণ সংক্রান্ত সাহায্য";
 "description-published-button-title" = "সম্পন্ন";
+"description-welcome-descriptions-title" = "নিবন্ধের বিবরণ";
 "description-welcome-start-editing-button" = "সম্পাদনা শুরু করুন";
 "dim-images" = "অনুজ্জ্বল ছবি";
 "edit-link-title" = "সংযোগ সম্পাদনা";
@@ -224,8 +231,6 @@
 "main-menu-account-logout-are-you-sure" = "আপনি কি নিশ্চিত যে আপনি প্রস্থান করতে চান?";
 "main-menu-account-logout-cancel" = "বাতিল";
 "main-menu-account-title-logged-in" = "$1 হিসাবে প্রবেশ";
-"main-menu-debug-tweaks" = "বিকাশকারীর সেটিংস";
-"main-menu-heading-debug" = "ডিবাগ";
 "main-menu-heading-legal" = "আইনী তথ্য";
 "main-menu-nearby" = "কাছাকাছি";
 "main-menu-privacy-policy" = "গোপনীয়তার নীতি";
@@ -234,7 +239,7 @@
 "main-menu-title" = "আরও";
 "main-menu-zero-faq" = "উইকিপিডিয়া জিরো প্রাজিপ্র";
 "menu-cancel-accessibility-label" = "বাতিল";
-"more-languages-tooltip-description" = "প্রায় ৩০০টি ভাষায় উইকিপিডিয়া অন্বেষণ করুন";
+"more-languages-tooltip-description" = "৩০০টি অধিক ভাষায় উইকিপিডিয়া অন্বেষণ করুন";
 "more-languages-tooltip-title" = "ভাষা যোগ করুন";
 "navbar-title-mode-edit-wikitext-preview" = "প্রাকদর্শন";
 "nearby-distance-label-feet" = "$1 ফুট";
@@ -300,7 +305,6 @@
 "relative-date-hours-ago" = "{{PLURAL:$1|0=সম্প্রতি|$1 ঘণ্টা আগে}}";
 "relative-date-minutes-ago" = "{{PLURAL:$1|0=এইমাত্র|$1 মিনিট আগে}}";
 "relative-date-months-ago" = "{{PLURAL:$1|0=এই মাস|1=গত মাস|$1 মাস আগে}}";
-"request-feedback-on-error" = "এই অ্যাপলিকেশনটি একটি সমস্যার সম্মুখীন হয়েছে, যা আমাদের উন্নয়নকারী জানতে চান। এই ত্রুটির বিবরণসহ ইমেইল পাঠাতে দয়া করে এখানে টোকা দিন।";
 "reverted-edit-thanks-for-editing-title" = "উইকিপিডিয়ায় সম্পাদনা করার জন্য ধন্যবাদ!";
 "saved-all-articles-title" = "সব নিবন্ধ";
 "saved-pages-image-download-error" = "এই সংরক্ষিত পাতার জন্য চিত্র ডাউনলোড করা ব্যর্থ হয়েছে।";
@@ -357,6 +361,7 @@
 "two-factor-login-title" = "আপনার অ্যাকাউন্টে প্রবেশ করুন";
 "two-factor-login-with-backup-code" = "আপনার ব্যাকআপ কোডগুলির একটি ব্যবহার করুন";
 "two-factor-login-with-regular-code" = "যাচাইকরণ কোড ব্যবহার করুন";
+"variants-alert-dismiss-button" = "না, ধন্যবাদ";
 "welcome-exploration-explore-feed-description" = "আমাদের সম্প্রদায়ের প্রস্তাবিত পাঠ এবং দৈনিক নিবন্ধ";
 "welcome-exploration-explore-feed-title" = "ফিড অন্বেষণ করুন";
 "welcome-exploration-on-this-day-title" = "আজকের এই দিনে";
@@ -366,7 +371,7 @@
 "welcome-intro-free-encyclopedia-more-about" = "উইকিপিডিয়া সম্পর্কে";
 "welcome-intro-free-encyclopedia-title" = "একটি মুক্ত বিশ্বকোষ";
 "welcome-languages-add-button" = "আরেকটি ভাষা যোগ করুন";
-"welcome-languages-search-title" = "প্রায় ৩০০টি ভাষায় অন্বেষণ করুন";
+"welcome-languages-search-title" = "৩০০টি অধিক ভাষায় অন্বেষণ করুন";
 "welcome-notifications-tell-me-more-title" = "বিজ্ঞপ্তি সম্পর্কে আরো";
 "welcome-volunteer-send-usage-reports" = "ব্যবহারের রিপোর্ট পাঠান";
 "wikitext-downloading" = "বিষয়বস্তু লোড হচ্ছে...";

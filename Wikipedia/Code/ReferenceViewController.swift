@@ -1,6 +1,6 @@
 import Foundation
 
-protocol ReferenceViewControllerDelegate: class {
+protocol ReferenceViewControllerDelegate: AnyObject {
     var referenceWebViewBackgroundTapGestureRecognizer: UITapGestureRecognizer { get }
     func referenceViewControllerUserDidTapClose(_ vc: ReferenceViewController)
     func referenceViewControllerUserDidNavigateBackToReference(_ vc: ReferenceViewController)
@@ -25,6 +25,7 @@ class ReferenceViewController: ViewController {
     }
     
     func setupNavbar() {
+        navigationBar.displayType = .modal
         updateTitle()
         navigationItem.rightBarButtonItem = closeButton
         navigationItem.leftBarButtonItem = backToReferenceButton

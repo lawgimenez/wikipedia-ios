@@ -1,11 +1,11 @@
 
 import UIKit
 
-protocol DiffToolbarViewDelegate: class {
+protocol DiffToolbarViewDelegate: AnyObject {
     func tappedPrevious()
     func tappedNext()
     func tappedShare(_ sender: UIBarButtonItem)
-    func tappedThank(isAlreadySelected: Bool)
+    func tappedThankButton()
     var isLoggedIn: Bool { get }
 }
 
@@ -43,7 +43,7 @@ class DiffToolbarView: UIView {
     }()
 
     lazy var thankButton: IconBarButtonItem = {
-        let item = IconBarButtonItem(iconName: "diff-smile", target: self, action: #selector(tappedThank(_:)), for: .touchUpInside)
+        let item = IconBarButtonItem(iconName: "diff-smile", target: self, action: #selector(tappedThank(_:)), for: .touchUpInside , iconInsets: UIEdgeInsets(top: 5.0, left: 0, bottom: -5.0, right: 0))
         item.accessibilityLabel = WMFLocalizedString("action-thank-user-accessibility", value: "Thank User", comment: "Accessibility title for the 'Thank User' action button when viewing a single revision diff.")
         
         return item
@@ -96,7 +96,7 @@ class DiffToolbarView: UIView {
     }
     
     @objc func tappedThank(_ sender: UIBarButtonItem) {
-        delegate?.tappedThank(isAlreadySelected: isThankSelected)
+        delegate?.tappedThankButton()
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {

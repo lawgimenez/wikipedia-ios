@@ -21,7 +21,7 @@ private typealias ContentGroupKindAndLoggingCode = (kind: WMFContentGroupKind, l
     let dataStore: MWKDataStore
     required init(dataStore: MWKDataStore) {
         self.dataStore = dataStore
-        super.init(schema: "MobileWikiAppiOSUserHistory", version: 19074748)
+        super.init(schema: "MobileWikiAppiOSUserHistory", version: 20339865)
     }
     
     private func event() -> Dictionary<String, Any> {
@@ -48,6 +48,10 @@ private typealias ContentGroupKindAndLoggingCode = (kind: WMFContentGroupKind, l
         }
 
         event["feed_enabled_list"] = feedEnabledListPayload()
+        
+        if let articleAsLivingDocBucket = dataStore.abTestsController.bucketForExperiment(.articleAsLivingDoc) {
+            event["test_group"] = articleAsLivingDocBucket.rawValue
+        }
         
         return wholeEvent(with: event)
     }
@@ -131,8 +135,8 @@ private typealias ContentGroupKindAndLoggingCode = (kind: WMFContentGroupKind, l
 
 private extension WMFContentGroupKind {
     var offLanguageCodes: Set<String> {
-        let preferredLangCodes = MWKDataStore.shared().languageLinkController.preferredLanguages.map{$0.languageCode}
-        return Set(preferredLangCodes).subtracting(languageCodes)
+        let preferredContentLangCodes = MWKDataStore.shared().languageLinkController.preferredLanguages.map{$0.contentLanguageCode}
+        return Set(preferredContentLangCodes).subtracting(contentLanguageCodes)
     }
     
     // codes define by: https://meta.wikimedia.org/wiki/Schema:MobileWikiAppiOSUserHistory
@@ -164,8 +168,8 @@ private extension WMFContentGroupKind {
     // "on" / "off" define by: https://meta.wikimedia.org/wiki/Schema:MobileWikiAppiOSUserHistory
     var userHistorySchemaLanguageInfo: [String: [String]] {
         var info = [String: [String]]()
-        if !languageCodes.isEmpty {
-            info["on"] = Array(languageCodes)
+        if !contentLanguageCodes.isEmpty {
+            info["on"] = Array(contentLanguageCodes)
         }
         if !offLanguageCodes.isEmpty {
             info["off"] = Array(offLanguageCodes)

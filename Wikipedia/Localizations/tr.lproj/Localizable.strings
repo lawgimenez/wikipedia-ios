@@ -1,29 +1,32 @@
 // Messages for Turkish (Türkçe)
 // Exported from translatewiki.net
 // Author: 1917 Ekim Devrimi
-// Author: Abijeet Patro
 // Author: Alikaan
 // Author: Alpkant
 // Author: Ayrıntılı Bilgi
 // Author: BaRaN6161 TURK
 // Author: Botansahin
 // Author: Bulgu
+// Author: Cobija
 // Author: HakanIST
 // Author: Hedda
 // Author: Incelemeelemani
 // Author: JoeWalshWMF
+// Author: Joseph
 // Author: Kumkumuk
 // Author: Macofe
 // Author: Mavrikant
 // Author: Mavrikant2
 // Author: McAang
 // Author: Meelo
+// Author: Melissadilara
 // Author: Mirzali
 // Author: MrSchipunov
 // Author: MuratTheTurkish
 // Author: Nemo bis
 // Author: Rapsar
 // Author: Sadrettin
+// Author: SaldırganSincap
 // Author: Sayginer
 // Author: Sucsuzz
 // Author: TmY e12
@@ -36,6 +39,40 @@
 // Author: Vito Genovese
 // Author: Ömer Berkay
 
+"aaald-added-text-description-2" = "$1 eklendi";
+"aaald-article-description-updated-description" = "Madde açıklaması güncellendi";
+"aaald-article-insert-header" = "Önemli Güncellemeler";
+"aaald-article-insert-last-updated" = "Son güncelleme";
+"aaald-article-insert-new-changes" = "Yeni değişiklikler";
+"aaald-article-insert-read-more" = "Daha fazla güncelleme okuyun";
+"aaald-characters-text-description" = "{{PLURAL:$1|0=0 karakterler|karakter}}";
+"aaald-deleted-text-description-2" = "$1 silindi";
+"aaald-error-subitle" = "Tekrar denemek için yenileyin";
+"aaald-error-title" = "Satır içi madde geçmişi yüklenemiyor";
+"aaald-many-sections-description" = "$1 bölümlerde";
+"aaald-multiple-changes-description" = "Birden çok değişiklik yapıldı";
+"aaald-multiple-references-added-description" = "Çoklu kaynakça eklendi";
+"aaald-new-book-reference-title" = "Kitap";
+"aaald-new-discussion" = "Yeni tartışma";
+"aaald-new-journal-reference-database" = "$1 üzerinden";
+"aaald-new-journal-reference-title" = "Dergi";
+"aaald-new-journal-reference-volume" = "$1 sesi:";
+"aaald-new-news-reference-retrieved-date" = "$1 tarihinde alındı";
+"aaald-new-news-reference-title" = "Haberler";
+"aaald-new-talk-topic-description-format" = "Bu madde hakkında $1";
+"aaald-new-website-reference-archive-date-text" = "orijinalinden $1 tarihinde";
+"aaald-new-website-reference-archive-url-text" = "Archive.org URL'si";
+"aaald-new-website-reference-title" = "Web sitesi";
+"aaald-numerical-multiple-references-added-description" = "{{PLURAL:$1|0=0 kaynakça|$1 kaynak|$1 kaynakça}} eklendi";
+"aaald-one-section-description" = "$1 bölümünde";
+"aaald-revision-by-anonymous" = "Anonim kullanıcı tarafından düzenleyin";
+"aaald-revision-userInfo" = "$1 tarafından düzenlendi ($2 düzenleme)";
+"aaald-single-reference-added-description" = "Kaynak eklendi";
+"aaald-small-change-description" = "{{PLURAL:$1|0=Küçük değişiklik yapılmadı|$1 küçük değişiklik yapıldı}}";
+"aaald-summary-title" = "{{PLURAL:$3|0=0 gün|$3 gün}} içinde {{PLURAL:$2|0=0 editör|$2 editör}} tarafından {{PLURAL:$1|0=0 değişiklik|$1 değişiklik}}";
+"aaald-two-sections-description" = "$1 ve $2 bölümlerinde";
+"aaald-vandalism-revert-description" = "Şüpheli Vandalizm geri alındı";
+"aaald-view-full-history-button" = "Tam madde geçmişini gör";
 "about-content-license" = "İçerik lisansı";
 "about-content-license-details" = "Aksi belirtilmediği sürece, içeriğe $1 altında erişilebilir.";
 "about-content-license-details-share-alike-license" = "Creative Commons Attribution-ShareAlike Lisansı";
@@ -131,6 +168,7 @@
 "article-about-title" = "Bu madde hakkında";
 "article-delete" = "Sil";
 "article-deleted-accessibility-notification" = "{{PLURAL:$1|madde|madde}} silindi";
+"article-fetcher-error-updated-content-timeout" = "Uygulama, güncellenen içeriği zamanında alamadı. Değişikliklerinizin yansıdığını görmek için lütfen bu sayfayı daha sonra yenileyin.";
 "article-languages-filter-placeholder" = "Dil bul";
 "article-languages-label" = "Dil seç";
 "article-languages-others" = "Diğer diller";
@@ -153,35 +191,41 @@
 "button-skip" = "Atla";
 "cancel" = "İptal";
 "cc-zero" = "Creative Commons CC0";
+"chinese-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Çince biçimlerini birincil veya ikincil olarak uygulama içinde, tercih ettiğiniz biçim ile okumayı, aramayı veya değişiklik yapmayı kolaylaştırmak için destekliyor.\n\n简体 Çince, Basitleştirilmiş (zh-hans)\n香港繁體 Geleneksel Hong Kong (zh-hk)\n澳門繁體 Geleneksel Makao (zh-mo)\n大马简体 Basitleştirilmiş Malezya (zh-my)\n新加坡简体 Basitleştirilmiş Singapur (zh-sg)\n臺灣正體 Geleneksel Tayvan (zh-tw)";
+"chinese-variants-alert-title" = "Çince biçim desteği güncellemeleri";
 "clear-title-accessibility-label" = "Temizle";
 "close-button-accessibility-label" = "Kapat";
 "compass-direction" = "saat $1 yönünde";
 "continue-reading-empty-description" = "Daha fazla madde okumak için Vikipedi'yi keşfedin";
 "continue-reading-empty-title" = "Son okunan madde yok";
+"crimean-tatar-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Kırım Tatarcası biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\nQırımtatarca, Latin Kırım Tatarcası Latin (chr-latn)\nкъырымтатарджа, Кирил Kırım Tatarcası Kiril (crh-cyrl)";
+"crimean-tatar-variants-alert-title" = "Kırım Tatarcası biçim desteği güncellemeleri";
+"data-migration-status" = "Güncelleniyor...";
 "description-add-title" = "Açıklama ekle";
-"description-edit-for-article" = "$1 için başlık açıklaması";
+"description-edit-for-article" = "$1 için madde açıklaması";
 "description-edit-learn-more" = "Daha fazla bilgi edinin";
 "description-edit-length-warning" = "$1 / $2";
-"description-edit-license" = "Başlık açıklamasını değiştirerek $1 şartını kabul ediyorum ve $2 lisansı kapsamındaki katkılarımı geri alınamaz bir şekilde yayımlıyorum.";
+"description-edit-license" = "Madde açıklamasını değiştirerek $1nı kabul ediyorum ve $2 lisansı kapsamındaki katkılarımı geri alınamaz bir şekilde yayımlıyorum.";
 "description-edit-pencil-introduction" = "Girişi düzenle";
-"description-edit-pencil-title" = "Başlık açıklamasını düzenle";
+"description-edit-pencil-title" = "Madde açıklamasını düzenle";
 "description-edit-placeholder-title" = "En güzeli, kısa açıklama yapmaktır";
 "description-edit-publish" = "Açıklamayı yayımla";
 "description-edit-title" = "Açıklamayı düzenle";
 "description-edit-warning" = "Açıklamaları kısa tutmaya çalışın, böylece kullanıcılar maddenin konusunu bir bakışta anlayabilirler.";
-"description-help-about-description" = "Başlık açıklamaları, okuyucuların bir bakışta konuyu anlamalarına yardımcı olmak için bir maddeyi özetler.";
+"description-edit-warning-casing" = "Sadece özel isimler büyük harfle başlamalıdır, cümlenin başında bile.";
+"description-help-about-description" = "Madde açıklamaları, okuyucuların bir bakışta konuyu anlamalarına yardımcı olmak için bir maddeyi özetler.";
 "description-help-about-title" = "Hakkında";
 "description-help-about-wikidata" = "Vikiveri Hakkında";
-"description-help-more-info-description" = "Tanımlar; Wikimedia Vakfı'nın bir projesi olan, ücretsiz, iş birlikçi, çok dilli, Vikipedi ve diğer projelerini destekleyen ikincil veritabanı Vikiveri'de saklanır ve oradan sağlanır.";
+"description-help-more-info-description" = "Tanımlar Wikimedia Vakfının bir projesi olan ücretsiz, iş birlikçi, çokdilli, Vikipedi ve diğer projelerini de destekleyen ikincil veritabanı Vikiveri'de saklanır ve oradan sağlanır.";
 "description-help-more-info-title" = "Daha fazla bilgi";
 "description-help-tips-description" = "Tanımların bir satıra sığacak şekilde, iki ila on iki kelimeden uzunluğunda olması tercih edilir. Özel isim olmadıkça büyük harf kullanılmaz.";
-"description-help-tips-example-description-one" = "Mona Lisa hakkındaki bir madde için başlık tanımı";
-"description-help-tips-example-description-two" = "Everest Dağı hakkındaki bir madde için başlık tanımı";
+"description-help-tips-example-description-one" = "Mona Lisa hakkındaki bir madde için madde açıklaması";
+"description-help-tips-example-description-two" = "Everest Dağı hakkındaki bir madde için madde açıklaması";
 "description-help-tips-example-title-one" = "Leonardo da Vinci tablosu";
 "description-help-tips-example-title-two" = "Dünya'nın en yüksek dağı";
 "description-help-tips-for-example" = "Örneğin:";
 "description-help-tips-title" = "Açıklama oluşturma ipuçları";
-"description-help-title" = "Başlık açıklaması yardımı";
+"description-help-title" = "Madde açıklama yardımı";
 "description-help-wikidata-guide" = "Açıklamaları yazmak için Vikiveri kılavuzu";
 "description-published-button-title" = "Yapıldı";
 "description-published-footer" = "Bu uygulamadaki maddeleri de düzenleyebilirsiniz. Bir dahaki sefere kalem simgesini tıklatarak yazım hatalarını ve küçük cümleleri düzeltmeyi deneyin.";
@@ -190,7 +234,7 @@
 "description-welcome-concise-sub-title" = "İdeal olarak iki ila on iki kelime arasında bir çizgi";
 "description-welcome-concise-title" = "Kısa tut";
 "description-welcome-descriptions-sub-title" = "Okuyucuların bir bakışta konuyu anlamalarına yardımcı olmak için bir maddeyi özetler.";
-"description-welcome-descriptions-title" = "Başlık tanımları";
+"description-welcome-descriptions-title" = "Madde açıklamaları";
 "description-welcome-promise-title" = "Başlayarak bu özelliği kötüye kullanmamaya söz veriyorum";
 "description-welcome-start-editing-button" = "Düzenlemeye başla";
 "diff-compare-header-from-info-heading" = "Gönderen:";
@@ -300,6 +344,8 @@
 "empty-no-feed-message" = "İnternet bağlantınız olduğunda, size önerilen makaleleri görebilirsiniz";
 "empty-no-history-message" = "Okuduklarını buradan takip et";
 "empty-no-history-title" = "Görüntülenebilecek bir geçmiş yok";
+"empty-no-other-article-languages-message" = "Bu madde henüz başka hiç bir dilde yazılmadı";
+"empty-no-other-article-languages-title" = "Başka dil mevcut değil";
 "empty-no-reading-lists-message" = "Seyahat edilecek yerler, favori konular ve daha pek çok şey için okuma listeleri oluşturun";
 "empty-no-reading-lists-title" = "Kaydedilen okuma listelerini düzenle";
 "empty-no-saved-pages-in-reading-list-message" = "Sayfaları bu listeye kaydederek burada nasıl göründüğüne bakın";
@@ -340,7 +386,7 @@
 "explore-feed-preferences-global-cards-title" = "Küresel kartlar";
 "explore-feed-preferences-hide-card-action-title" = "Bu kartı gizle";
 "explore-feed-preferences-hide-feed-cards-action-title" = "Tüm “$1” kartlarını gizle";
-"explore-feed-preferences-in-the-news-description" = "Güncel olaylar hakkında makaleler";
+"explore-feed-preferences-in-the-news-description" = "Güncel olaylar hakkında maddeler";
 "explore-feed-preferences-languages-footer-text" = "Tüm Keşfet akış kartlarını tüm dillerinde gizlemek Keşfet sekmesini kapatır.";
 "explore-feed-preferences-on-this-day-description" = "Tarihte bugün gerçekleşen olaylar";
 "explore-feed-preferences-places-description" = "Bulunduğunuz yere yakın Vikipedi maddeleri";
@@ -432,6 +478,8 @@
 "forgot-password-instructions" = "Parola sıfırlama talimatlarını e-posta yoluyla almak için aşağıdaki alanlardan birini doldurun";
 "forgot-password-title" = "Parolayı sıfırla";
 "forgot-password-username-or-email-title" = "Veya";
+"gan-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Gan biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\n贛語 原文 Gan (gan)\n赣语 简体 Gan, Basitleştirilmiş (gan-hans)\n贛語 繁體 Gan, Geleneksel (gan-hant)";
+"gan-variants-alert-title" = "Ganca biçim desteği güncellemeleri";
 "history-clear-all" = "Temizle";
 "history-clear-cancel" = "İptal";
 "history-clear-confirmation-heading" = "Tüm geçmişinizi silmek istediğinizden emin misiniz?";
@@ -493,6 +541,12 @@
 "intermediate-edits-editors-count-limited" = "$2+ kullanıcı tarafından yapılan $1+ revizyonlar gösterilmiyor";
 "intermediate-edits-editors-limited-count" = "{{PLURAL:$1|$1 orta revizyon|$1 orta revizyon}} tarafından $2+ kullanıcı gösterilmedi";
 "intermediate-edits-limited-editors-count" = "$1+ {{PLURAL:$2|$2 kullanıcı|$2 kullanıcı}} tarafından yapılan ara revizyonlar gösterilmez";
+"inuktitut-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Inuktitut biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\nᐃᓄᒃᑎᑐᑦ ᑎᑎᕋᐅᓯᖅ ᓄᑖᖅ Inuktitut, Heceli (ike-cans)\nInuktitut ilisautik, Inuktitut, Latin (ike-latn)";
+"inuktitut-variants-alert-title" = "Inuktitut biçim desteği güncellemeleri";
+"kazakh-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Kazakça biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\nҚазақша Kazakça (kk)\nҚазақша Кирил Kazakça, Kiril (kk-cyrl)\nqazaqşa latin Kazakça, Latin (kk-latn)\nتوتە قازاقشا Kazakça, Arap (kk-arab)";
+"kazakh-variants-alert-title" = "Kazakça biçim desteği güncellemeleri";
+"kurdish-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Kürtçe biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\nKurdî Latînî Kürtçe, Latin (ku-latn)\nكوردی Kürtçe, Arap (kk-arab)";
+"kurdish-variants-alert-title" = "Kürtçe biçim desteği güncellemeleri";
 "languages-settings-title" = "Diller";
 "languages-title" = "Dili değiştir";
 "languages-wikipedia" = "Vikipedi dilleri";
@@ -510,17 +564,15 @@
 "main-menu-account-logout-are-you-sure" = "Oturumu kapatmak istediğinizden emin misiniz?";
 "main-menu-account-logout-cancel" = "İptal";
 "main-menu-account-title-logged-in" = "$1 olarak oturum açıldı";
-"main-menu-debug-tweaks" = "Geliştirici ayarları";
-"main-menu-heading-debug" = "Ayıkla";
 "main-menu-heading-legal" = "Gizlilik ve Şartlar";
 "main-menu-nearby" = "Yakınımdakiler";
-"main-menu-privacy-policy" = "Gizlilik politikası";
+"main-menu-privacy-policy" = "Gizlilik ilkesi";
 "main-menu-rate-app" = "Uygulamayı puanla";
 "main-menu-terms-of-use" = "Kullanım Şartları";
 "main-menu-title" = "Daha fazla";
 "main-menu-zero-faq" = "Wikipedia Zero SSS";
 "menu-cancel-accessibility-label" = "İptal";
-"more-languages-tooltip-description" = "Yaklaşık 300 dilde ara";
+"more-languages-tooltip-description" = "Vikipedi'yi 300'den fazla dilde arayın";
 "more-languages-tooltip-title" = "Dil ekle";
 "move-articles-to-reading-list" = "{{PLURAL:$1|$1 maddeyi|$1 maddeyi}} okuma listesine taşıyın";
 "navbar-title-mode-edit-wikitext-preview" = "Önizleme";
@@ -540,7 +592,7 @@
 "on-this-day-detail-header-date-range" = "$2-$1 döneminde";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 tarihi olay|$1 tarihi olay}}";
 "on-this-day-footer" = "Bugünden daha fazla tarihi olay";
-"on-this-day-footer-with-event-count" = "Tarihte bugün gerçekleşen diğer $1 olay";
+"on-this-day-footer-showing-event-count" = "Bu günde $1 daha tarihi olay";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1, $2 Vikipedi'den";
 "on-this-day-title" = "Tarihte bugün";
 "original-tab-button-popover-description" = "Başladığınız sekmeye geri dönmek için 'W' düğmesine dokunun.";
@@ -633,9 +685,9 @@
 "reading-list-keep-sync-disabled-additional-subtitle" = "Senkronizasyonu kapatma, bu maddeleri hesabınızdan kaldıracaktır. Bunları cihazınızdan kaldırırsanız gelecekte tekrar senkronizasyonu açarak geri getiremezsiniz.";
 "reading-list-keep-sync-disabled-remove-article-button-title" = "Hayır, maddeleri hem cihazdan hem Vikipedi hesabımdan kaldır";
 "reading-list-keep-title" = "Kaydedilen maddeleri cihazda saklasın mı?";
-"reading-list-limit-hit-for-unsorted-articles-button-title" = "Makaleleri sırala";
+"reading-list-limit-hit-for-unsorted-articles-button-title" = "Maddeleri sırala";
 "reading-list-limit-hit-for-unsorted-articles-subtitle" = "5000 adet sıralanmamış madde sınırı var. Sıralanmamış maddelerin senkronizasyonuna devam etmek için lütfen mevcut maddelerinizi listelere ayırın.";
-"reading-list-limit-hit-for-unsorted-articles-title" = "Sıralanmamış maddeler için limit sayısı";
+"reading-list-limit-hit-for-unsorted-articles-title" = "Sıralanmamış maddeler için sınır sayısı";
 "reading-list-list-limit-exceeded-message" = "Bu okuma listesi ve bu listeye kaydedilen maddeler senkronize edilmeyecektir, lütfen bu listenin senkronizasyonunu devam ettirmek için listelerinizi şu sayıya düşürün: $1";
 "reading-list-list-limit-exceeded-title" = "Hesap başına {{PLURAL:$1|$1 okuma listesi|$1 okuma listesi}} sınırını aştınız.";
 "reading-list-list-limit-reached" = "Hesap başına $1 okuma listesi sınırına ulaştınız";
@@ -668,7 +720,7 @@
 "reading-lists-article-queued-to-be-downloaded" = "Madde indirilmek için sıraya alındı";
 "reading-lists-article-save-to-disk-failed" = "Cihaz limiti aşıldı, madde senkronize edilemedi";
 "reading-lists-article-save-to-disk-recovery-suggestion" = "Cihazınızda biraz yer açın ve tekrar deneyin";
-"reading-lists-articles-not-synced-limit-exceeded" = "Bazı maddeler senkronize edilmedi, limit aşıldı";
+"reading-lists-articles-not-synced-limit-exceeded" = "Bazı maddeler senkronize edilmedi, sınır aşıldı";
 "reading-lists-conflicting-reading-list-name-updated" = "'$1' adlı listeniz '$2' olarak değiştirildi";
 "reading-lists-count" = "{{PLURAL:$1|$1 okuma listesi|$1 okuma listesi}}";
 "reading-lists-default-list-description" = "Kaydedilen maddeleriniz için varsayılan liste";
@@ -676,7 +728,7 @@
 "reading-lists-delete-reading-list-alert-message" = "Bu eylem geri alınamaz. {{PLURAL:$1|bu listeye|bu listelere}} kaydedilen maddeler kaydedilmez.";
 "reading-lists-delete-reading-list-alert-title" = "{{PLURAL:$1|Listeyi|Listeleri}} silinsin mi?";
 "reading-lists-large-sync-completed" = "$1 madde ve $2 okuma listesi hesabınızdan senkronize edildi";
-"reading-lists-list-not-synced-limit-exceeded" = "Liste senkronize edilmedi, limit aşıldı";
+"reading-lists-list-not-synced-limit-exceeded" = "Liste senkronize edilmedi, sınır aşıldı";
 "reading-lists-sort-saved-articles" = "Kayıtlı maddeleri sırala";
 "reading-lists-split-notification" = "Okuma listesi başına $1 madde sınırı vardır. Bu sınırı aşan mevcut listeler birden fazla listeye ayrılmıştır.";
 "reading-lists-sync-error-no-internet-connection" = "İnternet bağlantısı mevcut olduğunda senkronizasyon devam edecek";
@@ -685,9 +737,10 @@
 "reading-themes-controls-accessibility-dark-theme-button" = "Koyu tema";
 "reading-themes-controls-accessibility-light-theme-button" = "Açık tema";
 "reading-themes-controls-accessibility-sepia-theme-button" = "Sepya tema";
-"reading-themes-controls-accessibility-syntax-highlighting-switch" = "Sözdizimi Vurgulama";
+"reading-themes-controls-accessibility-syntax-highlighting-switch" = "Sözdizim Vurgulama";
 "reading-themes-controls-accessibility-text-size-slider" = "Metin boyutu kaydırıcısı";
-"reading-themes-controls-syntax-highlighting" = "Sözdizimi Vurgulama";
+"reading-themes-controls-syntax-highlighting" = "Sözdizim Vurgulama";
+"reference-section-button-accessibility-label" = "Kaynak bölümüne atla";
 "reference-title" = "$1 referansı";
 "relative-date-days-ago" = "{{PLURAL:$1|0=Bugün|1=Dün|$1 gün önce}}";
 "relative-date-hours-abbreviated" = "$1st";
@@ -710,12 +763,11 @@
 "replace-replace-all-results-count" = "{{PLURAL:$1|$1 öge değiştirildi|$1 öge değiştirildi}}";
 "replace-textfield-accessibility" = "Değiştir";
 "replace-textfield-placeholder" = "Şununla değiştir:";
-"request-feedback-on-error" = "Uygulama bir sorunla karşılaştı ve geliştiricilerimiz bu konu hakkında daha fazla şey bilmek isteyecektir. Lütfen hata detaylarını bize e-posta ile göndermek için buraya dokunun.";
 "reverted-edit-back-to-article-button-title" = "Maddeye dön";
 "reverted-edit-notification-body" = "$1 maddesinde yaptığınız düzenleme $2 tarafından geri alındı.";
 "reverted-edit-notification-read-more-action-title" = "Devamını oku";
 "reverted-edit-possible-reasons" = "- Katkınız kurallarımızdan birini ihlal etti. $1 \n\n - Katkınız bir deneme ya da vandalizme benziyor";
-"reverted-edit-possible-reasons-subtitle" = "Elinizden geleni yaptığınızı biliyoruz ama inceleyenlerden biri, bir sıkıntı gördü.\n\n\nDeğişikliğiniz geri alınmasının muhtemel sebepleri şunlar olabilir:";
+"reverted-edit-possible-reasons-subtitle" = "Elinizden gelenin en iyisini yaptığınızı biliyoruz, ancak inceleyicilerden birinin endişesi vardı.\n\n\nDüzenlemenizin geri alınmasının olası nedenleri şunlardır:";
 "reverted-edit-thanks-for-editing-title" = "Vikipedi'yi düzenlediğiniz için teşekkürler!";
 "reverted-edit-title" = "Geri alınan düzenleme";
 "reverted-edit-view-guidelines-text" = "Kılavuzu görüntüle";
@@ -741,6 +793,8 @@
 "search-recent-title" = "Son arananlar";
 "search-result-redirected-from" = "Şuradan yönlendirildi: $1";
 "search-title" = "Ara";
+"serbian-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Sırpça biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\nсрпски ћирилица Sırpça, Kiril (sr-ec)\nsrpski latinica Sırpça, Latin (sr-el)";
+"serbian-variants-alert-title" = "Sırpça biçim desteği güncellemeleri";
 "settings-account" = "Hesap";
 "settings-appearance" = "Okuma tercihleri";
 "settings-clear-cache" = "Önbellekteki verileri temizle";
@@ -798,12 +852,17 @@
 "table-of-contents-close-accessibility-label" = "İçindekileri kapat";
 "table-of-contents-heading" = "Konu başlıkları";
 "table-of-contents-hide-button-label" = "İçindekiler tablosunu gizle";
+"table-of-contents-subheading-label" = "Alt başlık $1";
+"tachelhit-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Tachelhit biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\nⵜⴰⵛⵍⵃⵉⵜ Tachelhit, Tifinagh (shi-tfng)\nTaclḥit Tachelhit, Latin (shi-latn)";
+"tachelhit-variants-alert-title" = "Tachelhit biçim desteği güncellemeleri";
+"tajik-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Tacikçe biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\nтоҷикӣ кирилликӣ Tacikçe, Kiril (tg-cyrl)\ntojikī lotinī Tacikçe, Latin (tg-latn)";
+"tajik-variants-alert-title" = "Tacikçe biçim desteği güncellemeleri";
 "talk-page-add-discussion-accessibility-label" = "Tartışma ekle";
 "talk-page-discussion-accessibility-hint" = "Tartışma başlığını açmak için iki kez hafifçe vurun";
 "talk-page-discussion-read-accessibility-label" = "Oku";
-"talk-page-discussion-read-ipa-accessibility-attribute" = "rɛd";
+"talk-page-discussion-read-ipa-accessibility-attribute" = "oˈku";
 "talk-page-discussion-unread-accessibility-label" = "Okunmamış";
-"talk-page-discussion-unread-ipa-accessibility-attribute" = "ʌnˈrɛd";
+"talk-page-discussion-unread-ipa-accessibility-attribute" = "okuˈma";
 "talk-page-error-unable-to-post-reply" = "İnternet bağlantısı yok. Cevap gönderilemiyor.";
 "talk-page-error-unable-to-post-topic" = "İnternet bağlantısı yok. Tartışma gönderilemiyor.";
 "talk-page-info-active-conversations" = "$1 Vikipedi'de aktif sohbetler";
@@ -814,8 +873,8 @@
 "talk-page-new-banner-subtitle" = "Unutma, burada hepimiz insanız.";
 "talk-page-new-banner-title" = "Lütfen nazik ol";
 "talk-page-new-body-textfield-accessibility-label" = "Tartışma Organı";
-"talk-page-new-reply-body-accessibility-label" = "Cevap oluştur";
-"talk-page-new-reply-body-placeholder-text" = "Cevap yaz";
+"talk-page-new-reply-body-accessibility-label" = "Yanıt oluştur";
+"talk-page-new-reply-body-placeholder-text" = "Yanıt oluştur";
 "talk-page-new-reply-success-text" = "Cevabınız başarıyla yayımlandı";
 "talk-page-new-subject-clear-button-accessibility" = "Konuyu temizle";
 "talk-page-new-subject-placeholder-text" = "Konu";
@@ -845,6 +904,10 @@
 "two-factor-login-with-regular-code" = "Doğrulama kodu kullanın";
 "unable-to-load-talk-page-title" = "Tartışma sayfası yüklenemiyor";
 "unknown-generic-text" = "Bilinmiyor";
+"uzbek-variants-alert-body" = "Vikipedi uygulaması artık aşağıdaki Özbekçe biçimlerini birincil veya ikincil dil olarak uygulama içinde destekliyor, bu şekilde tercih ettiğiniz biçimle daha kolay okuyabilir, aratabilir ve değişiklik yapabilirsiniz:\n\noʻzbekcha lotin Özbekçe, Latin (uz-latin)\nўзбекча кирилл Özbekçe, Kiril (uz-cyrl)";
+"uzbek-variants-alert-title" = "Özbekçe biçim desteği güncellemeleri";
+"variants-alert-dismiss-button" = "Hayır teşekkürler";
+"variants-alert-preferences-button" = "Tercihlerinizi gözden geçirin";
 "welcome-exploration-explore-feed-description" = "Önerilen okumalar ve topluluğumuzdan günlük maddeler";
 "welcome-exploration-explore-feed-title" = "Keşfet bölümü";
 "welcome-exploration-on-this-day-description" = "Tarihte bugün neler olduğunu öğrenmek için geçmişe yolculuk yap";
@@ -854,7 +917,7 @@
 "welcome-explore-continue-button" = "Kullanmaya başla";
 "welcome-explore-new-ways-title" = "Keşfetmek için yeni yollar";
 "welcome-explore-tell-me-more-done-button" = "Anladım";
-"welcome-intro-free-encyclopedia-description" = "Vikipedi gönüllüler tarafından ortaklaşa yazılmakta ve yaklaşık 300 dilde, 40 milyondan fazla madde barındırmaktadır.";
+"welcome-intro-free-encyclopedia-description" = "Vikipedi, gönüllüler tarafından ortaklaşa yazılmıştır ve 300'den fazla dilde 40 milyondan fazla maddeden oluşmaktadır.";
 "welcome-intro-free-encyclopedia-more" = "Vikipedi hakkında daha fazla şey öğren";
 "welcome-intro-free-encyclopedia-more-about" = "Vikipedi hakkında";
 "welcome-intro-free-encyclopedia-more-description" = "Vikipedi dünyanın tüm dillerinde özgür ansiklopediler oluşturmayı amaçlayan bir küresel projedir. İnternet erişimi olan herkes tarafsız ve kaynaklı bilgilerle katkı yaparak katılım sağlamakta özgürdür.";
@@ -862,7 +925,7 @@
 "welcome-languages-add-button" = "Başka bir dil ekle";
 "welcome-languages-add-or-edit-button" = "Dil tercihi ekle veya düzenle";
 "welcome-languages-description" = "Cihazınızda şu dilleri bulduk:";
-"welcome-languages-search-title" = "Yaklaşık 300 dilde ara";
+"welcome-languages-search-title" = "300'den fazla dilde arama yapın";
 "welcome-notifications-tell-me-more-creation" = "Bildirimler, bizim (veya üçüncü tarafların) sunucuları(mız) eliyle değil, sizin cihazınız üzerindeki uygulama tarafından oluşturulur ve ulaştırılır.";
 "welcome-notifications-tell-me-more-storage" = "Bildirim tercihleri cihazda saklanır ve kişisel bilgi veya faaliyete dayalı değildir.";
 "welcome-notifications-tell-me-more-title" = "Bildirimler hakkında daha fazla bilgi";

@@ -28,6 +28,10 @@
 // Author: مصعب
 // Author: يونس
 
+"aaald-new-discussion" = "نقاش حديد";
+"aaald-new-news-reference-title" = "أخبار";
+"aaald-single-reference-added-description" = "أضيف المرجع";
+"aaald-view-full-history-button" = "عرض كامل تاريخ المقالة";
 "about-content-license" = "رخصة المحتوى";
 "about-content-license-details" = "إن لم يذكر خلاف ذلك، المحتوى متاح بموجب $1.";
 "about-content-license-details-share-alike-license" = "ترخيص المشاع الإبداعي الإيعاز والمشاركة بالمثل";
@@ -151,28 +155,35 @@
 "continue-reading-empty-description" = "تصفح ويكيبيديا لقراءة المزيد من المقالات";
 "continue-reading-empty-title" = "لا يوجد مقالات قرءت مؤخرا";
 "description-add-title" = "إضافة الوصف";
+// Fuzzy
 "description-edit-for-article" = "وصف العنوان ل$1";
 "description-edit-learn-more" = "معرفة المزيد";
 "description-edit-length-warning" = "$1 من $2";
+// Fuzzy
 "description-edit-license" = "عن طريق تغيير وصف العنوان، فأنا أوافق على $1 وعلى إصدار مساهماتي بلا رجعة تحت ترخيص $2.";
 "description-edit-pencil-introduction" = "عدل المقدمة";
+// Fuzzy
 "description-edit-pencil-title" = "عدل وصف العنوان";
 "description-edit-placeholder-title" = "الوصوفات القصيرة هي الأفضل";
 "description-edit-publish" = "نشر الوصف";
 "description-edit-title" = "عدل الوصف";
 "description-edit-warning" = "حاول إبقاء الوصوفات قصيرة حتى يستطيع المستخدمون فهم موضوع المقالة سريعا";
+// Fuzzy
 "description-help-about-description" = "وصوفات العنوان تلخص المقالة لمساعدة القراء على فهم الموضوع سريعا.";
 "description-help-about-title" = "حول";
 "description-help-about-wikidata" = "حول ويكي بيانات";
 "description-help-more-info-description" = "الوصوفات يتم تخرينها وصيانتها في ويكي بيانات، وهي مشروع لمؤسسة ويكيميديا يوفر قاعدة بيانات حرة، تعاونية، متعددة اللغات وثانوية لدعم ويكيبيديا والمشاريع الأخرى.";
 "description-help-more-info-title" = "المزيد من المعلومات";
 "description-help-tips-description" = "الوصوفات ينبغي أن تكون بشكل مثالي من سطر واحد، وما بين كلمتين إلى 12 كلمة. ولا يبدأ أول حرف بحرف كبير ما لم يكن اسما علما.";
+// Fuzzy
 "description-help-tips-example-description-one" = "وصف عنوان لمقالة عن لوحة الموناليزا";
+// Fuzzy
 "description-help-tips-example-description-two" = "وصف عنوان لمقالة حول جبل إيفرست";
 "description-help-tips-example-title-one" = "لوحة بواسطة ليوناردو دا فينشي";
 "description-help-tips-example-title-two" = "أعلى جبل في الأرض";
 "description-help-tips-for-example" = "على سبيل المثال:";
 "description-help-tips-title" = "نصائح لإنشاء الوصوفات";
+// Fuzzy
 "description-help-title" = "مساعدة وصف العناوين";
 "description-help-wikidata-guide" = "دليل ويكي بيانات لكتابة الوصوفات";
 "description-published-button-title" = "تم";
@@ -182,6 +193,7 @@
 "description-welcome-concise-sub-title" = "مثاليا سطر واحد، ما بين كلمتين إلى 12 كلمة";
 "description-welcome-concise-title" = "أبقه مختصرا";
 "description-welcome-descriptions-sub-title" = "يلخص المقالة لمساعدة القراء على فهم الموضوع سريعا";
+// Fuzzy
 "description-welcome-descriptions-title" = "وصوفات العنوان";
 "description-welcome-promise-title" = "بالبدء، أنا أعد بعدم إساءة استخدام هذه الخاصية";
 "description-welcome-start-editing-button" = "البدء بالتعديل";
@@ -502,8 +514,6 @@
 "main-menu-account-logout-are-you-sure" = "هل تريد بالتاكيد تسجيل الخروج؟";
 "main-menu-account-logout-cancel" = "ألغ";
 "main-menu-account-title-logged-in" = "مسجل الدخول بصفتك $1";
-"main-menu-debug-tweaks" = "إعدادات المطور";
-"main-menu-heading-debug" = "تصحيح";
 "main-menu-heading-legal" = "الشروط والخصوصية";
 "main-menu-nearby" = "بالقرب من هنا";
 "main-menu-privacy-policy" = "سياسة الخصوصية";
@@ -512,6 +522,7 @@
 "main-menu-title" = "المزيد";
 "main-menu-zero-faq" = "الأسئلة المتكررة عن ويكيبيديا زيرو";
 "menu-cancel-accessibility-label" = "ألغ";
+// Fuzzy
 "more-languages-tooltip-description" = "ابحث في ويكيبيديا بما يقرب من 300 لغة";
 "more-languages-tooltip-title" = "أضف لغات";
 "move-articles-to-reading-list" = "نقل {{PLURAL:$1|$1 مقالة|$1 مقالات}} إلى قائمة القراءة";
@@ -532,7 +543,6 @@
 "on-this-day-detail-header-date-range" = "من $1 - $2";
 "on-this-day-detail-header-title" = "{{PLURAL:$1|$1 حدث تاريخي|$1 أحداث تاريخية}}";
 "on-this-day-footer" = "المزيد من الأحداث التاريخية في هذا اليوم";
-"on-this-day-footer-with-event-count" = "$1 أكثر من الأحداث التاريخية في هذا اليوم";
 "on-this-day-sub-title-for-date-from-language-wikipedia" = "$1 من ويكيبيديا $2";
 "on-this-day-title" = "في هذا اليوم";
 "original-tab-button-popover-description" = "انقر على \"ص\" للعودة إلى علامة التبويب التي بدأت منها";
@@ -702,7 +712,6 @@
 "replace-replace-all-results-count" = "تم استبدال {{PLURAL:$1|$1 عنصر|$1 عناصر}}";
 "replace-textfield-accessibility" = "استبدال";
 "replace-textfield-placeholder" = "استبدل بـ…";
-"request-feedback-on-error" = "واجه التطبيق مشكلة والتي يود مطورينا أن يتعرفوا على المزيد عنها. يرجى النقر هنا كي ترسل لينا رسالة بريد إلكتروني تبين لنا فيها تفاصيل الخطأ.";
 "reverted-edit-back-to-article-button-title" = "العودة إلى المقالة";
 "reverted-edit-notification-body" = "تم إرجاع التعديل الذي تم إجراؤه بمقالة $1 بواسطة $2";
 "reverted-edit-notification-read-more-action-title" = "قراءة المزيد";
@@ -837,6 +846,7 @@
 "two-factor-login-with-regular-code" = "استخدم رمز التحقق";
 "unable-to-load-talk-page-title" = "غير قادر على تحميل صفحة النقاش";
 "unknown-generic-text" = "غير معروف";
+"variants-alert-dismiss-button" = "لا شكرًا";
 "welcome-exploration-explore-feed-description" = "القراءة الموصى بها والمقالات اليومية من مجتمعنا";
 "welcome-exploration-explore-feed-title" = "خلاصة الاستكشاف";
 "welcome-exploration-on-this-day-description" = "سافر عائدا في الزمن لمعرفة ما حدث اليوم في التاريخ";
@@ -846,6 +856,7 @@
 "welcome-explore-continue-button" = "فلنبدأ";
 "welcome-explore-new-ways-title" = "طرق جديدة للاستكشاف";
 "welcome-explore-tell-me-more-done-button" = "فهمت";
+// Fuzzy
 "welcome-intro-free-encyclopedia-description" = "ويكيبيديا مكتوبة بشكل تعاوني من قبل متطوعين وتتكون من أكثر من 40 مليون مقالة بما يقارب 300 لغة.";
 "welcome-intro-free-encyclopedia-more" = "معرفة المزيد عن ويكيبيديا";
 "welcome-intro-free-encyclopedia-more-about" = "عن ويكيبيديا";
@@ -854,6 +865,7 @@
 "welcome-languages-add-button" = "إضافة لغة آخرى";
 "welcome-languages-add-or-edit-button" = "إضافة أو تحرير اللغات المفضلة";
 "welcome-languages-description" = "لقد وجدنا اللغات التالية على جهازك:";
+// Fuzzy
 "welcome-languages-search-title" = "ابحث فيما يقارب 300 لغة";
 "welcome-notifications-tell-me-more-creation" = "يتم إنشاء الإشعارات وتسليمها على جهازك من خلال التطبيق، وليس من خوادمنا (أو جهات خارجية).";
 "welcome-notifications-tell-me-more-storage" = "يتم تخزين تفضيلات الإشعارات على الجهاز ولا تعتمد على المعلومات أو النشاط الشخصي.";

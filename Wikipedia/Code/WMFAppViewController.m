@@ -5,10 +5,6 @@
 
 #define DEBUG_THEMES 1
 
-#if WMF_TWEAKS_ENABLED
-#import <Tweaks/FBTweakInline.h>
-#endif
-
 // Views
 #import "UIViewController+WMFStoryboardUtilities.h"
 #import "UIApplicationShortcutItem+WMFShortcutItem.h"
@@ -23,7 +19,6 @@
 
 #import "Wikipedia-Swift.h"
 #import "EXTScope.h"
-#import <os/log.h>
 
 /**
  *  Enums for each tab in the main tab bar.
@@ -54,6 +49,8 @@ static NSString *const WMFLastRemoteAppConfigCheckAbsoluteTimeKey = @"WMFLastRem
 
 static const NSString *kvo_NSUserDefaults_defaultTabType = @"kvo_NSUserDefaults_defaultTabType";
 static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFetcher_progress";
+
+NSString *const WMFLanguageVariantAlertsLibraryVersion = @"WMFLanguageVariantAlertsLibraryVersion";
 
 @interface WMFAppViewController () <UITabBarControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate, WMFThemeable, ReadMoreAboutRevertedEditViewControllerDelegate, WMFWorkerControllerDelegate, WMFThemeableNavigationControllerDelegate, WMFAppTabBarDelegate>
 
@@ -264,7 +261,7 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 }
 
 - (NSURL *)siteURL {
-    return [[self.dataStore.languageLinkController appLanguage] siteURL];
+    return self.dataStore.primarySiteURL;
 }
 
 #pragma mark - Setup
@@ -305,7 +302,7 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 
     UITabBarItem *savedTabBarItem = [self.savedViewController tabBarItem];
     self.savedTabBarItemProgressBadgeManager = [[SavedTabBarItemProgressBadgeManager alloc] initWithTabBarItem:savedTabBarItem];
-    
+
     [self.dataStore.notificationsController updateCategories];
 }
 
@@ -361,12 +358,17 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 // When the user launches from a terminated state, resume might not finish before didBecomeActive, so these tasks are held until both items complete
 - (void)performTasksThatShouldOccurAfterBecomeActiveAndResume {
     [[SessionsFunnel shared] logSessionStart];
-    [UserHistoryFunnel.shared logSnapshot];
     [self checkRemoteAppConfigIfNecessary];
     [self.periodicWorkerController start];
     [self.savedArticlesFetcher start];
     [self.mobileViewToMobileHTMLMigrationController start];
     self.notificationsController.applicationActive = YES;
+}
+
+- (void)performTasksThatShouldOccurAfterAnnouncementsUpdated {
+    if (self.isResumeComplete) {
+        [UserHistoryFunnel.shared logSnapshot];
+    }
 }
 
 - (void)appDidBecomeActiveWithNotification:(NSNotification *)note {
@@ -379,13 +381,8 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 
     if (self.isResumeComplete) {
         [self performTasksThatShouldOccurAfterBecomeActiveAndResume];
+        [UserHistoryFunnel.shared logSnapshot];
     }
-
-#if WMF_TWEAKS_ENABLED
-    if (FBTweakValue(@"Notifications", @"In the news", @"Send on app open", NO)) {
-        [self.dataStore.feedContentController debugSendRandomInTheNewsNotification];
-    }
-#endif
 }
 
 - (void)appWillResignActiveWithNotification:(NSNotification *)note {
@@ -405,37 +402,32 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
     }
     [self startHousekeepingBackgroundTask];
     dispatch_async(dispatch_get_main_queue(), ^{
-#if WMF_TWEAKS_ENABLED
-        if (FBTweakValue(@"Notifications", @"In the news", @"Send on app exit", NO)) {
-            [self.dataStore.feedContentController debugSendRandomInTheNewsNotification];
-        }
-#endif
         [self pauseApp];
     });
 }
 
 - (void)preferredLanguagesDidChange:(NSNotification *)note {
-    [self updateExploreFeedPreferencesIfNecessary];
-    self.dataStore.feedContentController.siteURLs = [self.dataStore.languageLinkController preferredSiteURLs];
+    [self updateExploreFeedPreferencesIfNecessaryForChange:note];
+    [self.dataStore.feedContentController updateContentSources];
 }
 
 /**
  Updates explore feed preferences if new preferred language was appeneded or removed.
  */
-- (void)updateExploreFeedPreferencesIfNecessary {
-    MWKLanguageLinkController *languageLinkController = self.dataStore.languageLinkController;
-    NSArray<MWKLanguageLink *> *preferredLanguages = languageLinkController.preferredLanguages;
-    NSArray<MWKLanguageLink *> *previousPreferredLanguages = languageLinkController.previousPreferredLanguages;
-    if (preferredLanguages.count == previousPreferredLanguages.count) { // reordered
-        return;
-    }
-    MWKLanguageLink *mostRecentlyModifiedPreferredLanguage = languageLinkController.mostRecentlyModifiedPreferredLanguage;
-    NSURL *siteURL = mostRecentlyModifiedPreferredLanguage.siteURL;
-    BOOL appendedNewPreferredLanguage = [preferredLanguages containsObject:mostRecentlyModifiedPreferredLanguage];
+- (void)updateExploreFeedPreferencesIfNecessaryForChange:(NSNotification *)note {
     if (self.isPresentingOnboarding) {
         return;
     }
-    [self.dataStore.feedContentController toggleContentForSiteURL:siteURL isOn:appendedNewPreferredLanguage waitForCallbackFromCoordinator:NO updateFeed:NO];
+
+    NSNumber *changeTypeValue = (NSNumber *)[note userInfo][WMFPreferredLanguagesChangeTypeKey];
+    WMFPreferredLanguagesChangeType changeType = (WMFPreferredLanguagesChangeType)changeTypeValue.integerValue;
+    if (!changeType || (changeType == WMFPreferredLanguagesChangeTypeReorder)) {
+        return;
+    }
+
+    MWKLanguageLink *changedLanguage = (MWKLanguageLink *)[note userInfo][WMFPreferredLanguagesLastChangedLanguageKey];
+    BOOL appendedNewPreferredLanguage = (changeType == WMFPreferredLanguagesChangeTypeAdd);
+    [self.dataStore.feedContentController toggleContentForSiteURL:changedLanguage.siteURL isOn:appendedNewPreferredLanguage waitForCallbackFromCoordinator:NO updateFeed:NO];
 }
 
 - (void)readingListsWereSplitNotification:(NSNotification *)note {
@@ -820,10 +812,15 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
         [self loadMainUI];
         dispatch_block_t done = ^{
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self finishResumingApp];
-                if (completion) {
-                    completion();
-                }
+                [self presentLanguageVariantAlertsWithCompletion:^{
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self finishResumingApp];
+
+                        if (completion) {
+                            completion();
+                        }
+                    });
+                }];
             });
         };
 
@@ -868,6 +865,8 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 
     [[WMFDailyStatsLoggingFunnel shared] logAppNumberOfDaysSinceInstall];
 
+    WMFTaskGroup *resumeAndAnnouncementsCompleteGroup = [WMFTaskGroup new];
+    [resumeAndAnnouncementsCompleteGroup enter];
     [self.dataStore.authenticationManager
         attemptLoginWithCompletion:^{
             [self checkRemoteAppConfigIfNecessary];
@@ -888,6 +887,7 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
                                                                                  }];
             }
             self.resumeComplete = YES;
+            [resumeAndAnnouncementsCompleteGroup leave];
             [self performTasksThatShouldOccurAfterBecomeActiveAndResume];
             [self showLoggedOutPanelIfNeeded];
         }];
@@ -900,9 +900,11 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 
     BOOL locationAuthorized = [LocationManagerFactory coarseLocationManager].isAuthorized;
     if (!feedRefreshDate || [now timeIntervalSinceDate:feedRefreshDate] > [self timeBeforeRefreshingExploreFeed] || [[NSCalendar wmf_gregorianCalendar] wmf_daysFromDate:feedRefreshDate toDate:now] > 0) {
+        [resumeAndAnnouncementsCompleteGroup enter];
         [self.exploreViewController updateFeedSourcesWithDate:nil
                                                 userInitiated:NO
                                                    completion:^{
+                                                       [resumeAndAnnouncementsCompleteGroup leave];
                                                    }];
     } else {
         if (locationAuthorized != [defaults wmf_locationAuthorized]) {
@@ -913,8 +915,17 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
             [self.dataStore.feedContentController updateContentSource:[WMFContinueReadingContentSource class] force:YES completion:NULL];
         }
 
-        [self.dataStore.feedContentController updateContentSource:[WMFAnnouncementsContentSource class] force:YES completion:NULL];
+        [resumeAndAnnouncementsCompleteGroup enter];
+        [self.dataStore.feedContentController updateContentSource:[WMFAnnouncementsContentSource class]
+                                                            force:YES
+                                                       completion:^{
+                                                           [resumeAndAnnouncementsCompleteGroup leave];
+                                                       }];
     }
+
+    [resumeAndAnnouncementsCompleteGroup waitInBackgroundWithCompletion:^{
+        [self performTasksThatShouldOccurAfterAnnouncementsUpdated];
+    }];
 
     [defaults wmf_setLocationAuthorized:locationAuthorized];
 
@@ -937,20 +948,6 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
                                                                                                                                }];
                                                                                     }];
                                          }];
-#endif
-#if WMF_TWEAKS_ENABLED
-    if (FBTweakValue(@"Alerts", @"General", @"Show error on launch", NO)) {
-        [[WMFAlertManager sharedInstance] showErrorAlert:[NSError errorWithDomain:@"WMFTestDomain" code:0 userInfo:@{NSLocalizedDescriptionKey: @"There was an error"}] sticky:NO dismissPreviousAlerts:NO tapCallBack:NULL];
-    }
-    if (FBTweakValue(@"Alerts", @"General", @"Show warning on launch", NO)) {
-        [[WMFAlertManager sharedInstance] showWarningAlert:@"You have been warned" sticky:NO dismissPreviousAlerts:NO tapCallBack:NULL];
-    }
-    if (FBTweakValue(@"Alerts", @"General", @"Show success on launch", NO)) {
-        [[WMFAlertManager sharedInstance] showSuccessAlert:@"You are successful" sticky:NO dismissPreviousAlerts:NO tapCallBack:NULL];
-    }
-    if (FBTweakValue(@"Alerts", @"General", @"Show message on launch", NO)) {
-        [[WMFAlertManager sharedInstance] showAlert:@"You have been notified" sticky:NO dismissPreviousAlerts:NO tapCallBack:NULL];
-    }
 #endif
 }
 
@@ -1216,6 +1213,10 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
         } break;
         default: {
             NSURL *linkURL = [activity wmf_linkURL];
+            // Ensure incoming link is fetched in user's preferred variant if applicable
+            if (!linkURL.wmf_languageVariantCode) {
+                linkURL.wmf_languageVariantCode = [self.dataStore.languageLinkController preferredLanguageVariantCodeForLanguageCode:linkURL.wmf_languageCode];
+            }
             if (!linkURL) {
                 done();
                 return NO;
@@ -1244,9 +1245,9 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
         return nil;
     }
     WMFArticleViewController *visibleArticleViewController = self.visibleArticleViewController;
-    NSString *visibleKey = visibleArticleViewController.articleURL.wmf_databaseKey;
-    NSString *articleKey = articleURL.wmf_databaseKey;
-    if (visibleKey && articleKey && [visibleKey isEqualToString:articleKey]) {
+    WMFInMemoryURLKey *visibleKey = visibleArticleViewController.articleURL.wmf_inMemoryKey;
+    WMFInMemoryURLKey *articleKey = articleURL.wmf_inMemoryKey;
+    if (visibleKey && articleKey && [visibleKey isEqualToInMemoryURLKey:articleKey]) {
         if (articleURL.fragment) {
             [visibleArticleViewController showAnchor:articleURL.fragment];
         }
@@ -1266,21 +1267,21 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 
     WMFArticleViewController *articleVC = [[WMFArticleViewController alloc] initWithArticleURL:articleURL dataStore:self.dataStore theme:self.theme schemeHandler:nil];
     articleVC.loadCompletion = completion;
-    
-    #if DEBUG
+
+#if DEBUG
     if ([[[NSProcessInfo processInfo] environment] objectForKey:@"DYLD_PRINT_STATISTICS"]) {
-        os_log_t customLog = os_log_create("org.wikimedia.ios", "articleLoadTime");
         NSDate *start = [NSDate date];
 
         articleVC.initialSetupCompletion = ^{
             NSDate *end = [NSDate date];
             NSTimeInterval articleLoadTime = [end timeIntervalSinceDate:start];
-            os_log_with_type(customLog, OS_LOG_TYPE_INFO, "article load time = %f", articleLoadTime);
+            DDLogInfo(@"article load time = %f", articleLoadTime);
         };
     }
-    #endif
+#endif
 
-    [nc pushViewController:articleVC animated:YES];
+    [nc pushViewController:articleVC
+                  animated:YES];
     return articleVC;
 }
 
@@ -1431,18 +1432,16 @@ static const NSString *kvo_SavedArticlesFetcher_progress = @"kvo_SavedArticlesFe
 static NSString *const WMFDidShowOnboarding = @"DidShowOnboarding5.3";
 
 - (BOOL)shouldShowOnboarding {
-#if WMF_TWEAKS_ENABLED
-    if (FBTweakValue(@"Welcome", @"General", @"Show on launch (requires force quit)", NO) || [[NSProcessInfo processInfo] environment][@"WMFShowWelcomeView"].boolValue) {
-        return YES;
-    }
-#endif
-
     NSNumber *didShow = [[NSUserDefaults standardUserDefaults] objectForKey:WMFDidShowOnboarding];
     return !didShow.boolValue;
 }
 
 - (void)setDidShowOnboarding {
     [[NSUserDefaults standardUserDefaults] setObject:@YES forKey:WMFDidShowOnboarding];
+
+    // If the user is onboarding, variant info alerts do not need to be presented
+    // So, set the user default to the current library version
+    [[NSUserDefaults standardUserDefaults] setInteger:MWKDataStore.currentLibraryVersion forKey:WMFLanguageVariantAlertsLibraryVersion];
 }
 
 - (void)presentOnboardingIfNeededWithCompletion:(void (^)(BOOL didShowOnboarding))completion {
@@ -1561,6 +1560,10 @@ static NSString *const WMFDidShowOnboarding = @"DidShowOnboarding5.3";
     [self wmf_hideKeyboard];
 }
 
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    [self logTappedTabBarItem:item inTabBar:tabBar];
+}
+
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
     if (viewController == tabBarController.selectedViewController) {
         switch (tabBarController.selectedIndex) {
@@ -1588,6 +1591,7 @@ static NSString *const WMFDidShowOnboarding = @"DidShowOnboarding5.3";
         }
     }
 }
+
 #pragma mark - UINavigationControllerDelegate
 
 - (void)navigationController:(UINavigationController *)navigationController
@@ -1678,7 +1682,7 @@ static NSString *const WMFDidShowOnboarding = @"DidShowOnboarding5.3";
     NSURL *articleURL = [NSURL URLWithString:articleURLString];
     NSDictionary *JSONDictionary = info[WMFNotificationInfoFeedNewsStoryKey];
     NSError *JSONError = nil;
-    WMFFeedNewsStory *feedNewsStory = [MTLJSONAdapter modelOfClass:[WMFFeedNewsStory class] fromJSONDictionary:JSONDictionary error:&JSONError];
+    WMFFeedNewsStory *feedNewsStory = [MTLJSONAdapter modelOfClass:[WMFFeedNewsStory class] fromJSONDictionary:JSONDictionary languageVariantCode:nil error:&JSONError];
     if (!feedNewsStory || JSONError) {
         DDLogError(@"Error parsing feed news story: %@", JSONError);
         [self showArticleWithURL:articleURL animated:NO];
@@ -1896,6 +1900,7 @@ static NSString *const WMFDidShowOnboarding = @"DidShowOnboarding5.3";
 }
 
 - (void)showSettings {
+    [self logTappedSettingsFromExplore];
     [self showSettingsAnimated:YES];
 }
 
@@ -1948,7 +1953,7 @@ static NSString *const WMFDidShowOnboarding = @"DidShowOnboarding5.3";
     } else {
         searchVC = [[SearchViewController alloc] init];
         searchVC.shouldBecomeFirstResponder = YES;
-        searchVC.areRecentSearchesEnabled = NO;
+        searchVC.areRecentSearchesEnabled = YES;
         [searchVC applyTheme:self.theme];
         searchVC.dataStore = self.dataStore;
     }
@@ -2093,32 +2098,36 @@ static NSString *const WMFDidShowOnboarding = @"DidShowOnboarding5.3";
     });
 }
 
-#pragma mark - Perma Random Mode
+#pragma mark - Navigation logging
 
-#if WMF_TWEAKS_ENABLED
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if ([super respondsToSelector:@selector(motionEnded:withEvent:)]) {
-        [super motionEnded:motion withEvent:event];
-    }
-    if (event.subtype != UIEventSubtypeMotionShake) {
-        return;
-    }
-    UINavigationController *navController = self.navigationController;
-    if ([navController.visibleViewController isKindOfClass:[WMFRandomArticleViewController class]] || [navController.visibleViewController isKindOfClass:[WMFFirstRandomViewController class]]) {
-        [UIApplication sharedApplication].idleTimerDisabled = NO;
+- (void)logTappedTabBarItem:(UITabBarItem *)item inTabBar:(UITabBar *)tabBar {
+    if (tabBar.items.count != self.viewControllers.count || self.tabBar != tabBar) {
+        NSAssert(false, @"Unexpected tab bar setup for logging tap events.");
         return;
     }
 
-    [self setSelectedIndex:WMFAppTabTypeMain];
-    UINavigationController *exploreNavController = self.navigationController;
+    NSInteger index = [self.tabBar.items indexOfObject:item];
+    if (index != NSNotFound) {
+        UIViewController *selectedViewController = self.viewControllers[index];
 
-    [self dismissPresentedViewControllers];
-
-    WMFFirstRandomViewController *vc = [[WMFFirstRandomViewController alloc] initWithSiteURL:[self siteURL] dataStore:self.dataStore theme:self.theme];
-    vc.permaRandomMode = NO;
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-    [exploreNavController pushViewController:vc animated:YES];
+        if ([selectedViewController isKindOfClass:[ExploreViewController class]] && [NSUserDefaults standardUserDefaults].defaultTabType == WMFAppDefaultTabTypeExplore) {
+            [[WMFNavigationEventsFunnel shared] logTappedExplore];
+        } else if ([selectedViewController isKindOfClass:[WMFSettingsViewController class]] && [NSUserDefaults standardUserDefaults].defaultTabType == WMFAppDefaultTabTypeSettings) {
+            [[WMFNavigationEventsFunnel shared] logTappedSettingsFromTabBar];
+        } else if ([selectedViewController isKindOfClass:[WMFPlacesViewController class]]) {
+            [[WMFNavigationEventsFunnel shared] logTappedPlaces];
+        } else if ([selectedViewController isKindOfClass:[WMFSavedViewController class]]) {
+            [[WMFNavigationEventsFunnel shared] logTappedSaved];
+        } else if ([selectedViewController isKindOfClass:[WMFHistoryViewController class]]) {
+            [[WMFNavigationEventsFunnel shared] logTappedHistory];
+        } else if ([selectedViewController isKindOfClass:[SearchViewController class]]) {
+            [[WMFNavigationEventsFunnel shared] logTappedSearch];
+        }
+    }
 }
-#endif
+
+- (void)logTappedSettingsFromExplore {
+    [[WMFNavigationEventsFunnel shared] logTappedSettingsFromExplore];
+}
 
 @end

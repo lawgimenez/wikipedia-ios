@@ -1,5 +1,6 @@
 import UIKit
 import WMF
+import CocoaLumberjackSwift
 
 class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewControllerDelegate, UISearchBarDelegate, CollectionViewUpdaterDelegate, ImageScaleTransitionProviding, DetailTransitionSourceProviding, EventLoggingEventValuesProviding {
 
@@ -59,7 +60,7 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
         restoreScrollPositionIfNeeded()
 
         /// Terrible hack to make back button text appropriate for iOS 14 - need to set the title on `WMFAppViewController`. For all app tabs, this is set in `viewWillAppear`.
-        parent?.navigationItem.backButtonTitle = title
+        (parent as? WMFAppViewController)?.navigationItem.backButtonTitle = title
     }
 
     private func restoreScrollPositionIfNeeded() {
@@ -218,13 +219,25 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
         searchContainerView.addConstraints([leading, trailing, top, bottom])
         return searchContainerView
     }()
-    
+
+    @available(iOS 14.0, *)
+    lazy var scribbleIgnoringDelegate = ScribbleIgnoringInteractionDelegate()
+
     lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.delegate = self
         searchBar.returnKeyType = .search
         searchBar.searchBarStyle = .minimal
         searchBar.placeholder =  WMFLocalizedString("search-field-placeholder-text", value: "Search Wikipedia", comment: "Search field placeholder text")
+
+        // Disable Scribble on this placeholder text field
+        if UIDevice.current.userInterfaceIdiom == .pad, #available(iOS 14.0, *) {
+            let existingInteractions = searchBar.searchTextField.interactions
+            existingInteractions.forEach { searchBar.searchTextField.removeInteraction($0) }
+            let scribbleIgnoringInteraction = UIScribbleInteraction(delegate: scribbleIgnoringDelegate)
+            searchBar.searchTextField.addInteraction(scribbleIgnoringInteraction)
+        }
+
         return searchBar
     }()
     
@@ -270,8 +283,8 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
         return frc.object(at: indexPath)
     }
     
-    private func groupKey(at indexPath: IndexPath) -> String? {
-        return group(at: indexPath)?.key
+    private func groupKey(at indexPath: IndexPath) -> WMFInMemoryURLKey? {
+        return group(at: indexPath)?.inMemoryKey
     }
     
     lazy var saveButtonsController: SaveButtonsController = {
@@ -437,6 +450,7 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var titleAreaTapped = false;
         if let cell = collectionView.cellForItem(at: indexPath) as? ExploreCardCollectionViewCell {
             detailTransitionSourceRect = view.convert(cell.frame, from: collectionView)
             if
@@ -448,14 +462,18 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
             } else {
                 imageScaleTransitionView = nil
             }
+            titleAreaTapped = cell.titleAreaTapped
         }
         guard let group = group(at: indexPath) else {
             return
         }
 
         presentedContentGroupKey = group.key
+        
+        // When a random article title is tapped, show the previewed article, not another random article
+        let useRandomArticlePreviewItem = titleAreaTapped && group.moreType == .pageWithRandomButton
 
-        if let vc = group.detailViewControllerWithDataStore(dataStore, theme: theme) {
+        if !useRandomArticlePreviewItem, let vc = group.detailViewControllerWithDataStore(dataStore, theme: theme) {
             push(vc, context: FeedFunnelContext(group), index: indexPath.item, animated: true)
             return
         }
@@ -541,7 +559,7 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
             return ColumnarCollectionViewLayoutHeightEstimate(precalculated: true, height: 0)
         }
         let identifier = ExploreCardCollectionViewCell.identifier
-        let userInfo = "evc-cell-\(group.key ?? "")"
+        let userInfo = "evc-cell-\(group.inMemoryKey?.userInfoString ?? "")"
         if let cachedHeight = layoutCache.cachedHeightForCellWithIdentifier(identifier, columnWidth: columnWidth, userInfo: userInfo) {
             return ColumnarCollectionViewLayoutHeightEstimate(precalculated: true, height: cachedHeight)
         }
@@ -552,7 +570,7 @@ class ExploreViewController: ColumnarCollectionViewController, ExploreCardViewCo
         configure(cell: placeholderCell, forItemAt: indexPath, layoutOnly: true)
         estimate.height = placeholderCell.sizeThatFits(CGSize(width: columnWidth, height: UIView.noIntrinsicMetric), apply: false).height
         estimate.precalculated = true
-        layoutCache.setHeight(estimate.height, forCellWithIdentifier: identifier, columnWidth: columnWidth, groupKey: group.key, userInfo: userInfo)
+        layoutCache.setHeight(estimate.height, forCellWithIdentifier: identifier, columnWidth: columnWidth, groupKey: group.inMemoryKey, userInfo: userInfo)
         return estimate
     }
     
@@ -868,7 +886,7 @@ extension ExploreViewController: ExploreCardCollectionViewCellDelegate {
     @objc func articleDidChange(_ note: Notification) {
         guard
             let article = note.object as? WMFArticle,
-            let articleKey = article.key
+            let articleKey = article.inMemoryKey
         else {
             return
         }
@@ -905,7 +923,7 @@ extension ExploreViewController: ExploreCardCollectionViewCellDelegate {
     }
     
     @objc func articleDeleted(_ note: Notification) {
-        guard let articleKey = note.userInfo?[WMFArticleDeletedNotificationUserInfoArticleKeyKey] as? String else {
+        guard let articleKey = note.userInfo?[WMFArticleDeletedNotificationUserInfoArticleKeyKey] as? WMFInMemoryURLKey else {
             return
         }
         layoutCache.invalidateArticleKey(articleKey)
